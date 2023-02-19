@@ -1,11 +1,11 @@
 import React from 'react';
 import * as ReactDOMClient from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import store from './redux/store';
-import App from './App';
 import 'react-toastify/dist/ReactToastify.css';
+import App from './App';
+import store from './redux/store';
 
 const container = document.getElementById('root');
 ReactDOMClient.createRoot(container).render(
