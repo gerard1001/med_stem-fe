@@ -41,8 +41,8 @@ module.exports = {
         options: { presets: ['@babel/preset-env', '@babel/preset-react'] }
       },
       {
-        test: /\.(css|scss)$/,
-        use: ['style-loader', 'css-loader']
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader', 'postcss-loader']
       },
       {
         test: /\.(png|svg|jpg|gif)$/,

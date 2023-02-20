@@ -14,10 +14,10 @@
   },
   "plugins": ["react", "prettier"],
   "rules": {
-    "react/jsx-no-undef": "off",
     "react/jsx-filename-extension": "off",
-    "react/jsx-wrap-multilines": "off",
-    "no-undef": "off",
-    "no-unused-vars": "warn"
+    "no-unused-vars": "warn",
+    "react/react-in-jsx-scope": "off"
+    // "react/jsx-no-undef": "off",
+    // "react/jsx-wrap-multilines": "off",
   }
 }
