@@ -10,6 +10,10 @@ module.exports = {
         md: { max: '640px' },
         sm: { max: '440px' },
         'semi-md': '840px'
+      },
+      colors: {
+        primary: '#1A4CFF',
+        secondary: '#051B6C'
       }
     },
     variants: {
