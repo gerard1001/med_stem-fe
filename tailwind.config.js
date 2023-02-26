@@ -54,7 +54,7 @@ module.exports = {
         widest: '0.1em'
       },
       textColor: {
-        primary: '#fff'
+        primary: '#1A4CFF'
       }
     },
     variants: {

@@ -49,7 +49,7 @@ const HomeNavBar = () => {
           )}
         </div>
       </div>
-      <div className="bg-white hidden md:flex items-center justify-between text-primary fixed left-0 right-0 top-0 px-10 py-3 shadow-md border border-[#71A9F7]">
+      <div className="bg-white hidden md:flex z-10 items-center justify-between text-primary fixed left-0 right-0 top-0 px-10 py-3 shadow-md border border-[#71A9F7]">
         <div className="font-bold">MedStem</div>
         {!lapBar ? (
           <Box className="text-secondary" onClick={() => setlapBar(true)}>

@@ -2,169 +2,197 @@ import {
   Box,
   Button,
   FormControl,
+  FormHelperText,
   InputLabel,
   MenuItem,
   Select,
-  TextField
+  TextField,
+  Typography
 } from '@mui/material';
 import React, { Fragment } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
 
 // Destructuring props
-const FirstStep = ({
-  handleNext,
-  handleChange,
-  values: {
-    first_name,
-    last_name,
-    id_number,
-    gender,
-    birth_date,
-    marital_status
-  },
-  formErrors
-}) => {
+const FirstStep = ({}) => {
   // Check if all values are not empty or if there are some error
-  // const isValid = true;
-  const isValid =
-    first_name.length > 0 &&
-    !formErrors.first_name &&
-    last_name.length > 0 &&
-    !formErrors.last_name &&
-    id_number.length > 0 &&
-    !formErrors.id_number &&
-    gender.length > 0 &&
-    marital_status.length > 0 &&
-    birth_date.length > 0;
+  const isValid = true;
+
+  const {
+    control,
+    register,
+    formState: { errors },
+    trigger,
+    setValue
+  } = useFormContext();
+
+  const handleNext = () => {
+    trigger([
+      'first_name',
+      'last_name',
+      'gender',
+      'marital_status',
+      'id_number',
+      'birth_date'
+    ]).then((value) => {
+      if (value) {
+        setValue('activeStep', 1);
+      }
+    });
+  };
 
   return (
-    <Fragment className="max-w-[800px]">
+    <Box>
       <div className="font-bold ml-[3%]">Personal Information</div>
-      <Box
-        container
-        spacing={2}
-        noValidate
-        className="flex items-center justify-evenly w-[100%]"
-      >
+      <Box className="flex items-center justify-evenly w-[100%]">
         <Box className="block w-[45%]">
-          <Box item className="w-[100%] min-w-[220px]">
-            <TextField
-              variant="outlined"
-              fullWidth
-              label="Family name"
+          <Box className="w-[100%] min-w-[220px]">
+            <Controller
+              control={control}
               name="first_name"
-              placeholder="Family name"
-              margin="normal"
-              value={first_name}
-              onChange={handleChange}
-              error={!!formErrors.first_name}
-              helperText={formErrors.first_name}
-              required
-              size="small"
+              render={({ field }) => {
+                return (
+                  <TextField
+                    {...field}
+                    variant="outlined"
+                    fullWidth
+                    label="Family name"
+                    placeholder="Family name"
+                    margin="normal"
+                    error={!!errors.first_name}
+                    helperText={
+                      !!errors.first_name && errors.first_name.message
+                    }
+                    required
+                    size="small"
+                  />
+                );
+              }}
             />
           </Box>
-          <Box item className="w-[100%] min-w-[220px]">
-            <TextField
-              variant="outlined"
-              fullWidth
-              label="Given name"
+          <Box className="w-[100%] min-w-[220px]">
+            <Controller
+              control={control}
               name="last_name"
-              placeholder="Given name"
-              margin="normal"
-              value={last_name}
-              onChange={handleChange}
-              error={!!formErrors.last_name}
-              helperText={formErrors.last_name}
-              required
-              size="small"
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  variant="outlined"
+                  fullWidth
+                  label="Given name"
+                  placeholder="Given name"
+                  margin="normal"
+                  error={!!errors.last_name}
+                  helperText={errors.last_name && errors.last_name.message}
+                  required
+                  size="small"
+                />
+              )}
             />
           </Box>
-          <Box item className="w-[100%] min-w-[220px]">
-            <TextField
-              variant="outlined"
-              required
-              fullWidth
-              label="ID number"
+          <Box className="w-[100%] min-w-[220px]">
+            <Controller
+              control={control}
               name="id_number"
-              placeholder="i.e: xxx-xxx-xxxx"
-              value={id_number}
-              onChange={handleChange}
-              error={!!formErrors.id_number}
-              helperText={formErrors.id_number}
-              margin="normal"
-              size="small"
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  variant="outlined"
+                  fullWidth
+                  label="ID number"
+                  placeholder="ID number"
+                  margin="normal"
+                  error={!!errors.id_number}
+                  helperText={errors.id_number && errors.id_number.message}
+                  required
+                  size="small"
+                />
+              )}
             />
           </Box>
         </Box>
         <Box className="block w-[45%]">
-          <Box item className="w-[100%] min-w-[220px]">
-            <FormControl
-              variant="outlined"
-              margin="normal"
-              className="w-[100%] min-w-[220px]"
-              size="small"
-            >
-              <InputLabel required>Gender</InputLabel>
-              <Select
-                value={gender}
-                label="Gender"
-                name="gender"
-                onChange={handleChange}
-                size="small"
-              >
-                <MenuItem value="male">male</MenuItem>
-                <MenuItem value="female">female</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-          <Box item className="w-[100%] min-w-[220px]">
-            <TextField
-              variant="outlined"
-              fullWidth
-              InputLabelProps={{
-                shrink: true
-              }}
-              label="Date of birth"
-              name="birth_date"
-              type="date"
-              defaultValue={birth_date}
-              onChange={handleChange}
-              margin="normal"
-              required
-              size="small"
+          <Box className="w-[100%] min-w-[220px]">
+            <Controller
+              control={control}
+              name="gender"
+              render={({ field }) => (
+                <FormControl
+                  variant="outlined"
+                  margin="normal"
+                  className="w-[100%] min-w-[220px]"
+                  size="small"
+                >
+                  <InputLabel required>Gender</InputLabel>
+                  <Select
+                    {...field}
+                    label="Gender"
+                    labelId="demo-simple-select-label"
+                    error={!!errors.gender}
+                    // helperText={errors.gender && errors.gender.message}
+                    size="small"
+                  >
+                    <MenuItem value="male">male</MenuItem>
+                    <MenuItem value="female">female</MenuItem>
+                  </Select>
+                  <FormHelperText error={true}>
+                    {errors.gender && errors.gender.message}
+                  </FormHelperText>
+                </FormControl>
+              )}
             />
           </Box>
-          <Box item className="w-[100%] min-w-[220px]">
-            <FormControl
-              InputLabelProps={{
-                shrink: true
-              }}
-              variant="outlined"
-              margin="normal"
-              className="w-[100%] min-w-[220px]"
-              size="small"
-            >
-              <InputLabel
-                required
-                InputLabelProps={{
-                  shrink: true
-                }}
-              >
-                Marital status
-              </InputLabel>
-              <Select
-                value={marital_status}
-                label="Marital Status"
-                InputLabelProps={{
-                  shrink: true
-                }}
-                name="marital_status"
-                onChange={handleChange}
-                size="small"
-              >
-                <MenuItem value="single">Single</MenuItem>
-                <MenuItem value="married">Married</MenuItem>
-              </Select>
-            </FormControl>
+          <Box className="w-[100%] min-w-[220px]">
+            <Controller
+              control={control}
+              name="birth_date"
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  type="date"
+                  variant="outlined"
+                  fullWidth
+                  // label="Birth date"
+                  // placeholder="Birth date"
+                  margin="normal"
+                  error={!!errors.birth_date}
+                  helperText={errors.birth_date && errors.birth_date.message}
+                  required
+                  size="small"
+                />
+              )}
+            />
+          </Box>
+          <Box className="w-[100%] min-w-[220px]">
+            <Controller
+              control={control}
+              name="marital_status"
+              render={({ field }) => (
+                <FormControl
+                  variant="outlined"
+                  margin="normal"
+                  className="w-[100%] min-w-[220px]"
+                  size="small"
+                >
+                  <InputLabel required>Marital status</InputLabel>
+                  <Select
+                    {...field}
+                    label="Marital Status"
+                    id="demo-simple-select"
+                    error={!!errors.marital_status}
+                    // helperText={
+                    //   errors.marital_status && errors.marital_status.message
+                    // }
+                    size="small"
+                  >
+                    <MenuItem value="single">Single</MenuItem>
+                    <MenuItem value="married">Married</MenuItem>
+                  </Select>
+                  <FormHelperText error={true}>
+                    {errors.marital_status && errors.marital_status.message}
+                  </FormHelperText>
+                </FormControl>
+              )}
+            />
           </Box>
         </Box>
       </Box>
@@ -188,7 +216,7 @@ const FirstStep = ({
                   textTransform: 'capitalize'
                 }
           }
-          onClick={isValid ? handleNext : null}
+          onClick={handleNext}
           className={`${
             isValid ? 'bg-[#1A4CFF]' : 'bg-[#c0c0c0]'
           } capitalize text-white`}
@@ -199,7 +227,7 @@ const FirstStep = ({
           1/5
         </div>
       </div>
-    </Fragment>
+    </Box>
   );
 };
 

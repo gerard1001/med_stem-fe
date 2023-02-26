@@ -1,46 +1,45 @@
 import React from 'react';
-import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import { Button, Box } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import * as IoIcons from 'react-icons/io5';
 import { countries } from '../../utils/data';
+import { Controller, useFormContext } from 'react-hook-form';
 
 // Destructuring props
-const SecondStep = ({
-  handleNext,
-  handleBack,
-  handleChange,
-  values: { country, address_1, email, city, phone },
-  formErrors
-}) => {
-  // Check if all values are not empty or if there are some error
-  const isValid =
-    country.length > 0 &&
-    !formErrors.country &&
-    address_1.length > 0 &&
-    !formErrors.address_1 &&
-    email.length > 0 &&
-    !formErrors.email &&
-    city.length > 0 &&
-    !formErrors.city &&
-    phone.length > 0 &&
-    !formErrors.phone;
-  // const isValid = true;
+const SecondStep = ({}) => {
+  const {
+    control,
+    register,
+    formState: { errors },
+    trigger,
+    setValue
+  } = useFormContext();
+
+  const isValid = true;
+
+  const handleNext = () => {
+    trigger(['email', 'country', 'address_1', 'city', 'phone']).then(
+      (value) => {
+        if (value) {
+          setValue('activeStep', 2);
+        }
+      }
+    );
+  };
+
+  const handleBack = () => {
+    setValue('activeStep', 0);
+  };
 
   return (
     <div className="max-w-[800px]">
       {' '}
       <div className="font-bold ml-[3%]">Contact Information</div>
-      <Grid container spacing={2}>
-        <Box
-          container
-          spacing={2}
-          noValidate
-          className="flex items-start justify-evenly w-[100%]"
-        >
+      <Box spacing={2}>
+        <Box spacing={2} className="flex items-start justify-evenly w-[100%]">
           <Box className="block w-[45%]">
-            <Grid>
+            <Box>
               {/* <Autocomplete
                 id="country-select-demo"
                 sx={{ padding: 0, minWidth: '220px' }}
@@ -72,23 +71,54 @@ const SecondStep = ({
                   />
                 )}
               /> */}
-              <TextField
-                variant="outlined"
-                fullWidth
-                label="Country"
+              <Controller
+                control={control}
                 name="country"
-                placeholder="Enter your country name"
-                value={country || ''}
-                margin="normal"
-                onChange={handleChange}
-                error={!!formErrors.country}
-                helperText={formErrors.country}
-                required
-                size="small"
+                render={({ field }) => {
+                  return (
+                    <TextField
+                      {...field}
+                      variant="outlined"
+                      fullWidth
+                      label="Country"
+                      name="country"
+                      placeholder="Enter your country name"
+                      margin="normal"
+                      error={!!errors.country}
+                      helperText={!!errors.country && errors.country.message}
+                      required
+                      size="small"
+                    />
+                  );
+                }}
               />
-            </Grid>
-            <Grid>
-              <TextField
+            </Box>
+            <Box>
+              <Controller
+                control={control}
+                name="address_1"
+                render={({ field }) => {
+                  return (
+                    <TextField
+                      {...field}
+                      variant="outlined"
+                      fullWidth
+                      label="Address 1"
+                      name="Address 1"
+                      placeholder="Enter your address 1 name"
+                      margin="normal"
+                      error={!!errors.address_1}
+                      helperText={
+                        !!errors.address_1 && errors.address_1.message
+                      }
+                      required
+                      size="small"
+                    />
+                  );
+                }}
+              />
+
+              {/* <TextField
                 variant="outlined"
                 fullWidth
                 label="Address 1"
@@ -101,10 +131,32 @@ const SecondStep = ({
                 helperText={formErrors.address_1}
                 required
                 size="small"
+              /> */}
+            </Box>
+            <Box>
+              <Controller
+                control={control}
+                name="email"
+                render={({ field }) => {
+                  return (
+                    <TextField
+                      {...field}
+                      variant="outlined"
+                      fullWidth
+                      label="email"
+                      name="email"
+                      placeholder="Enter your email name"
+                      margin="normal"
+                      error={!!errors.email}
+                      helperText={!!errors.email && errors.email.message}
+                      required
+                      size="small"
+                    />
+                  );
+                }}
               />
-            </Grid>
-            <Grid>
-              <TextField
+
+              {/* <TextField
                 variant="outlined"
                 fullWidth
                 label="Email"
@@ -117,13 +169,34 @@ const SecondStep = ({
                 helperText={formErrors.email}
                 required
                 size="small"
-              />
-            </Grid>
+              /> */}
+            </Box>
           </Box>
           {/* ************************************************************************* */}
           <Box className="block w-[45%]">
-            <Grid>
-              <TextField
+            <Box>
+              <Controller
+                control={control}
+                name="city"
+                render={({ field }) => {
+                  return (
+                    <TextField
+                      {...field}
+                      variant="outlined"
+                      fullWidth
+                      label="city"
+                      name="city"
+                      placeholder="Enter your city name"
+                      margin="normal"
+                      error={!!errors.city}
+                      helperText={!!errors.city && errors.city.message}
+                      required
+                      size="small"
+                    />
+                  );
+                }}
+              />
+              {/* <TextField
                 variant="outlined"
                 fullWidth
                 label="City"
@@ -136,10 +209,32 @@ const SecondStep = ({
                 helperText={formErrors.city}
                 required
                 size="small"
+              /> */}
+            </Box>
+            <Box>
+              <Controller
+                control={control}
+                name="phone"
+                render={({ field }) => {
+                  return (
+                    <TextField
+                      {...field}
+                      variant="outlined"
+                      fullWidth
+                      label="phone"
+                      name="phone"
+                      placeholder="Phone number"
+                      margin="normal"
+                      error={!!errors.phone}
+                      helperText={!!errors.phone && errors.phone.message}
+                      required
+                      size="small"
+                    />
+                  );
+                }}
               />
-            </Grid>
-            <Grid>
-              <TextField
+
+              {/* <TextField
                 variant="outlined"
                 required
                 fullWidth
@@ -152,11 +247,11 @@ const SecondStep = ({
                 helperText={formErrors.phone}
                 margin="normal"
                 size="small"
-              />
-            </Grid>{' '}
+              /> */}
+            </Box>{' '}
           </Box>
         </Box>
-      </Grid>
+      </Box>
       {/* <div className="flex mt-12 justify-end">
         <Button
           variant="contained"
@@ -184,21 +279,12 @@ const SecondStep = ({
         </Box>
         <Button
           variant="contained"
-          disabled={!isValid}
-          style={
-            isValid
-              ? {
-                  background: '#1A4CFF',
-                  color: 'white',
-                  textTransform: 'capitalize'
-                }
-              : {
-                  background: '#    ',
-                  color: 'white',
-                  textTransform: 'capitalize'
-                }
-          }
-          onClick={isValid ? handleNext : null}
+          style={{
+            background: '#1A4CFF',
+            color: 'white',
+            textTransform: 'capitalize'
+          }}
+          onClick={handleNext}
           className={`${
             isValid ? 'bg-[#1A4CFF]' : 'bg-[#c0c0c0]'
           } capitalize text-white`}

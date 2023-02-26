@@ -23,6 +23,7 @@ module.exports = {
       dynamicImport: true
     }
   },
+  devtool: 'eval-source-map',
   mode: process.env.NODE_ENV || 'development',
   resolve: { extensions: ['*', '.js', '.jsx'] },
   devServer: {

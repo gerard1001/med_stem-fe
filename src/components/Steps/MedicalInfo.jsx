@@ -10,17 +10,11 @@ import * as ImIcons from 'react-icons/im';
 import * as IoIcons from 'react-icons/io5';
 // import { useStyles } from '../../pages/Form';
 import mason from '../../utils/mson';
+import { Controller, useFormContext } from 'react-hook-form';
 
-const ThirdStep = ({
-  chooseMessage,
-  values: { message },
-  handleNext,
-  handleChange,
-  handleBack,
-  formErrors
-}) => {
+const ThirdStep = ({}) => {
   const isValid = true;
-  const [value, setValue] = React.useState({});
+  const [value, setValues] = React.useState({});
   const [text, setText] = React.useState({});
   const [id, setId] = React.useState({});
   const [description, setDescription] = React.useState('');
@@ -31,29 +25,35 @@ const ThirdStep = ({
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openCreateModal, setOpenCreateModal] = React.useState(false);
   const open = Boolean(anchorEl);
+  const {
+    control,
+    register,
+    formState: { errors },
+    trigger,
+    setValue
+  } = useFormContext();
 
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleNext = () => {
+    setValue('activeStep', 2);
   };
 
-  const handleOpenDeleteCycle = (e) => {
-    setAnchorEl(null);
+  const handleBack = () => {
+    setValue('activeStep', 0);
   };
-
   const handleOpenCreateCycle = () => {
     setOpenCreateModal(true);
   };
 
   const handleCloseCreateModel = () => {
     setOpenCreateModal(false);
-    setValue('yes');
+    setValues('yes');
   };
 
-  const handleRadioChange = (event) => {
-    setValue(event.target.value);
-    setHelperText(' ');
-    setError(false);
-  };
+  // const handleRadioChange = (event) => {
+  //   setValues(event.target.value);
+  //   setHelperText(' ');
+  //   setError(false);
+  // };
 
   const handleSubmit = (event, idx) => {
     event.preventDefault();
@@ -118,67 +118,89 @@ const ThirdStep = ({
         className=""
       >
         {mason.map((values, idx) => (
-          <div>
-            <form key={values.info_id} className="flex items-center h-[50px]">
+          <div key={values.info_id}>
+            <Box className="flex flex-row items-center h-[50px]">
               <FormControl
                 id="form-control"
                 sx={{ m: 3 }}
                 error={error}
                 variant="standard"
-                // style={{ display: 'flex', alignItems: 'center' }}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  width: '100%'
+                }}
               >
-                <FormLabel id="demo-error-radios">{values.info_name}</FormLabel>
-                <RadioGroup
-                  aria-labelledby="demo-error-radios"
-                  id="demo-radios"
-                  name={values.info_name}
-                  value={value[idx]}
-                  onChange={(event) => {
-                    setValue((prev) => ({
-                      ...prev,
-                      [idx]: event.target.value
-                    }));
-                  }}
-                  sx={{ display: 'flex', alignItems: 'center' }}
-                >
-                  <FormControlLabel
-                    value="yes"
-                    control={<Radio />}
-                    type="submit"
-                    label="yes"
-                    onClick={(event) => {
-                      setShowDetails((state) => ({
-                        ...state,
-                        // [idx]: !showDetails[idx]
-                        [idx]: true
-                      }));
-                      setClickedIdx(idx);
-                      setText((prev) => ({
-                        ...prev,
-                        [idx]: values.info_name
-                      }));
-                      setId((prev) => ({
-                        ...prev,
-                        [idx]: values.info_id
-                      }));
-                    }}
-                  />
-                  <FormControlLabel
-                    value="no"
-                    control={<Radio />}
-                    label="no"
-                    onClick={(event) => {
-                      setClickedIdx(idx);
-                      setShowDetails((state) => ({
-                        ...state,
-                        // [idx]: !showDetails[idx]
-                        [idx]: false
-                      }));
-                      delete text[idx];
-                      delete description[idx];
-                    }}
-                  />
-                </RadioGroup>
+                <Typography id="demo-error-radios" sx={{ width: '100%' }}>
+                  {values.info_name}
+                </Typography>
+                <Controller
+                  control={control}
+                  defaultValue="no"
+                  name={`info.${values.info_id}.value`}
+                  render={({ field }) => (
+                    <RadioGroup
+                      {...field}
+                      aria-labelledby="demo-error-radios"
+                      id="demo-radios"
+                      // name={values.info_name}
+                      // value={value[idx]}
+                      // onChange={(event) => {
+                      //   console.log(event.target.value);
+                      //   setValues((prev) => ({
+                      //     ...prev,
+                      //     [idx]: event.target.value
+                      //   }));
+                      // }}
+                      row={true}
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        flexDirection: 'row'
+                      }}
+                    >
+                      <FormControlLabel
+                        value="yes"
+                        control={<Radio />}
+                        type="submit"
+                        label="yes"
+                        onClick={(event) => {
+                          setShowDetails((state) => ({
+                            ...state,
+                            // [idx]: !showDetails[idx]
+                            [idx]: true
+                          }));
+                          setClickedIdx(idx);
+                          setText((prev) => ({
+                            ...prev,
+                            [idx]: values.info_name
+                          }));
+                          setId((prev) => ({
+                            ...prev,
+                            [idx]: values.info_id
+                          }));
+                        }}
+                      />
+                      <FormControlLabel
+                        value="no"
+                        control={<Radio />}
+                        label="no"
+                        onClick={(event) => {
+                          setClickedIdx(idx);
+                          setShowDetails((state) => ({
+                            ...state,
+                            // [idx]: !showDetails[idx]
+                            [idx]: false
+                          }));
+                          delete text[idx];
+                          delete description[idx];
+                        }}
+                      />
+                    </RadioGroup>
+                  )}
+                />
+
                 {/* <FormHelperText>{helperText}</FormHelperText> */}
               </FormControl>
               <Button
@@ -204,8 +226,105 @@ const ThirdStep = ({
               >
                 Details
               </Button>
-            </form>
+            </Box>
             <Divider />
+            {clickedIdx === idx && (
+              <Modal
+                open={openCreateModal}
+                onClose={handleCloseCreateModel}
+                aria-labelledby="parent-modal-title"
+                aria-describedby="parent-modal-description"
+              >
+                <Box className="absolute w-[50%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] md:w-[90%]">
+                  <main className="">
+                    <Paper>
+                      <div className="absolute right-5 top-5  bg-[#bfbfbf] text-[#7b7b7b] text-[14px] rounded-md p-1">
+                        <ImIcons.ImCross onClick={handleCloseCreateModel} />
+                      </div>
+                      <Typography
+                        variant="h4"
+                        align="center"
+                        className="font-bold"
+                      >
+                        Welcome to Medstem
+                      </Typography>
+                      <Typography
+                        variant="h6"
+                        align="justify"
+                        className="font-bold mt-10"
+                      >
+                        Medical History
+                      </Typography>
+                      <Typography
+                        align="justify"
+                        className="text-[16px] mb-10 mt-3"
+                      >
+                        {values.info_name}
+                      </Typography>
+                      <Controller
+                        control={control}
+                        defaultValue=""
+                        name={`info.${values.info_id}.details`}
+                        render={({ field }) => (
+                          <TextField
+                            {...field}
+                            variant="outlined"
+                            fullWidth
+                            label="Description"
+                            // name="description"
+                            placeholder="Description"
+                            margin="normal"
+                            // value={description[clickedIdx]}
+                            // onChange={(event) => {
+                            //   setDescription((prev) => ({
+                            //     ...prev,
+                            //     [clickedIdx]: event.target.value
+                            //   }));
+                            // }}
+                            required
+                            size="small"
+                          />
+                        )}
+                      />
+
+                      <Button
+                        onClick={(event) => {
+                          handleCloseCreateModel();
+                        }}
+                        color="primary"
+                        style={{
+                          backgroundColor: '#0093df',
+                          color: '#fff',
+                          textTransform: 'capitalize',
+                          fontWeight: 'bold',
+                          display: 'block',
+                          margin: '20px auto',
+                          padding: '5px 20px'
+                        }}
+                        className="hover:bg-black mx-auto"
+                      >
+                        Submit
+                      </Button>
+                    </Paper>
+                  </main>
+                </Box>
+                {/* <Box style={{ margin: '30px 0 10px' }}>
+          <Typography variant="h4" align="center" className="font-bold">
+            Welcome to Medstem
+          </Typography>
+          <Typography
+            variant="subtitle2"
+            align="center"
+            style={{ margin: '10px 0' }}
+          >
+            Already have an account?{' '}
+            <span className="text-primary font-bold cursor-pointer">
+              Log in
+            </span>
+          </Typography>
+        </Box> */}
+              </Modal>
+            )}
           </div>
         ))}
         <div className="relative flex items-center mt-12 justify-center">
@@ -243,86 +362,6 @@ const ThirdStep = ({
           </div>
         </div>
       </form>
-      <Modal
-        open={openCreateModal}
-        onClose={handleCloseCreateModel}
-        aria-labelledby="parent-modal-title"
-        aria-describedby="parent-modal-description"
-      >
-        <Box className="absolute w-[50%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] md:w-[90%]">
-          <main className="">
-            <Paper>
-              <div className="absolute right-5 top-5  bg-[#bfbfbf] text-[#7b7b7b] text-[14px] rounded-md p-1">
-                <ImIcons.ImCross onClick={handleCloseCreateModel} />
-              </div>
-              <Typography variant="h4" align="center" className="font-bold">
-                Welcome to Medstem
-              </Typography>
-              <Typography
-                variant="h6"
-                align="justify"
-                className="font-bold mt-10"
-              >
-                Medical History
-              </Typography>
-              <Typography align="justify" className="text-[16px] mb-10 mt-3">
-                {text[clickedIdx]}
-              </Typography>
-
-              <TextField
-                variant="outlined"
-                fullWidth
-                label="Description"
-                name="description"
-                placeholder="Description"
-                margin="normal"
-                value={description[clickedIdx]}
-                onChange={(event) => {
-                  setDescription((prev) => ({
-                    ...prev,
-                    [clickedIdx]: event.target.value
-                  }));
-                }}
-                required
-                size="small"
-              />
-              <Button
-                onClick={(event) => {
-                  handleCloseCreateModel();
-                }}
-                color="primary"
-                style={{
-                  backgroundColor: '#0093df',
-                  color: '#fff',
-                  textTransform: 'capitalize',
-                  fontWeight: 'bold',
-                  display: 'block',
-                  margin: '20px auto',
-                  padding: '5px 20px'
-                }}
-                className="hover:bg-black mx-auto"
-              >
-                Submit
-              </Button>
-            </Paper>
-          </main>
-        </Box>
-        {/* <Box style={{ margin: '30px 0 10px' }}>
-          <Typography variant="h4" align="center" className="font-bold">
-            Welcome to Medstem
-          </Typography>
-          <Typography
-            variant="subtitle2"
-            align="center"
-            style={{ margin: '10px 0' }}
-          >
-            Already have an account?{' '}
-            <span className="text-primary font-bold cursor-pointer">
-              Log in
-            </span>
-          </Typography>
-        </Box> */}
-      </Modal>
     </>
   );
 };
