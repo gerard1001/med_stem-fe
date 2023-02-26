@@ -251,9 +251,7 @@ const ThirdStep = ({
       >
         <Box className="absolute w-[50%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] md:w-[90%]">
           <main className="">
-            <Paper
-            // className={classes.paper}
-            >
+            <Paper>
               <div className="absolute right-5 top-5  bg-[#bfbfbf] text-[#7b7b7b] text-[14px] rounded-md p-1">
                 <ImIcons.ImCross onClick={handleCloseCreateModel} />
               </div>

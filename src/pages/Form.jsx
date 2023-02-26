@@ -18,6 +18,8 @@ const Form = () => {
     setStatus(status);
   };
 
+  console.log({ theme });
+
   return (
     <div className="">
       <HomeNavBar />
@@ -25,42 +27,28 @@ const Form = () => {
         sx={{
           ...(!status
             ? {
-                width: 'auto',
-                marginLeft: theme.spacing(2),
-                marginRight: theme.spacing(2),
-                [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
-                  width: '80%',
-                  maxWidth: 800,
-                  marginLeft: 'auto',
-                  marginRight: 'auto',
-                  paddingTop: 100
-                }
+                width: '80%',
+                maxWidth: 800,
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                paddingTop: 15
               }
             : {
                 width: 'auto',
-                marginLeft: theme.spacing(2),
-                marginRight: theme.spacing(2),
-                [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
-                  width: '80%',
-                  marginLeft: 'auto',
-                  marginRight: 'auto',
-                  paddingTop: 100
-                }
+                width: '80%',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                paddingTop: 7
               })
         }}
       >
         <Paper
           sx={{
-            marginTop: theme.spacing(3),
-            marginBottom: theme.spacing(3),
-            padding: theme.spacing(2),
-            [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
-              marginTop: theme.spacing(8),
-              marginBottom: theme.spacing(8),
-              padding: theme.spacing(3)
-            },
+            marginTop: theme.spacing(8),
+            marginBottom: theme.spacing(8),
+            padding: theme.spacing(3),
             border: '1px solid #0093df',
-            borderRadius: 10,
+            borderRadius: 5,
             position: 'relative'
           }}
         >

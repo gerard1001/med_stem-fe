@@ -24,17 +24,17 @@ const FirstStep = ({
   formErrors
 }) => {
   // Check if all values are not empty or if there are some error
-  const isValid = true;
-  // const isValid =
-  //   first_name.length > 0 &&
-  //   !formErrors.first_name &&
-  //   last_name.length > 0 &&
-  //   !formErrors.last_name &&
-  //   id_number.length > 0 &&
-  //   !formErrors.id_number &&
-  //   gender.length > 0 &&
-  //   marital_status.length > 0 &&
-  //   birth_date.length > 0;
+  // const isValid = true;
+  const isValid =
+    first_name.length > 0 &&
+    !formErrors.first_name &&
+    last_name.length > 0 &&
+    !formErrors.last_name &&
+    id_number.length > 0 &&
+    !formErrors.id_number &&
+    gender.length > 0 &&
+    marital_status.length > 0 &&
+    birth_date.length > 0;
 
   return (
     <Fragment className="max-w-[800px]">

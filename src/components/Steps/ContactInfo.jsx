@@ -15,18 +15,18 @@ const SecondStep = ({
   formErrors
 }) => {
   // Check if all values are not empty or if there are some error
-  // const isValid =
-  //   country.length > 0 &&
-  //   !formErrors.country &&
-  //   address_1.length > 0 &&
-  //   !formErrors.address_1 &&
-  //   email.length > 0 &&
-  //   !formErrors.email &&
-  //   city.length > 0 &&
-  //   !formErrors.city &&
-  //   phone.length > 0 &&
-  //   !formErrors.phone;
-  const isValid = true;
+  const isValid =
+    country.length > 0 &&
+    !formErrors.country &&
+    address_1.length > 0 &&
+    !formErrors.address_1 &&
+    email.length > 0 &&
+    !formErrors.email &&
+    city.length > 0 &&
+    !formErrors.city &&
+    phone.length > 0 &&
+    !formErrors.phone;
+  // const isValid = true;
 
   return (
     <div className="max-w-[800px]">
@@ -193,7 +193,7 @@ const SecondStep = ({
                   textTransform: 'capitalize'
                 }
               : {
-                  background: '#c0c0c0',
+                  background: '#    ',
                   color: 'white',
                   textTransform: 'capitalize'
                 }

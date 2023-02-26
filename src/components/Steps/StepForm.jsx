@@ -2,12 +2,12 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import React, { useState } from 'react';
 import formValidation from '../../utils/formValidation';
-import Success from '../Success';
-import FirstStep from './FirstStep';
-import FourthStep from './FourthStep';
+import Success from './Success';
+import PersonalInfo from './PersonalInfo';
+import MedicalHistory from './MedicalHistory';
 import Password from './Password';
-import SecondStep from './SecondStep';
-import ThirdStep from './ThirdStep';
+import ContactInfo from './ContactInfo';
+import MedicalInfo from './MedicalInfo';
 
 // Step titles
 const labels = [
@@ -128,12 +128,12 @@ const StepForm = ({ chooseStatus }) => {
     });
   };
 
-  const HandleSteps = ({ step }) => {
+  const Steps = ({ step }) => {
     switch (step) {
       case 0:
         chooseStatus(false);
         return (
-          <FirstStep
+          <PersonalInfo
             handleNext={handleNext}
             handleChange={handleChange}
             values={formValues}
@@ -143,7 +143,7 @@ const StepForm = ({ chooseStatus }) => {
       case 1:
         chooseStatus(false);
         return (
-          <SecondStep
+          <ContactInfo
             handleNext={handleNext}
             handleBack={handleBack}
             handleChange={handleChange}
@@ -154,7 +154,7 @@ const StepForm = ({ chooseStatus }) => {
       case 2:
         chooseStatus(true);
         return (
-          <ThirdStep
+          <MedicalInfo
             handleNext={handleNext}
             handleBack={handleBack}
             handleChange={handleChange}
@@ -165,7 +165,7 @@ const StepForm = ({ chooseStatus }) => {
       case 3:
         chooseStatus(false);
         return (
-          <FourthStep
+          <MedicalHistory
             handleNext={handleNext}
             handleBack={handleBack}
             handleChange={handleChange}
@@ -184,15 +184,15 @@ const StepForm = ({ chooseStatus }) => {
           />
         );
       /* Overview */
-      // case 5:
-      //   chooseStatus(false);
-      //   return (
-      //     <Confirm
-      //       handleNext={handleNext}
-      //       handleBack={handleBack}
-      //       values={formValues}
-      //     />
-      //   );
+      case 5:
+        chooseStatus(false);
+        return (
+          <Confirm
+            handleNext={handleNext}
+            handleBack={handleBack}
+            values={formValues}
+          />
+        );
       default:
         return null;
     }
@@ -220,7 +220,7 @@ const StepForm = ({ chooseStatus }) => {
               </span>
             </Typography>
           </Box>
-          <HandleSteps step={activeStep} />
+          <Steps step={activeStep} />
         </>
       )}
     </>

@@ -32,10 +32,9 @@ const FourthStep = ({ values: { message }, handleNext, handleBack }) => {
           <form key={values.info_id} className="block">
             <FormControl
               id="form-control"
-              sx={{ m: 3 }}
+              sx={{ marginTop: 3 }}
               error={error}
               variant="standard"
-              // style={{ display: 'flex', alignItems: 'center' }}
             >
               <FormLabel id="demo-error-radios">{values.info_name}</FormLabel>
               <RadioGroup
@@ -57,7 +56,7 @@ const FourthStep = ({ values: { message }, handleNext, handleBack }) => {
                   type="submit"
                   label="yes"
                   onClick={(event) => {
-                    setShowDetails((showDetails) => ({
+                    setShowDetails((state) => ({
                       ...showDetails,
                       [idx]: true
                     }));
@@ -78,7 +77,7 @@ const FourthStep = ({ values: { message }, handleNext, handleBack }) => {
                   label="no"
                   onClick={(event) => {
                     setClickedIdx(idx);
-                    setShowDetails((showDetails) => ({
+                    setShowDetails((state) => ({
                       ...showDetails,
                       [idx]: false
                     }));
@@ -106,7 +105,7 @@ const FourthStep = ({ values: { message }, handleNext, handleBack }) => {
               size="medium"
             />
           </form>
-          <Divider />
+          <Divider sx={{ marginTop: 3 }} />
         </div>
       ))}
       <div className="relative flex items-center mt-12 justify-center">
