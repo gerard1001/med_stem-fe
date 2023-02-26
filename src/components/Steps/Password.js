@@ -8,7 +8,7 @@ import {
   //   FormControl,
   TextField,
   Grid
-} from '@material-ui/core';
+} from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
@@ -133,7 +133,6 @@ const Password = ({
           }}
           variant="contained"
           disabled={!isValid}
-          color="#fff"
           style={
             isValid
               ? {

@@ -1,10 +1,11 @@
 import React, { Fragment } from 'react';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
-import Button from '@material-ui/core/Button';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
+import Button from '@mui/material/Button';
 import * as IoIcons from 'react-icons/io5';
+import { Box } from '@mui/material';
 
 const Confirm = ({
   handleNext,
@@ -122,18 +123,17 @@ const Confirm = ({
       </List>
 
       <div className="relative flex items-center mt-12 justify-center">
-        <div
+        <Box
           className="border-[#2b8aff] rounded-[10px] text-primary border w-fit px-3 py-1 absolute left-5 text-[16px] cursor-pointer hover:border-none hover:bg-[#a2ccff]"
           onClick={handleBack}
         >
           <IoIcons.IoArrowBack />
-        </div>
+        </Box>
         <Button
           onClick={() => {
             handleSubmit();
           }}
           variant="contained"
-          color="#fff"
           style={{
             background: '#1A4CFF',
             color: 'white',

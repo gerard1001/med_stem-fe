@@ -1,4 +1,4 @@
-export const mason = [
+const mason = [
   {
     info_id: '53e35973-a010-4b4b-ad21-5c23b9f7194c',
     info_name:
@@ -198,3 +198,5 @@ export const mason = [
     updatedAt: '2023-02-23T08:56:10.950Z'
   }
 ];
+
+export default mason;

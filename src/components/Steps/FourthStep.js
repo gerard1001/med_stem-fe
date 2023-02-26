@@ -1,23 +1,12 @@
-import * as React from 'react';
-import {
-  TextField,
-  Grid,
-  Button,
-  Box,
-  Modal,
-  Paper,
-  Divider
-} from '@material-ui/core';
+import { Box, Button, Divider, TextField } from '@mui/material';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormLabel from '@mui/material/FormLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-import Typography from '@material-ui/core/Typography';
+import * as React from 'react';
 import * as IoIcons from 'react-icons/io5';
-import * as ImIcons from 'react-icons/im';
-import { mason } from '../../utils/mson';
-import { useStyles } from '../../pages/Form';
+import mason from '../../utils/mson';
 
 const FourthStep = ({ values: { message }, handleNext, handleBack }) => {
   const [value, setValue] = React.useState({});
@@ -40,7 +29,7 @@ const FourthStep = ({ values: { message }, handleNext, handleBack }) => {
       <div className="font-bold ml-[3%]">Other Medical History</div>
       {valueToDisplay.map((values, idx) => (
         <div>
-          <form key={idx} className="block">
+          <form key={values.info_id} className="block">
             <FormControl
               id="form-control"
               sx={{ m: 3 }}
@@ -121,17 +110,16 @@ const FourthStep = ({ values: { message }, handleNext, handleBack }) => {
         </div>
       ))}
       <div className="relative flex items-center mt-12 justify-center">
-        <div
+        <Box
           className="border-[#2b8aff] rounded-[10px] text-primary border w-fit px-3 py-1 absolute left-5 text-[16px] cursor-pointer hover:border-none hover:bg-[#a2ccff]"
           onClick={handleBack}
         >
           <IoIcons.IoArrowBack />
-        </div>
+        </Box>
         <Button
           onClick={handleNext}
           variant="contained"
           disabled={!isValid}
-          color="#fff"
           style={
             isValid
               ? {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import * as FiIcons from 'react-icons/fi';
 import * as FaIcons from 'react-icons/fa';
+import { Box } from '@mui/material';
 
 const HomeNavBar = () => {
   const [onHome, setOnHome] = useState(true);
@@ -51,13 +52,13 @@ const HomeNavBar = () => {
       <div className="bg-white hidden md:flex items-center justify-between text-primary fixed left-0 right-0 top-0 px-10 py-3 shadow-md border border-[#71A9F7]">
         <div className="font-bold">MedStem</div>
         {!lapBar ? (
-          <div className="text-secondary" onClick={() => setlapBar(true)}>
+          <Box className="text-secondary" onClick={() => setlapBar(true)}>
             <FaIcons.FaBars />
-          </div>
+          </Box>
         ) : (
-          <div className="text-secondary" onClick={() => setlapBar(false)}>
+          <Box className="text-secondary" onClick={() => setlapBar(false)}>
             <FaIcons.FaTimes />
-          </div>
+          </Box>
         )}
       </div>
     </>

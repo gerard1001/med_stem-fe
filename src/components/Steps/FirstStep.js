@@ -1,14 +1,13 @@
-import React, { Fragment } from 'react';
 import {
   Box,
   Button,
-  MenuItem,
-  InputLabel,
-  Select,
   FormControl,
-  TextField,
-  Grid
-} from '@material-ui/core';
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField
+} from '@mui/material';
+import React, { Fragment } from 'react';
 
 // Destructuring props
 const FirstStep = ({
@@ -176,7 +175,6 @@ const FirstStep = ({
         <Button
           variant="contained"
           disabled={!isValid}
-          color="#fff"
           style={
             isValid
               ? {

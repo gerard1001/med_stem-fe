@@ -1,17 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import React, { useState } from 'react';
+import formValidation from '../../utils/formValidation';
+import Success from '../Success';
 import FirstStep from './FirstStep';
+import FourthStep from './FourthStep';
+import Password from './Password';
 import SecondStep from './SecondStep';
 import ThirdStep from './ThirdStep';
-import FourthStep from './FourthStep';
-import Confirm from '../Confirm';
-import Success from '../Success';
-import formValidation from '../../utils/formValidation';
-import Password from './Password';
 
 // Step titles
 const labels = [
@@ -132,7 +128,7 @@ const StepForm = ({ chooseStatus }) => {
     });
   };
 
-  const handleSteps = (step) => {
+  const HandleSteps = ({ step }) => {
     switch (step) {
       case 0:
         chooseStatus(false);
@@ -198,7 +194,7 @@ const StepForm = ({ chooseStatus }) => {
       //     />
       //   );
       default:
-        break;
+        return null;
     }
   };
 
@@ -224,7 +220,7 @@ const StepForm = ({ chooseStatus }) => {
               </span>
             </Typography>
           </Box>
-          {handleSteps(activeStep)}
+          <HandleSteps step={activeStep} />
         </>
       )}
     </>

@@ -1,7 +1,7 @@
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import { Button, Box } from '@material-ui/core';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
+import { Button, Box } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import * as IoIcons from 'react-icons/io5';
 import { countries } from '../../utils/data';
@@ -176,16 +176,15 @@ const SecondStep = ({
         </Button>
       </div> */}
       <div className="relative flex items-center mt-12 justify-center">
-        <div
+        <Box
           className="border-[#2b8aff] rounded-[10px] text-primary border w-fit px-3 py-1 absolute left-5 text-[16px] cursor-pointer hover:border-none hover:bg-[#a2ccff]"
           onClick={handleBack}
         >
           <IoIcons.IoArrowBack />
-        </div>
+        </Box>
         <Button
           variant="contained"
           disabled={!isValid}
-          color="#fff"
           style={
             isValid
               ? {

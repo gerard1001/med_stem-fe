@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 const isText = RegExp(/^[A-Z ]+$/i);
 const isEmail = RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
 const isPhone = RegExp(/^\D?(\d{3})\D?\D?(\d{3})\D?(\d{4,6})$/); // us

@@ -1,23 +1,15 @@
-import * as React from 'react';
-import {
-  TextField,
-  Grid,
-  Button,
-  Box,
-  Modal,
-  Paper,
-  Divider
-} from '@material-ui/core';
+import { Box, Button, Divider, Modal, Paper, TextField } from '@mui/material';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormLabel from '@mui/material/FormLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-import Typography from '@material-ui/core/Typography';
-import * as IoIcons from 'react-icons/io5';
+import Typography from '@mui/material/Typography';
+import * as React from 'react';
 import * as ImIcons from 'react-icons/im';
-import { mason } from '../../utils/mson';
-import { useStyles } from '../../pages/Form';
+import * as IoIcons from 'react-icons/io5';
+// import { useStyles } from '../../pages/Form';
+import mason from '../../utils/mson';
 
 const ThirdStep = ({
   chooseMessage,
@@ -39,8 +31,6 @@ const ThirdStep = ({
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openCreateModal, setOpenCreateModal] = React.useState(false);
   const open = Boolean(anchorEl);
-
-  const classes = useStyles();
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -104,7 +94,7 @@ const ThirdStep = ({
   return (
     <>
       {' '}
-      <div className="font-bold ml-[3%]">Medical Information</div>
+      <div className="font-bold ml-[3%] third-step">Medical Information</div>
       {/* <Grid noValidate>
         <TextField
           variant="outlined"
@@ -129,7 +119,7 @@ const ThirdStep = ({
       >
         {mason.map((values, idx) => (
           <div>
-            <form key={idx} className="flex items-center h-[50px]">
+            <form key={values.info_id} className="flex items-center h-[50px]">
               <FormControl
                 id="form-control"
                 sx={{ m: 3 }}
@@ -157,8 +147,8 @@ const ThirdStep = ({
                     type="submit"
                     label="yes"
                     onClick={(event) => {
-                      setShowDetails((showDetails) => ({
-                        ...showDetails,
+                      setShowDetails((state) => ({
+                        ...state,
                         // [idx]: !showDetails[idx]
                         [idx]: true
                       }));
@@ -179,8 +169,8 @@ const ThirdStep = ({
                     label="no"
                     onClick={(event) => {
                       setClickedIdx(idx);
-                      setShowDetails((showDetails) => ({
-                        ...showDetails,
+                      setShowDetails((state) => ({
+                        ...state,
                         // [idx]: !showDetails[idx]
                         [idx]: false
                       }));
@@ -219,16 +209,15 @@ const ThirdStep = ({
           </div>
         ))}
         <div className="relative flex items-center mt-12 justify-center">
-          <div
+          <Box
             className="border-[#2b8aff] rounded-[10px] text-primary border w-fit px-3 py-1 absolute left-5 text-[16px] cursor-pointer hover:border-none hover:bg-[#a2ccff]"
             onClick={handleBack}
           >
             <IoIcons.IoArrowBack />
-          </div>
+          </Box>
           <Button
             variant="contained"
             disabled={!isValid}
-            color="#fff"
             style={
               isValid
                 ? {
@@ -262,19 +251,25 @@ const ThirdStep = ({
       >
         <Box className="absolute w-[50%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] md:w-[90%]">
           <main className="">
-            <Paper className={classes.paper}>
+            <Paper
+            // className={classes.paper}
+            >
               <div className="absolute right-5 top-5  bg-[#bfbfbf] text-[#7b7b7b] text-[14px] rounded-md p-1">
                 <ImIcons.ImCross onClick={handleCloseCreateModel} />
               </div>
               <Typography variant="h4" align="center" className="font-bold">
                 Welcome to Medstem
               </Typography>
-              <h1 variant="h6" align="justify" className="font-bold mt-10">
+              <Typography
+                variant="h6"
+                align="justify"
+                className="font-bold mt-10"
+              >
                 Medical History
-              </h1>
-              <p align="justify" className="text-[16px] mb-10 mt-3">
+              </Typography>
+              <Typography align="justify" className="text-[16px] mb-10 mt-3">
                 {text[clickedIdx]}
-              </p>
+              </Typography>
 
               <TextField
                 variant="outlined"

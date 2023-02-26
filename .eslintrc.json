@@ -12,11 +12,17 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": ["react", "prettier"],
+  "plugins": ["react", "prettier", "react-hooks"],
   "rules": {
     "react/jsx-filename-extension": "off",
     "no-unused-vars": "warn",
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "react/prop-types": "off",
+    "camelcase": "off",
+    "no-plusplus": "off",
+    "no-shadow": "off"
     // "react/jsx-no-undef": "off",
     // "react/jsx-wrap-multilines": "off",
   }
