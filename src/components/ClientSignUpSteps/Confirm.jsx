@@ -6,42 +6,20 @@ import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 import * as IoIcons from 'react-icons/io5';
 import { Box } from '@mui/material';
+import { useFormContext } from 'react-hook-form';
 
-const Confirm = ({
-  handleNext,
-  handleBack,
-  values: {
-    first_name,
-    last_name,
-    email,
-    password,
-    gender,
-    birth_date,
-    phone,
-    city,
-    address_1,
-    country,
-    id_number,
-    marital_status,
-    message
-  }
-}) => {
+const Confirm = ({ data }) => {
+  const { register, trigger, setValue } = useFormContext();
+
+  const handleBack = () => {
+    setValue('activeStep', 4);
+  };
+
+  const handleNext = () => {
+    setValue('activeStep', 6);
+  };
+
   const handleSubmit = () => {
-    console.log({
-      first_name,
-      last_name,
-      email,
-      password,
-      gender,
-      birth_date,
-      phone,
-      city,
-      address_1,
-      country,
-      id_number,
-      marital_status,
-      message
-    });
     handleNext();
   };
 
@@ -49,61 +27,64 @@ const Confirm = ({
     <>
       <List disablePadding className="h-[45vh] overflow-auto">
         <ListItem>
-          <ListItemText primary="Family Name" secondary={first_name} />
+          <ListItemText primary="Family Name" secondary={data.first_name} />
         </ListItem>
 
         <Divider />
 
         <ListItem>
-          <ListItemText primary="Given Name" secondary={last_name} />
+          <ListItemText primary="Given Name" secondary={data.last_name} />
         </ListItem>
 
         <Divider />
 
         <ListItem>
-          <ListItemText primary="ID number" secondary={id_number} />
+          <ListItemText primary="ID number" secondary={data.id_number} />
         </ListItem>
 
         <Divider />
 
         <ListItem>
-          <ListItemText primary="Marital Status" secondary={marital_status} />
+          <ListItemText
+            primary="Marital Status"
+            secondary={data.marital_status}
+          />
         </ListItem>
 
         <Divider />
 
         <ListItem>
-          <ListItemText primary="Email Address" secondary={email} />
+          <ListItemText primary="Email Address" secondary={data.email} />
         </ListItem>
 
         <Divider />
 
         <ListItem>
-          <ListItemText primary="Gender" secondary={gender} />
+          <ListItemText primary="Gender" secondary={data.gender} />
         </ListItem>
 
         <Divider />
 
         <ListItem>
-          <ListItemText primary="Date of birth" secondary={birth_date} />
+          <ListItemText primary="Date of birth" secondary={data.birth_date} />
         </ListItem>
 
         <Divider />
 
         <ListItem>
-          <ListItemText primary="Country" secondary={country} />
+          <ListItemText primary="Country" secondary={data.country} />
         </ListItem>
 
         <Divider />
 
         <ListItem>
-          <ListItemText primary="City" secondary={city} />
+          <ListItemText primary="City" secondary={data.city} />
         </ListItem>
 
         <Divider />
 
         <ListItem>
-          <ListItemText primary="Address 1" secondary={address_1} />
+          <ListItemText primary="Address 1" secondary={data.address_1} />
         </ListItem>
 
         <Divider />
@@ -111,15 +92,15 @@ const Confirm = ({
         <ListItem>
           <ListItemText
             primary="phone"
-            secondary={phone.length > 0 ? phone : 'Not Provided'}
+            secondary={data.phone.length > 0 ? data.phone : 'Not Provided'}
           />
         </ListItem>
 
         <Divider />
 
-        <ListItem>
-          <ListItemText primary="Info Medicale" secondary={message} />
-        </ListItem>
+        {/* <ListItem>
+          <ListItemText primary="Info Medicale" secondary={data.} />
+        </ListItem> */}
       </List>
 
       <div className="relative flex items-center mt-12 justify-center">

@@ -1,30 +1,20 @@
 import { Box, Button, Divider, Modal, Paper, TextField } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import * as ImIcons from 'react-icons/im';
 import * as IoIcons from 'react-icons/io5';
-// import { useStyles } from '../../pages/Form';
 import mason from '../../utils/mson';
 import { Controller, useFormContext } from 'react-hook-form';
 
-const ThirdStep = ({}) => {
-  const isValid = true;
-  const [value, setValues] = React.useState({});
-  const [text, setText] = React.useState({});
-  const [id, setId] = React.useState({});
-  const [description, setDescription] = React.useState('');
+const MedicalInfo = ({}) => {
   const [clickedIdx, setClickedIdx] = React.useState(0);
   const [showDetails, setShowDetails] = React.useState(false);
-  const [error, setError] = React.useState(false);
-  const [helperText, setHelperText] = React.useState('Choose wisely');
-  const [anchorEl, setAnchorEl] = React.useState(null);
   const [openCreateModal, setOpenCreateModal] = React.useState(false);
-  const open = Boolean(anchorEl);
+
   const {
     control,
     register,
@@ -34,11 +24,11 @@ const ThirdStep = ({}) => {
   } = useFormContext();
 
   const handleNext = () => {
-    setValue('activeStep', 2);
+    setValue('activeStep', 3);
   };
 
   const handleBack = () => {
-    setValue('activeStep', 0);
+    setValue('activeStep', 1);
   };
   const handleOpenCreateCycle = () => {
     setOpenCreateModal(true);
@@ -46,93 +36,34 @@ const ThirdStep = ({}) => {
 
   const handleCloseCreateModel = () => {
     setOpenCreateModal(false);
-    setValues('yes');
   };
-
-  // const handleRadioChange = (event) => {
-  //   setValues(event.target.value);
-  //   setHelperText(' ');
-  //   setError(false);
-  // };
-
-  const handleSubmit = (event, idx) => {
-    event.preventDefault();
-
-    console.log(event);
-    handleOpenCreateCycle();
-    setText((prev) => ({
-      ...prev,
-      [idx]: event.target.name
-    }));
-  };
-
-  const variable = [];
-  const string = [];
-
-  for (let i = 0; i < Object.keys(text).length; i++) {
-    const obj = {};
-    const pos = Object.keys(text)[i];
-    obj.id = id[pos];
-    obj.txt = text[pos];
-    obj.descr = description[pos] || '';
-    const str = `${obj.id}#%#%${obj.descr}`;
-    string.push(str);
-    variable.push(obj);
-  }
-
-  const msg = string.join('#&#&');
-
-  // const storeData = () => {
-  //   localStorage.setItem('InfoMessage', JSON.stringify(message));
-  // };
-
-  // const defaultVes = localStorage.getItem('InfoMessage');
-
-  // console.log({ defaultVes });
-  // console.log(variable);
 
   return (
     <>
       {' '}
-      <div className="font-bold ml-[3%] third-step">Medical Information</div>
-      {/* <Grid noValidate>
-        <TextField
-          variant="outlined"
-          fullWidth
-          label="Info medicale"
-          name="message"
-          placeholder="Enter your address"
-          value={message || msg}
-          margin="normal"
-          onChange={handleChange}
-          size="small"
-        />
-      </Grid> */}
-      <form
-        onSubmit={(e) => {
-          // e.preventDefault();
-          handleNext();
-          chooseMessage(msg);
-          return false;
-        }}
-        className=""
-      >
+      <div className="font-bold ml-[3%] md:text-center my-3 third-step">
+        Medical Information
+      </div>
+      <form className="">
         {mason.map((values, idx) => (
           <div key={values.info_id}>
-            <Box className="flex flex-row items-center h-[50px]">
+            <Box className="flex flex-row items-center h-[50px] lg:h-min">
               <FormControl
                 id="form-control"
-                sx={{ m: 3 }}
-                error={error}
-                variant="standard"
-                style={{
-                  display: 'flex',
+                sx={{
+                  m: 3,
+                  display: { md: 'flex', xs: 'block' },
                   flexDirection: 'row',
                   alignItems: 'center',
                   width: '100%'
                 }}
+                variant="standard"
               >
-                <Typography id="demo-error-radios" sx={{ width: '100%' }}>
+                <Typography
+                  id="demo-error-radios"
+                  sx={{ width: '100%' }}
+                  className="line-clamp-4"
+                >
                   {values.info_name}
                 </Typography>
                 <Controller
@@ -144,15 +75,6 @@ const ThirdStep = ({}) => {
                       {...field}
                       aria-labelledby="demo-error-radios"
                       id="demo-radios"
-                      // name={values.info_name}
-                      // value={value[idx]}
-                      // onChange={(event) => {
-                      //   console.log(event.target.value);
-                      //   setValues((prev) => ({
-                      //     ...prev,
-                      //     [idx]: event.target.value
-                      //   }));
-                      // }}
                       row={true}
                       sx={{
                         display: 'flex',
@@ -172,14 +94,6 @@ const ThirdStep = ({}) => {
                             [idx]: true
                           }));
                           setClickedIdx(idx);
-                          setText((prev) => ({
-                            ...prev,
-                            [idx]: values.info_name
-                          }));
-                          setId((prev) => ({
-                            ...prev,
-                            [idx]: values.info_id
-                          }));
                         }}
                       />
                       <FormControlLabel
@@ -193,15 +107,11 @@ const ThirdStep = ({}) => {
                             // [idx]: !showDetails[idx]
                             [idx]: false
                           }));
-                          delete text[idx];
-                          delete description[idx];
                         }}
                       />
                     </RadioGroup>
                   )}
                 />
-
-                {/* <FormHelperText>{helperText}</FormHelperText> */}
               </FormControl>
               <Button
                 disabled={!showDetails[idx]}
@@ -235,30 +145,33 @@ const ThirdStep = ({}) => {
                 aria-labelledby="parent-modal-title"
                 aria-describedby="parent-modal-description"
               >
-                <Box className="absolute w-[50%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] md:w-[90%]">
+                <Box className="absolute w-[90%] max-w-lg top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
                   <main className="">
-                    <Paper>
-                      <div className="absolute right-5 top-5  bg-[#bfbfbf] text-[#7b7b7b] text-[14px] rounded-md p-1">
+                    <Paper
+                      sx={{
+                        padding: { xs: '40px 10% 2px', md: '40px 40px 2px' },
+                        maxWidth: '480px',
+                        position: 'relative'
+                      }}
+                    >
+                      <div className="absolute right-5 top-5  bg-[#bfbfbf] text-[#7b7b7b] text-[14px] rounded-md p-1 mb-10">
                         <ImIcons.ImCross onClick={handleCloseCreateModel} />
                       </div>
-                      <Typography
+                      {/* <Typography
                         variant="h4"
                         align="center"
                         className="font-bold"
                       >
                         Welcome to Medstem
-                      </Typography>
+                      </Typography> */}
                       <Typography
                         variant="h6"
                         align="justify"
-                        className="font-bold mt-10"
+                        sx={{ textAlign: 'center' }}
                       >
                         Medical History
                       </Typography>
-                      <Typography
-                        align="justify"
-                        className="text-[16px] mb-10 mt-3"
-                      >
+                      <Typography align="justify" sx={{ textAlign: 'center' }}>
                         {values.info_name}
                       </Typography>
                       <Controller
@@ -271,18 +184,10 @@ const ThirdStep = ({}) => {
                             variant="outlined"
                             fullWidth
                             label="Description"
-                            // name="description"
                             placeholder="Description"
                             margin="normal"
-                            // value={description[clickedIdx]}
-                            // onChange={(event) => {
-                            //   setDescription((prev) => ({
-                            //     ...prev,
-                            //     [clickedIdx]: event.target.value
-                            //   }));
-                            // }}
-                            required
                             size="small"
+                            className="w-[80%]"
                           />
                         )}
                       />
@@ -308,21 +213,6 @@ const ThirdStep = ({}) => {
                     </Paper>
                   </main>
                 </Box>
-                {/* <Box style={{ margin: '30px 0 10px' }}>
-          <Typography variant="h4" align="center" className="font-bold">
-            Welcome to Medstem
-          </Typography>
-          <Typography
-            variant="subtitle2"
-            align="center"
-            style={{ margin: '10px 0' }}
-          >
-            Already have an account?{' '}
-            <span className="text-primary font-bold cursor-pointer">
-              Log in
-            </span>
-          </Typography>
-        </Box> */}
               </Modal>
             )}
           </div>
@@ -336,24 +226,14 @@ const ThirdStep = ({}) => {
           </Box>
           <Button
             variant="contained"
-            disabled={!isValid}
-            style={
-              isValid
-                ? {
-                    background: '#1A4CFF',
-                    color: 'white',
-                    textTransform: 'capitalize'
-                  }
-                : {
-                    background: '#c0c0c0',
-                    color: 'white',
-                    textTransform: 'capitalize'
-                  }
-            }
+            style={{
+              background: '#1A4CFF',
+              color: 'white',
+              textTransform: 'capitalize'
+            }}
             type="submit"
-            className={`${
-              isValid ? 'bg-[#1A4CFF]' : 'bg-[#c0c0c0]'
-            } capitalize text-white`}
+            className={`bg-[#1A4CFF] capitalize text-white`}
+            onClick={handleNext}
           >
             Continue
           </Button>
@@ -366,4 +246,4 @@ const ThirdStep = ({}) => {
   );
 };
 
-export default ThirdStep;
+export default MedicalInfo;

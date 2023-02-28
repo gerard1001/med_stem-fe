@@ -6,8 +6,7 @@ import * as IoIcons from 'react-icons/io5';
 import { countries } from '../../utils/data';
 import { Controller, useFormContext } from 'react-hook-form';
 
-// Destructuring props
-const SecondStep = ({}) => {
+const ContactInfo = ({}) => {
   const {
     control,
     register,
@@ -15,8 +14,6 @@ const SecondStep = ({}) => {
     trigger,
     setValue
   } = useFormContext();
-
-  const isValid = true;
 
   const handleNext = () => {
     trigger(['email', 'country', 'address_1', 'city', 'phone']).then(
@@ -35,10 +32,15 @@ const SecondStep = ({}) => {
   return (
     <div className="max-w-[800px]">
       {' '}
-      <div className="font-bold ml-[3%]">Contact Information</div>
+      <div className="font-bold ml-[3%] md:text-center ">
+        Contact Information
+      </div>
       <Box spacing={2}>
-        <Box spacing={2} className="flex items-start justify-evenly w-[100%]">
-          <Box className="block w-[45%]">
+        <Box
+          spacing={2}
+          className="flex flex-row items-start justify-evenly md:flex-col w-[100%]"
+        >
+          <Box className="block w-[45%] md:w-full md:max-w-[400px]">
             <Box>
               {/* <Autocomplete
                 id="country-select-demo"
@@ -117,21 +119,6 @@ const SecondStep = ({}) => {
                   );
                 }}
               />
-
-              {/* <TextField
-                variant="outlined"
-                fullWidth
-                label="Address 1"
-                name="address_1"
-                placeholder="Enter your address"
-                value={address_1 || ''}
-                margin="normal"
-                onChange={handleChange}
-                error={!!formErrors.address_1}
-                helperText={formErrors.address_1}
-                required
-                size="small"
-              /> */}
             </Box>
             <Box>
               <Controller
@@ -155,25 +142,9 @@ const SecondStep = ({}) => {
                   );
                 }}
               />
-
-              {/* <TextField
-                variant="outlined"
-                fullWidth
-                label="Email"
-                name="email"
-                placeholder="Enter your email"
-                value={email || ''}
-                margin="normal"
-                onChange={handleChange}
-                error={!!formErrors.email}
-                helperText={formErrors.email}
-                required
-                size="small"
-              /> */}
             </Box>
           </Box>
-          {/* ************************************************************************* */}
-          <Box className="block w-[45%]">
+          <Box className="block w-[45%] md:w-full md:max-w-[400px]">
             <Box>
               <Controller
                 control={control}
@@ -196,20 +167,6 @@ const SecondStep = ({}) => {
                   );
                 }}
               />
-              {/* <TextField
-                variant="outlined"
-                fullWidth
-                label="City"
-                name="city"
-                placeholder="Enter your city"
-                value={city || ''}
-                margin="normal"
-                onChange={handleChange}
-                error={!!formErrors.city}
-                helperText={formErrors.city}
-                required
-                size="small"
-              /> */}
             </Box>
             <Box>
               <Controller
@@ -233,43 +190,10 @@ const SecondStep = ({}) => {
                   );
                 }}
               />
-
-              {/* <TextField
-                variant="outlined"
-                required
-                fullWidth
-                label="Phone number"
-                name="phone"
-                placeholder="i.e: xxx-xxx-xxxx"
-                value={phone || ''}
-                onChange={handleChange}
-                error={!!formErrors.phone}
-                helperText={formErrors.phone}
-                margin="normal"
-                size="small"
-              /> */}
             </Box>{' '}
           </Box>
         </Box>
       </Box>
-      {/* <div className="flex mt-12 justify-end">
-        <Button
-          variant="contained"
-          color="default"
-          onClick={handleBack}
-          style={{ marginRight: 10 }}
-        >
-          Back
-        </Button>
-        <Button
-          variant="contained"
-          disabled={!isValid}
-          color="primary"
-          onClick={isValid ? handleNext : null}
-        >
-          Next
-        </Button>
-      </div> */}
       <div className="relative flex items-center mt-12 justify-center">
         <Box
           className="border-[#2b8aff] rounded-[10px] text-primary border w-fit px-3 py-1 absolute left-5 text-[16px] cursor-pointer hover:border-none hover:bg-[#a2ccff]"
@@ -285,9 +209,7 @@ const SecondStep = ({}) => {
             textTransform: 'capitalize'
           }}
           onClick={handleNext}
-          className={`${
-            isValid ? 'bg-[#1A4CFF]' : 'bg-[#c0c0c0]'
-          } capitalize text-white`}
+          className={`bg-[#1A4CFF] capitalize text-white`}
         >
           Continue
         </Button>
@@ -299,4 +221,4 @@ const SecondStep = ({}) => {
   );
 };
 
-export default SecondStep;
+export default ContactInfo;

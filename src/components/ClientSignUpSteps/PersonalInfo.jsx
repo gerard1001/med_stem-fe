@@ -12,9 +12,7 @@ import {
 import React, { Fragment } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-// Destructuring props
-const FirstStep = ({}) => {
-  // Check if all values are not empty or if there are some error
+const PersonalInfo = ({}) => {
   const isValid = true;
 
   const {
@@ -42,9 +40,11 @@ const FirstStep = ({}) => {
 
   return (
     <Box>
-      <div className="font-bold ml-[3%]">Personal Information</div>
-      <Box className="flex items-center justify-evenly w-[100%]">
-        <Box className="block w-[45%]">
+      <div className="font-bold ml-[3%] md:text-center">
+        Personal Information
+      </div>
+      <Box className="flex flex-row items-center justify-evenly md:flex-col w-[100%]">
+        <Box className="block w-[45%] md:w-full md:max-w-[400px]">
           <Box className="w-[100%] min-w-[220px]">
             <Controller
               control={control}
@@ -110,7 +110,7 @@ const FirstStep = ({}) => {
             />
           </Box>
         </Box>
-        <Box className="block w-[45%]">
+        <Box className="block w-[45%]  md:w-full md:max-w-[400px]">
           <Box className="w-[100%] min-w-[220px]">
             <Controller
               control={control}
@@ -231,4 +231,4 @@ const FirstStep = ({}) => {
   );
 };
 
-export default FirstStep;
+export default PersonalInfo;

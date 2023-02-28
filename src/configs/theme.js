@@ -57,6 +57,13 @@ const theme = createTheme({
     }
   },
   components: {
+    MuiCssBaseline: {
+      styleOverrides: `
+        @font-face {
+          font-size: 30px;
+        }
+      `
+    },
     MuiFormHelperText: {
       styleOverrides: {
         root: {
@@ -82,6 +89,14 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           flexWrap: 'nowrap'
+        }
+      }
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'capitalize'
+          // fontSize: '18px'
         }
       }
     }

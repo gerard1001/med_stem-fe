@@ -5,6 +5,9 @@ import Dashboard from '../pages/Dashboard';
 import LandingPage from '../pages/LandingPage';
 import SchedulePage from '../pages/SchedulePage';
 import Form from '../pages/Form';
+import About from '../pages/About';
+import FindDoctor from '../pages/FindDoctor';
+import SpecialityDoctor from '../pages/SpecialityDoctor';
 
 const routes = createBrowserRouter([
   {
@@ -13,8 +16,23 @@ const routes = createBrowserRouter([
     children: []
   },
   {
-    path: '/form',
+    path: '/about',
+    element: <About />,
+    children: []
+  },
+  {
+    path: '/signup',
     element: <Form />,
+    children: []
+  },
+  {
+    path: '/find_doctor',
+    element: <FindDoctor />,
+    children: []
+  },
+  {
+    path: '/speciality/:id',
+    element: <SpecialityDoctor />,
     children: []
   },
   {

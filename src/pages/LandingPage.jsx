@@ -1,5 +1,6 @@
 import React from 'react';
 import HomeNavBar from '../components/HomeNavBar';
+import { Box } from '@mui/material';
 import Footer from '../components/Footer';
 import img1 from '../../public/assets/image 1.png';
 import img2 from '../../public/assets/image 2.png';
@@ -16,13 +17,13 @@ import svg7 from '../../public/assets/Vector-6.svg';
 import svg8 from '../../public/assets/Vector-7.svg';
 
 const LandingPage = () => (
-  <div className="bg-white min-h-screen">
+  <Box className="bg-white min-h-screen">
     <HomeNavBar />
     <div className="w-[82%] xl:w-[100%] mx-auto bg-white px-4">
-      <section className="flex items-center lg:flex-col lg:gap-16 justify-between pt-[180px] md:pt-20">
+      <section className="flex items-center lg:flex-col lg:gap-16 justify-between pt-12 md:pt-0">
         <div className="w-[45%] xl:w-full flex flex-col items-center">
           <div
-            className="text-secondary font-bold text-6xl md:text-4xl leading-[1.1]"
+            className="text-secondary font-bold text-5xl md:text-4xl leading-[1.1]"
             style={{
               textShadow:
                 '0 0 10px #214add25, 0 0 20px #214add25, 0 0 30px #214add25, 0 0 40px #214add25,0 0 50px #214add25'
@@ -208,11 +209,26 @@ const LandingPage = () => (
         <h1 className="text-secondary text-center text-4xl mb-10 font-semibold">
           why you should choose us{' '}
         </h1>
-        <div className="h-[60vh]" />
+        <div className="grid grid-cols-3 mb-10 gap-4">
+          <div>
+            <h1 className="text-secondary font-bold mb-5">Safety</h1>
+            <p>
+              All medical services in our clinic are performed by experienced
+              staff using modern medical equipment
+            </p>
+          </div>
+          <div>
+            <h1 className="text-secondary font-bold mb-5">Comfort</h1>
+            <p>
+              Attentive and polite staff, large parking area, spacious waiting
+              and receiving areas.
+            </p>
+          </div>
+        </div>
       </section>
     </div>
     <Footer />
-  </div>
+  </Box>
 );
 
 export default LandingPage;
