@@ -12,11 +12,6 @@
 html {
   font-size: 17px;
 }
-@media (max-width: 784px) {
-  html {
-    font-size: 14px;
-  }
-}
 input:focus {
   box-shadow: none !important;
 }
@@ -25,7 +20,6 @@ input:focus {
   scrollbar-color: var(--secondary) var(--primary);
 }
 
-/* Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
   width: 15px;
 }
@@ -41,29 +35,11 @@ input:focus {
   border: 3px solid var(--primary);
 }
 
-/*
-} */
-
-/* #country-select-demo {
-  height: 22px !important;
-  padding: 0 !important;
+@media (max-width: 784px) {
+  html {
+    font-size: 14px;
+  }
+  html::-webkit-scrollbar {
+    display: none;
+  }
 }
-
-#demo-error-radios {
-  display: block !important;
-  width: 100% !important;
-  overflow: hidden;
-}
-
-#demo-radios {
-  display: block !important;
-  width: 180px !important;
-}
-
-#form-control {
-  display: flex !important;
-  flex-direction: row;
-  align-items: center;
-  width: 100% !important; 
-}
-*/

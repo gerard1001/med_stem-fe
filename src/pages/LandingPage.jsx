@@ -21,9 +21,9 @@ const LandingPage = () => (
     <HomeNavBar />
     <div className="w-[82%] xl:w-[100%] mx-auto bg-white px-4">
       <section className="flex items-center lg:flex-col lg:gap-16 justify-between pt-12 md:pt-0">
-        <div className="w-[45%] xl:w-full flex flex-col items-center">
+        <div className="w-[45%] xl:w-full flex flex-col items-baseline lg:items-center">
           <div
-            className="text-secondary font-bold text-5xl md:text-4xl leading-[1.1]"
+            className="text-secondary font-bold text-6xl md:text-4xl leading-[1.1]"
             style={{
               textShadow:
                 '0 0 10px #214add25, 0 0 20px #214add25, 0 0 30px #214add25, 0 0 40px #214add25,0 0 50px #214add25'

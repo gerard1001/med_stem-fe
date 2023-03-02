@@ -12,42 +12,18 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { useNavigate } from 'react-router';
-
-const SearchBar = ({ setSearchQuery }) => (
-  <form className="relative w-full h-min">
-    <TextField
-      id="search-bar"
-      className="text"
-      onInput={(e) => {
-        setSearchQuery(e.target.value);
-      }}
-      label="Last name, speciality or keyword"
-      variant="outlined"
-      placeholder="Search..."
-      sx={{ backgroundColor: '#EDF0F2', width: '100%' }}
-    />
-    <IconButton
-      type="submit"
-      aria-label="search"
-      sx={{
-        position: 'absolute',
-        transform: 'translate(-50%, -50%)',
-        top: '50%',
-        padding: 0,
-        border: '2px solid #797979'
-      }}
-      className="right-0"
-    >
-      <IoIcons.IoCloseSharp className="text-[16px] font-bold" />
-    </IconButton>
-  </form>
-);
+import SearchBar from '../components/SearchBar';
+import Loader from '../components/Loader/Loader';
 
 const filterData = (query, data) => {
   if (!query) {
     return data;
   } else {
-    return data?.filter((values) => values?.toLowerCase().includes(query));
+    return data?.filter(
+      (values) =>
+        values.first_name.toLowerCase().includes(query.toLowerCase()) ||
+        values.last_name.toLowerCase().includes(query.toLowerCase())
+    );
   }
 };
 
@@ -55,12 +31,20 @@ const FindDoctor = () => {
   const doctors = useSelector((state) => state.doctor);
   const departments = useSelector((state) => state.department);
   const [searchQuery, setSearchQuery] = React.useState('');
-  const dataFiltered = filterData(searchQuery, data);
   const [moreOPtions, setMoreOptions] = React.useState(false);
   const [allDoctors, setAllDoctors] = React.useState(false);
   const [allSpecialities, setAllSpecialities] = React.useState(false);
   const [hideSearchBox, setHideSearchBox] = React.useState(true);
   const [specialityId, setSpecialityId] = React.useState('');
+  const [doctorId, setDoctorId] = React.useState('');
+
+  const filteredData = doctors?.data?.data;
+
+  const dataFiltered = filterData(searchQuery, filteredData);
+
+  console.log({ filteredData, dataFiltered, searchQuery });
+
+  filteredData ? console.log(filteredData[0].doctor_id) : '';
 
   const dispatch = useDispatch();
 
@@ -70,12 +54,6 @@ const FindDoctor = () => {
     dispatch(getDoctorList());
     dispatch(getDepartmentList());
   }, []);
-
-  console.log(doctors?.data?.data);
-
-  const data = doctors?.data?.data?.map((values) => {
-    return values.first_name;
-  });
 
   const toggleSearchOptions = () => {
     setMoreOptions((value) => !value);
@@ -111,7 +89,6 @@ const FindDoctor = () => {
     );
   }, []);
 
-  console.log({ dataFiltered });
   return (
     <Box>
       {' '}
@@ -149,11 +126,17 @@ const FindDoctor = () => {
               <Typography>More search options </Typography>
             </Button>
             {allDoctors && !moreOPtions ? (
-              <Button disableRipple sx={{ mt: '16px', color: '#797979' }}>
+              <Button
+                disableRipple
+                sx={{ mt: '16px', color: '#797979', cursor: 'default' }}
+              >
                 <Typography>- List all doctors</Typography>
               </Button>
             ) : allSpecialities && !moreOPtions ? (
-              <Button disableRipple sx={{ mt: '16px', color: '#797979' }}>
+              <Button
+                disableRipple
+                sx={{ mt: '16px', color: '#797979', cursor: 'default' }}
+              >
                 <Typography>- Search by speciality</Typography>
               </Button>
             ) : (
@@ -199,75 +182,146 @@ const FindDoctor = () => {
             </Box>
           )}
         </Box>
-      </Box>
+      </Box>{' '}
       {allDoctors && !moreOPtions && (
-        <List
-          className="max-w-[640px] w-[90%] px-10 mx-auto h-[90vh] my-10 overflow-auto"
-          sx={{ marginX: 'auto', marginTop: 5 }}
-        >
-          {doctors?.data?.data?.map((data, idx) => {
-            const dpt = data.departments
-              ? data.departments[0]?.department_name
-              : 'Crap';
-            console.log(data.department, '****&*&*&*&*');
-            return (
-              <ListItem
-                key={data.doctor_id}
-                className={`border border-x-zinc-400 rounded-md my-4`}
-              >
-                <img
-                  src={data.picture}
-                  alt=""
-                  className="w-[40px] h-[40px] mr-4 rounded-[50%]"
-                />
-                <ListItemText
-                  primary={`${data.first_name} ${data.last_name}, M.D - ${data.speciality}`}
-                  secondary={`Total experience (years): ${data.experience_years},  Cost per appointment: ${data.cost_per_appointment}$`}
-                  className="line-clamp-3"
-                />
-              </ListItem>
-            );
-          })}
-        </List>
+        <>
+          {' '}
+          {doctors.loading && (
+            <Box className="w-[80px] h-[80px] mx-auto mt-12">
+              <Loader />
+            </Box>
+          )}
+          {!doctors.loading && (
+            <>
+              <Box className="flex flex-col items-end w-[70%] p-0 mx-auto pb-10">
+                <List
+                  className="max-w-[640px] w-[100%] px-10 mx-auto my-10 overflow-auto"
+                  sx={{ marginX: 'auto', marginTop: 5 }}
+                >
+                  {dataFiltered?.map((data, idx) => {
+                    return (
+                      <ListItem
+                        key={data.doctor_id}
+                        className={`shadow-sm border hover:bg-[#EDF0F2] rounded-md my-4 cursor-pointer ${
+                          doctorId === data.doctor_id &&
+                          'border-[2px] border-[#0093df]'
+                        }`}
+                        onClick={() => {
+                          setDoctorId(data.doctor_id);
+                        }}
+                      >
+                        <img
+                          src={data.picture}
+                          alt=""
+                          className="w-[40px] h-[40px] mr-[4%] ml-[3%] rounded-[50%]"
+                        />
+                        <ListItemText
+                          primary={`${data.first_name} ${data.last_name}, M.D - ${data.speciality}`}
+                          secondary={`Total experience (years): ${data.experience_years},  Cost per appointment: ${data.cost_per_appointment}$`}
+                          className="line-clamp-3"
+                        />
+                      </ListItem>
+                    );
+                  })}
+                </List>{' '}
+                <Button
+                  disabled={!doctorId}
+                  onClick={() => {
+                    nav(`/doctor_page/${doctorId}`);
+                  }}
+                  sx={{
+                    width: '120px',
+                    backgroundColor: '#D1D1D1',
+                    color: '#000',
+                    marginTop: '40px',
+                    ...(doctorId && {
+                      backgroundColor: '#1A4CFF',
+                      color: '#fff',
+                      ':hover': { backgroundColor: '#1A4CFA' }
+                    })
+                  }}
+                >
+                  Next
+                </Button>
+              </Box>
+            </>
+          )}
+        </>
       )}
       {allSpecialities && !moreOPtions && (
-        <Box
-          className="max-w-[1024px] w-[90%]  mx-auto  my-10"
-          sx={{
-            marginX: 'auto',
-            marginTop: 5,
-            display: 'grid',
-            gridTemplateColumns: {
-              md: 'repeat(5, 1fr)',
-              sm: 'repeat(3, 1fr)',
-              xs: 'repeat(2, 1fr)'
-            }
-          }}
-        >
-          {departments?.data?.data?.map((data, idx) => {
-            return (
-              <Box
-                key={data.department_id}
-                className={`flex flex-col items-center px-5`}
-                onClick={() => {
-                  setSpecialityId(data.department_id);
-                }}
-              >
+        <>
+          {' '}
+          {departments.loading && (
+            <Box className="w-[80px] h-[80px] mx-auto mt-12">
+              <Loader />
+            </Box>
+          )}
+          {!departments.loading && (
+            <>
+              <Box className="flex flex-col items-end w-fit p-0 mx-auto py-10">
                 <Box
-                  sx={{ aspectRatio: '1/1' }}
-                  className={`w-full ${
-                    specialityId === data.department_id
-                      ? 'bg-[#0f5f6d]'
-                      : 'bg-[#d8d8d8]'
-                  }  rounded-xl`}
-                ></Box>
-                <Typography>{data.department_name}</Typography>
+                  className="max-w-[1024px] w-[100%]  mx-auto"
+                  sx={{
+                    display: 'grid',
+                    gap: '30px',
+                    gridTemplateColumns: {
+                      md: 'repeat(5, 1fr)',
+                      sm: 'repeat(3, 1fr)',
+                      xs: 'repeat(2, 1fr)'
+                    }
+                  }}
+                >
+                  {departments?.data?.data?.map((data, idx) => {
+                    return (
+                      <Box
+                        key={data.department_id}
+                        className={`flex flex-col items-center px-5`}
+                        onClick={() => {
+                          setSpecialityId(data.department_id);
+                        }}
+                      >
+                        <Box
+                          sx={{ aspectRatio: '1/1' }}
+                          className={`w-full ${
+                            specialityId === data.department_id &&
+                            'border-[2px] border-[#0093df]'
+                          } bg-[#d4d4d4]  rounded-xl`}
+                        ></Box>
+                        <Typography
+                          className="line-clamp-2"
+                          sx={{ fontSize: '15px' }}
+                        >
+                          {data.department_name}
+                        </Typography>
+                      </Box>
+                    );
+                  })}
+                </Box>
+                <Button
+                  disabled={!specialityId}
+                  onClick={() => {
+                    nav(`/speciality/${specialityId}`);
+                  }}
+                  sx={{
+                    width: '120px',
+                    backgroundColor: '#D1D1D1',
+                    color: '#000',
+                    marginTop: '40px',
+                    ...(specialityId && {
+                      backgroundColor: '#1A4CFF',
+                      color: '#fff',
+                      ':hover': { backgroundColor: '#1A4CFA' }
+                    })
+                  }}
+                >
+                  Next
+                </Button>
               </Box>
-            );
-          })}
-        </Box>
+            </>
+          )}
+        </>
       )}
-      {specialityId && allSpecialities && !moreOPtions && (
+      {/* {specialityId && allSpecialities && !moreOPtions && (
         <Box className="w-[90%] max-w-[1024px] flex justify-end">
           <Button
             disabled={!specialityId}
@@ -276,34 +330,18 @@ const FindDoctor = () => {
             }}
             sx={
               specialityId
-                ? { backgroundColor: '#1A4CFF', color: '#fff' }
+                ? {
+                    backgroundColor: '#1A4CFF',
+                    color: '#fff',
+                    ':hover': { backgroundColor: '#1A4CFA' }
+                  }
                 : { backgroundColor: '#D1D1D1', color: '#000' }
             }
           >
             Next
           </Button>
         </Box>
-      )}
-      <div style={{ padding: 3 }}>
-        {dataFiltered?.map((d, idx) => (
-          <div
-            className="text"
-            style={{
-              padding: 5,
-              justifyContent: 'normal',
-              fontSize: 20,
-              color: 'blue',
-              margin: 1,
-              width: '250px',
-              BorderColor: 'green',
-              borderWidth: '10px'
-            }}
-            key={idx}
-          >
-            {d}
-          </div>
-        ))}
-      </div>
+      )} */}
     </Box>
   );
 };

@@ -78,7 +78,15 @@ const theme = createTheme({
         root: {
           ['& .Mui-focused']: {
             border: 'none'
-          }
+          },
+          borderRadius: '10px'
+        }
+      }
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          borderRadius: '10px'
         }
       }
     },

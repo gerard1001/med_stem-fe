@@ -8,6 +8,9 @@ import Form from '../pages/Form';
 import About from '../pages/About';
 import FindDoctor from '../pages/FindDoctor';
 import SpecialityDoctor from '../pages/SpecialityDoctor';
+import DoctorPage from '../pages/DoctorPage';
+import DashboardSideBar from '../components/DashboardSideBar';
+import PatientProfile from '../pages/PatientProfile';
 
 const routes = createBrowserRouter([
   {
@@ -31,8 +34,18 @@ const routes = createBrowserRouter([
     children: []
   },
   {
+    path: '/doctor_page/:id',
+    element: <DoctorPage />,
+    children: []
+  },
+  {
     path: '/speciality/:id',
     element: <SpecialityDoctor />,
+    children: []
+  },
+  {
+    path: '/patient_profile',
+    element: <PatientProfile />,
     children: []
   },
   {

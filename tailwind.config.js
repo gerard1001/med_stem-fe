@@ -5,6 +5,7 @@
 module.exports = {
   content: ['./src/**/*.{js,jsx}', './public/index.html'],
   darkMode: 'class',
+  mode: 'jit',
   theme: {
     extend: {
       screens: {

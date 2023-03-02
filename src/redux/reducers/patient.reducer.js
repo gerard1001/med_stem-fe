@@ -8,55 +8,57 @@ const initialState = {
   error: ''
 };
 
-export const getDoctorList = createAsyncThunk(
-  'users/fetchDoctors',
+export const getPatientList = createAsyncThunk(
+  'users/fetchPatients',
   async () => {
     return axios
-      .get('http://localhost:3030/api/v1/users/doctors')
+      .get('http://localhost:3030/api/v1/users/clients')
       .then((res) => {
         return res.data;
       });
   }
 );
 
-export const getOneDoctor = createAsyncThunk(
-  'users/fetchDoctor',
-  async (doctorId) => {
+export const getOnePatient = createAsyncThunk(
+  'users/fetchPatient',
+  async (patientId) => {
     return axios
-      .get(`http://localhost:3030/api/v1/users/doctors/${doctorId}`)
+      .get(
+        `http://localhost:3030/api/v1/users/clients/64fc1233-8b59-5643-8e9a-c9a8f38bf6b6`
+      )
       .then((res) => {
         return res.data;
       });
   }
 );
 
-const doctorSlice = createSlice({
-  name: 'doctor',
+const patientSlice = createSlice({
+  name: 'patient',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getDoctorList.pending, (state) => {
+    builder.addCase(getPatientList.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(getDoctorList.fulfilled, (state, action) => {
+    builder.addCase(getPatientList.fulfilled, (state, action) => {
       state.loading = false;
       state.data = action.payload;
       state.error = '';
     });
-    builder.addCase(getDoctorList.rejected, (state, action) => {
+    builder.addCase(getPatientList.rejected, (state, action) => {
       state.loading = false;
       state.data = [];
       state.error = action.error.message;
     });
-    builder.addCase(getOneDoctor.pending, (state, action) => {
+    builder.addCase(getOnePatient.pending, (state, action) => {
       state.loading = true;
     });
-    builder.addCase(getOneDoctor.fulfilled, (state, action) => {
+    builder.addCase(getOnePatient.fulfilled, (state, action) => {
       state.loading = false;
       state.single_data = action.payload;
       state.error = '';
     });
-    builder.addCase(getOneDoctor.rejected, (state, action) => {
+    builder.addCase(getOnePatient.rejected, (state, action) => {
       state.loading = false;
       state.single_data = {};
       state.error = action.error.message;
@@ -64,4 +66,4 @@ const doctorSlice = createSlice({
   }
 });
 
-export default doctorSlice.reducer;
+export default patientSlice.reducer;

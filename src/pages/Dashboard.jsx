@@ -23,7 +23,6 @@ function Dashboard() {
     dispatch(getDoctorList());
     dispatch(getDepartmentList());
   }, []);
-  console.log(doctor);
   return (
     <Box>
       <DashboardNavBar />

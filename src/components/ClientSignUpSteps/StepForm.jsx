@@ -22,7 +22,7 @@ const labels = [
 ];
 
 const defaultValues = {
-  activeStep: 2,
+  activeStep: 0,
   first_name: '',
   last_name: '',
   id_number: '',
