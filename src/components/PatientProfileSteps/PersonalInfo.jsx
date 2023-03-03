@@ -34,13 +34,6 @@ const PatientInfo = () => {
         )}
         {!patient?.loading && (
           <Box className="">
-            <Box className="flex flex-center gap-3">
-              <Typography variant="h6">Profile</Typography>
-              <Typography variant="h6">-</Typography>
-              <Typography variant="h6">
-                {patientData?.first_name} {patientData?.last_name}
-              </Typography>
-            </Box>
             <PatientProfileNavigation />
             <Box sx={{ width: { md: '50%' } }}>
               <Grid

@@ -11,6 +11,8 @@ import SpecialityDoctor from '../pages/SpecialityDoctor';
 import DoctorPage from '../pages/DoctorPage';
 import DashboardSideBar from '../components/DashboardSideBar';
 import PatientProfile from '../pages/PatientProfile';
+import PatientAppointments from '../pages/PatientAppointments';
+import Login from '../pages/Login';
 
 const routes = createBrowserRouter([
   {
@@ -29,6 +31,11 @@ const routes = createBrowserRouter([
     children: []
   },
   {
+    path: '/login',
+    element: <Login />,
+    children: []
+  },
+  {
     path: '/find_doctor',
     element: <FindDoctor />,
     children: []
@@ -44,8 +51,13 @@ const routes = createBrowserRouter([
     children: []
   },
   {
-    path: '/patient_profile',
+    path: '/patient',
     element: <PatientProfile />,
+    children: []
+  },
+  {
+    path: '/patient/appointments',
+    element: <PatientAppointments />,
     children: []
   },
   {

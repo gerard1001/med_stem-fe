@@ -8,11 +8,22 @@ import {
 import { Box, Typography } from '@mui/material';
 
 const PatientProfileNavigation = () => {
-  const step = useSelector((state) => state.step.step);
+  const step = useSelector((state) => state.step.profile_step);
+  const patient = useSelector((state) => state.patient.single_data.data);
+
   const dispatch = useDispatch();
+
+  console.log(step, '***********');
 
   return (
     <div>
+      <Box className="flex flex-center gap-3">
+        <Typography variant="h6">Profile</Typography>
+        <Typography variant="h6">-</Typography>
+        <Typography variant="h6">
+          {patient?.first_name} {patient?.last_name}
+        </Typography>
+      </Box>
       <Box className="flex items-center gap-10 mt-8 mb-5">
         <Typography
           variant="subtitle1"

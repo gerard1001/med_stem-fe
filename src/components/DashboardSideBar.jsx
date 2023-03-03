@@ -19,7 +19,8 @@ import { FiHome, FiLogOut, FiUsers } from 'react-icons/fi';
 import { RiCalendarTodoLine, RiBillLine } from 'react-icons/ri';
 import { VscGraphLine } from 'react-icons/vsc';
 import { FaBars } from 'react-icons/fa';
-
+import { IoCalculatorOutline } from 'react-icons/io5';
+import { BsPlusCircle } from 'react-icons/bs';
 const listItems = [
   {
     listIcon: <FiUsers className="text-[20px]" />,
@@ -34,8 +35,12 @@ const listItems = [
     listText: 'Analytics'
   },
   {
-    listIcon: <RiBillLine className="text-[20px]" />,
-    listText: 'Bill'
+    listIcon: <IoCalculatorOutline className="text-[20px]" />,
+    listText: 'Calculator'
+  },
+  {
+    listIcon: <BsPlusCircle className="text-[20px]" />,
+    listText: 'Add'
   }
 ];
 
@@ -80,7 +85,7 @@ const DashboardSideBar = () => {
       </Box>
       <Divider />
       <Box className="h-[calc(100%-64px)] min-h-[60vh] flex flex-col justify-between">
-        <Box className="h-[100%]">
+        <Box className="h-[55%]">
           <List>
             {listItems.map((listItem, index) => (
               <ListItem button key={index}>
@@ -90,7 +95,7 @@ const DashboardSideBar = () => {
             ))}
           </List>
         </Box>
-        <Box className="h-[40%]  border-t border-[#0093df]">
+        <Box className="h-[45%]  border-t border-[#0093df]">
           <List>
             {accItems.map((listItem, index) => (
               <ListItem button key={index}>
@@ -130,6 +135,7 @@ const DashboardSideBar = () => {
                   variant="subtitle1"
                   color="primary"
                   fontWeight="bold"
+                  fontSize="16px"
                 >
                   MedStem
                 </Typography>

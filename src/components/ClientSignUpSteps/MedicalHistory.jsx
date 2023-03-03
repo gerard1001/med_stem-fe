@@ -6,7 +6,7 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import * as React from 'react';
 import * as IoIcons from 'react-icons/io5';
-import mason from '../../utils/mson';
+import { med_info } from '../../utils/dummyData';
 import { Controller, useFormContext } from 'react-hook-form';
 
 const MedicalHistory = ({}) => {
@@ -14,8 +14,8 @@ const MedicalHistory = ({}) => {
 
   const { control, register, getValues, setValue } = useFormContext();
 
-  const valueToDisplay = mason?.filter(
-    (values) => values.info_description !== ''
+  const spec_med_info = med_info?.filter(
+    (values) => values.info_type === 'special'
   );
 
   const handleNext = () => {
@@ -32,7 +32,7 @@ const MedicalHistory = ({}) => {
       <div className="font-bold ml-[3%] md:text-center">
         Other Medical History
       </div>
-      {valueToDisplay.map((values, idx) => (
+      {spec_med_info.map((values, idx) => (
         <Box key={values.info_description}>
           <Box key={values.info_id} className="block">
             <FormControl
@@ -85,7 +85,7 @@ const MedicalHistory = ({}) => {
                   label=""
                   placeholder=""
                   margin="normal"
-                  style={{ background: '#e7e7e7' }}
+                  style={{ background: '#e7e7e7', borderRadius: '10px' }}
                   size="medium"
                 />
               )}

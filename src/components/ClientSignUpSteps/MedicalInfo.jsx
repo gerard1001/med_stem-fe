@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import * as ImIcons from 'react-icons/im';
 import * as IoIcons from 'react-icons/io5';
-import mason from '../../utils/mson';
+import { med_info } from '../../utils/dummyData';
 import { Controller, useFormContext } from 'react-hook-form';
 
 const MedicalInfo = ({}) => {
@@ -45,7 +45,7 @@ const MedicalInfo = ({}) => {
         Medical Information
       </div>
       <form className="">
-        {mason.map((values, idx) => (
+        {med_info.map((values, idx) => (
           <div key={values.info_id}>
             <Box className="flex flex-row items-center h-[50px] lg:h-min">
               <FormControl

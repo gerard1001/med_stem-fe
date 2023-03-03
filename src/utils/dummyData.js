@@ -199,7 +199,6 @@ export const countries_1 = [
   'Sierra Leone',
   'Singapore',
   'Sint Maarten',
-
   'Slovakia',
   'Slovenia',
   'Solomon Islands',
@@ -674,4 +673,303 @@ export const countries = [
   { code: 'ZA', label: 'South Africa', phone: '27' },
   { code: 'ZM', label: 'Zambia', phone: '260' },
   { code: 'ZW', label: 'Zimbabwe', phone: '263' }
+];
+
+export const infos = [
+  'Epilepsy, fits, blackouts, fainting turns or unexplained loss of consciousness?',
+  'Vertigo, dizziness, giddiness, problems with balance?',
+  'Recurrent headache or migraine?',
+  'Diseases of the nervous system e.g. neuritis, stroke, multiple sclerosis?',
+  'Chest pain, angina, heart disease or breathlessness?',
+  'Any visual defect e.g. scotoma, blindness in one eye, reduced visual field, blurred vision, coloured blind?'
+];
+
+export const spec_infos = [
+  'Allergies: Do you have any known allergies or do you have any adverse reaction to drugs or medication?:',
+  'Do you currently take any medication?:',
+  'Smoking History. Do you or have you ever smoked?:'
+];
+
+export const med_info = [
+  {
+    info_id: '48cf79b2-3a3f-4d9f-8c07-936903fb4026',
+    info_name:
+      'Epilepsy, fits, blackouts, fainting turns or unexplained loss of consciousness?',
+    info_type: 'general',
+    createdAt: '2023-02-28T18:00:05.289Z',
+    updatedAt: '2023-02-28T18:00:05.289Z'
+  },
+  {
+    info_id: '7b0b5d8a-8529-4bf9-b62b-d06791e0c83a',
+    info_name: 'Vertigo, dizziness, giddiness, problems with balance?',
+    info_type: 'general',
+    createdAt: '2023-02-28T18:00:05.289Z',
+    updatedAt: '2023-02-28T18:00:05.289Z'
+  },
+  {
+    info_id: 'f7bc4839-42d0-4161-b02b-2bc617d1c09e',
+    info_name: 'Recurrent headache or migraine?',
+    info_type: 'general',
+    createdAt: '2023-02-28T18:00:05.289Z',
+    updatedAt: '2023-02-28T18:00:05.289Z'
+  },
+  {
+    info_id: '86211a9d-1c0f-48fd-b88f-dd5acb12691b',
+    info_name:
+      'Diseases of nervous system e.g neuritis, stroke, multiple sclerosis?',
+    info_type: 'general',
+    createdAt: '2023-02-28T18:00:05.289Z',
+    updatedAt: '2023-02-28T18:00:05.289Z'
+  },
+  {
+    info_id: '5f4f0e88-3bbc-4232-8e8e-15f87c9a9369',
+    info_name: 'Chest pain, angina, heart disease or breathlessness?',
+    info_type: 'general',
+    createdAt: '2023-02-28T18:00:05.289Z',
+    updatedAt: '2023-02-28T18:00:05.289Z'
+  },
+  {
+    info_id: 'f5be2ce3-014c-4b70-85d4-dc85fdef7c99',
+    info_name:
+      'Any visual defect e.g. scotoma, blindness in one eye, reduced visual field, blurred vision, coloured blind?',
+    info_type: 'general',
+    createdAt: '2023-02-28T18:00:05.289Z',
+    updatedAt: '2023-02-28T18:00:05.289Z'
+  },
+  {
+    info_id: 'd5e143ec-801f-43ee-9931-38668771b897',
+    info_name: 'Raised or low blood pressure?',
+    info_type: 'general',
+    createdAt: '2023-02-28T18:00:05.289Z',
+    updatedAt: '2023-02-28T18:00:05.289Z'
+  },
+  {
+    info_id: '2f17f24e-bcba-4e0c-a141-fc7e8cb93a66',
+    info_name: 'Any blood disorder?',
+    info_type: 'general',
+    createdAt: '2023-02-28T18:00:05.289Z',
+    updatedAt: '2023-02-28T18:00:05.289Z'
+  },
+  {
+    info_id: '0dc7a710-07eb-488f-9fa7-9ec09839bcb0',
+    info_name:
+      'Asthma, bronchitis, emphysema, pneumonia or any other lung disease?',
+    info_type: 'general',
+    createdAt: '2023-02-28T18:00:05.289Z',
+    updatedAt: '2023-02-28T18:00:05.289Z'
+  },
+  {
+    info_id: '7495ac31-d2ab-4da7-9b8b-88398f12ebb9',
+    info_name: 'Jaundice or any form of hepatitis or other liver problem?',
+    info_type: 'general',
+    createdAt: '2023-02-28T18:00:05.289Z',
+    updatedAt: '2023-02-28T18:00:05.289Z'
+  },
+  {
+    info_id: 'e659dcc7-fa6c-40af-95d6-71f7dc35302a',
+    info_name: 'Any kidney or bladder conditions?',
+    info_type: 'general',
+    createdAt: '2023-02-28T18:00:05.289Z',
+    updatedAt: '2023-02-28T18:00:05.289Z'
+  },
+  {
+    info_id: 'aecedb18-de36-47ed-bcfe-a4b83acf8b30',
+    info_name: 'Arthritis, gout, chondromalcia patellae or rheumatism?',
+    info_type: 'general',
+    createdAt: '2023-02-28T18:00:05.289Z',
+    updatedAt: '2023-02-28T18:00:05.289Z'
+  },
+  {
+    info_id: '46b8e585-9c4d-413c-8e39-12f588bce5c5',
+    info_name:
+      'Any metabolic disorder including diabetes, thyroid and adrenal gland disease?',
+    info_type: 'general',
+    createdAt: '2023-02-28T18:00:05.289Z',
+    updatedAt: '2023-02-28T18:00:05.289Z'
+  },
+  {
+    info_id: 'e60817c1-ab38-4c1b-a83f-fa7229384355',
+    info_name: 'Psoriasis, eczema, allergic skin rash or other skin disorder?',
+    info_type: 'general',
+    createdAt: '2023-02-28T18:00:05.289Z',
+    updatedAt: '2023-02-28T18:00:05.289Z'
+  },
+  {
+    info_id: '33fdbee2-7289-476f-8056-a492268cabca',
+    info_name: 'Any infectious diseases?',
+    info_type: 'general',
+    createdAt: '2023-02-28T18:00:05.289Z',
+    updatedAt: '2023-02-28T18:00:05.289Z'
+  },
+  {
+    info_id: 'fcc5d0c4-bd88-454c-8851-0faaad653d1f',
+    info_name:
+      'Anxiety/depression, mental breakdown or stress related problems?',
+    info_type: 'general',
+    createdAt: '2023-02-28T18:00:05.289Z',
+    updatedAt: '2023-02-28T18:00:05.289Z'
+  },
+  {
+    info_id: '08d33a75-e388-4759-ae9f-f542e4ec6422',
+    info_name: 'Sleep related issues?',
+    info_type: 'general',
+    createdAt: '2023-02-28T18:00:05.289Z',
+    updatedAt: '2023-02-28T18:00:05.289Z'
+  },
+  {
+    info_id: 'f5a1f83a-d57f-429f-a73e-1b5262c650d1',
+    info_name: 'Substence misuse (e.g drugs, steroids)?',
+    info_type: 'general',
+    createdAt: '2023-02-28T18:00:05.289Z',
+    updatedAt: '2023-02-28T18:00:05.289Z'
+  },
+  {
+    info_id: '1d1a399f-ce80-45b7-b507-ce132612ddbf',
+    info_name: 'Any malignancies or cancers?',
+    info_type: 'general',
+    createdAt: '2023-02-28T18:00:05.289Z',
+    updatedAt: '2023-02-28T18:00:05.289Z'
+  },
+  {
+    info_id: 'f57eabff-2f08-413e-9113-d4fd01fe3c9e',
+    info_name: 'Any operations or surgical procedures?',
+    info_type: 'general',
+    createdAt: '2023-02-28T18:00:05.289Z',
+    updatedAt: '2023-02-28T18:00:05.289Z'
+  },
+  {
+    info_id: '5d47f0a0-115a-47c2-9cf1-97b5a7bebcd5',
+    info_name: 'Ear or hearing problems?',
+    info_type: 'general',
+    createdAt: '2023-02-28T18:00:05.289Z',
+    updatedAt: '2023-02-28T18:00:05.289Z'
+  },
+  {
+    info_id: '9302795d-ecfc-4ec3-b55c-651ec2965568',
+    info_name:
+      'Have you ever consulted any orthopaedic surgeon, chiropractor, osteopath or physiotherapist?',
+    info_type: 'general',
+    createdAt: '2023-02-28T18:00:05.289Z',
+    updatedAt: '2023-02-28T18:00:05.289Z'
+  },
+  {
+    info_id: 'e25a827a-eecc-48fe-b819-78e5d06bc8c6',
+    info_name:
+      'Current treatment. Are you currently attending a hospital/GP for treatment or waiting for an appointment?',
+    info_type: 'general',
+    createdAt: '2023-02-28T18:00:05.289Z',
+    updatedAt: '2023-02-28T18:00:05.289Z'
+  },
+  {
+    info_id: '46c12646-ab4b-43b0-a1c4-4f16d7475bde',
+    info_name: 'Any other medical condition we should be aware of?',
+    info_type: 'general',
+    createdAt: '2023-02-28T18:00:05.289Z',
+    updatedAt: '2023-02-28T18:00:05.289Z'
+  },
+  {
+    info_id: '783ab92b-c126-485e-b82b-e3c0fe9210ef',
+    info_name:
+      'Allergies: Do you have any known allergies or do you have any adverse reaction to drugs or medication?',
+    info_type: 'special',
+    createdAt: '2023-02-28T18:00:05.289Z',
+    updatedAt: '2023-02-28T18:00:05.289Z'
+  },
+  {
+    info_id: '0c1abad3-5346-4db0-a122-d25af0a7005e',
+    info_name: 'Do you currently take any medication?',
+    info_type: 'special',
+    createdAt: '2023-02-28T18:00:05.289Z',
+    updatedAt: '2023-02-28T18:00:05.289Z'
+  },
+  {
+    info_id: 'b16fe8d5-8f28-47a8-8a1e-324c549d4f64',
+    info_name: 'Smoking History. Do you or have you ever smoked?',
+    info_type: 'special',
+    createdAt: '2023-02-28T18:00:05.289Z',
+    updatedAt: '2023-02-28T18:00:05.289Z'
+  }
+];
+
+export const expected_appointments = [
+  {
+    appointment_number: '0005605568796',
+    appointment_date: new Date().toLocaleDateString(),
+    doctor: {
+      first_name: 'Dina',
+      last_name: 'Tsoy',
+      email: 'dina@med.com',
+      doctor_number: '0073777733',
+      speciality: 'Endocrinologist'
+    }
+  },
+  {
+    appointment_number: '0003673635357',
+    appointment_date: new Date().toLocaleDateString(),
+    doctor: {
+      first_name: 'Dina',
+      last_name: 'Tsoy',
+      email: 'dina@med.com',
+      doctor_number: '0073777733',
+      speciality: 'Pulmonologist'
+    }
+  },
+  {
+    appointment_number: '0008930390827',
+    appointment_date: new Date().toLocaleDateString(),
+    doctor: {
+      first_name: 'Dina',
+      last_name: 'Tsoy',
+      email: 'dina@med.com',
+      doctor_number: '0073777733',
+      speciality: 'Endocrinologist'
+    }
+  },
+  {
+    appointment_number: '0003839233829',
+    appointment_date: new Date().toLocaleDateString(),
+    doctor: {
+      first_name: 'Dina',
+      last_name: 'Tsoy',
+      email: 'dina@med.com',
+      doctor_number: '0073777733',
+      speciality: 'Cardiatric'
+    }
+  }
+];
+
+export const prev_appointments = [
+  {
+    appointment_number: '0007847484838',
+    appointment_date: new Date().toLocaleDateString(),
+    doctor: {
+      first_name: 'Dina',
+      last_name: 'Tsoy',
+      email: 'dina@med.com',
+      doctor_number: '0073777733',
+      speciality: 'Endocrinologist'
+    }
+  },
+  {
+    appointment_number: '000839237937',
+    appointment_date: new Date().toLocaleDateString(),
+    doctor: {
+      first_name: 'Dina',
+      last_name: 'Tsoy',
+      email: 'dina@med.com',
+      doctor_number: '0073777733',
+      speciality: 'Endocrinologist'
+    }
+  },
+  {
+    appointment_number: '0007474684684',
+    appointment_date: new Date().toLocaleDateString(),
+    doctor: {
+      first_name: 'Dina',
+      last_name: 'Tsoy',
+      email: 'dina@med.com',
+      doctor_number: '0073777733',
+      speciality: 'Endocrinologist'
+    }
+  }
 ];

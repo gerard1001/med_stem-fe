@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 import { Button, Box } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import * as IoIcons from 'react-icons/io5';
-import { countries } from '../../utils/data';
+import { countries } from '../../utils/dummyData';
 import { Controller, useFormContext } from 'react-hook-form';
 
 const ContactInfo = ({}) => {

@@ -11,6 +11,7 @@ import MedicalInfo from './MedicalInfo';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { useNavigate } from 'react-router';
 
 const labels = [
   'First Step',
@@ -93,6 +94,8 @@ const StepForm = ({ getStatus }) => {
     getStatus(activeStep);
   }, [activeStep]);
 
+  const nav = useNavigate();
+
   return (
     <FormProvider {...methods}>
       {activeStep === labels.length ? (
@@ -110,7 +113,12 @@ const StepForm = ({ getStatus }) => {
               style={{ margin: '10px 0' }}
             >
               Already have an account?{' '}
-              <span className="text-primary font-bold cursor-pointer">
+              <span
+                className="text-primary font-bold cursor-pointer"
+                onClick={() => {
+                  nav('/login');
+                }}
+              >
                 Log in
               </span>
             </Typography>

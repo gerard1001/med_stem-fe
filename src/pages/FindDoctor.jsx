@@ -42,8 +42,6 @@ const FindDoctor = () => {
 
   const dataFiltered = filterData(searchQuery, filteredData);
 
-  console.log({ filteredData, dataFiltered, searchQuery });
-
   filteredData ? console.log(filteredData[0].doctor_id) : '';
 
   const dispatch = useDispatch();
