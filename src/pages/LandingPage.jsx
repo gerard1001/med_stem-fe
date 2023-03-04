@@ -1,5 +1,6 @@
 import React from 'react';
 import HomeNavBar from '../components/HomeNavBar';
+import { Box } from '@mui/material';
 import Footer from '../components/Footer';
 import img1 from '../../public/assets/image 1.png';
 import img2 from '../../public/assets/image 2.png';
@@ -16,11 +17,11 @@ import svg7 from '../../public/assets/Vector-6.svg';
 import svg8 from '../../public/assets/Vector-7.svg';
 
 const LandingPage = () => (
-  <div className="bg-white min-h-screen">
+  <Box className="bg-white min-h-screen">
     <HomeNavBar />
     <div className="w-[82%] xl:w-[100%] mx-auto bg-white px-4">
-      <section className="flex items-center lg:flex-col lg:gap-16 justify-between pt-[180px] md:pt-20">
-        <div className="w-[45%] xl:w-full flex flex-col items-center">
+      <section className="flex items-center lg:flex-col lg:gap-16 justify-between pt-12 md:pt-0">
+        <div className="w-[45%] xl:w-full flex flex-col items-baseline lg:items-center">
           <div
             className="text-secondary font-bold text-6xl md:text-4xl leading-[1.1]"
             style={{
@@ -208,226 +209,26 @@ const LandingPage = () => (
         <h1 className="text-secondary text-center text-4xl mb-10 font-semibold">
           why you should choose us{' '}
         </h1>
-        <div className="h-[60vh]" />
+        <div className="grid grid-cols-3 mb-10 gap-4">
+          <div>
+            <h1 className="text-secondary font-bold mb-5">Safety</h1>
+            <p>
+              All medical services in our clinic are performed by experienced
+              staff using modern medical equipment
+            </p>
+          </div>
+          <div>
+            <h1 className="text-secondary font-bold mb-5">Comfort</h1>
+            <p>
+              Attentive and polite staff, large parking area, spacious waiting
+              and receiving areas.
+            </p>
+          </div>
+        </div>
       </section>
     </div>
     <Footer />
-  </div>
+  </Box>
 );
 
 export default LandingPage;
-
-// import * as React from 'react';
-// import Radio from '@mui/material/Radio';
-// import RadioGroup from '@mui/material/RadioGroup';
-// import FormControlLabel from '@mui/material/FormControlLabel';
-// import FormControl from '@mui/material/FormControl';
-// import { TextField } from '@mui/material';
-// import FormHelperText from '@mui/material/FormHelperText';
-// import FormLabel from '@mui/material/FormLabel';
-// import Button from '@mui/material/Button';
-// import Box from '@mui/material/Box';
-// import Modal from '@mui/material/Modal';
-// import Menu from '@mui/material/Menu';
-// import MenuItem from '@mui/material/MenuItem';
-// import * as BsIcons from 'react-icons/bs';
-// import * as AiIcons from 'react-icons/ai';
-// import * as IoIcons from 'react-icons/io5';
-// import { mason } from '../utils/mson';
-
-// export default function ErrorRadios() {
-//   const [value, setValue] = React.useState({});
-//   const [text, setText] = React.useState({});
-//   const [description, setDescription] = React.useState('');
-//   const [clickedIdx, setClickedIdx] = React.useState(0);
-//   const [showDetails, setShowDetails] = React.useState(false);
-//   const [error, setError] = React.useState(false);
-//   const [helperText, setHelperText] = React.useState('Choose wisely');
-//   const [anchorEl, setAnchorEl] = React.useState(null);
-//   const [openCreateModal, setOpenCreateModal] = React.useState(false);
-//   const open = Boolean(anchorEl);
-
-//   const handleClose = () => {
-//     setAnchorEl(null);
-//   };
-
-//   const handleOpenDeleteCycle = (e) => {
-//     setAnchorEl(null);
-//   };
-
-//   const handleOpenCreateCycle = () => {
-//     setOpenCreateModal(true);
-//   };
-
-//   const handleCloseCreateModel = () => {
-//     setOpenCreateModal(false);
-//     setValue('yes');
-//   };
-
-//   const handleRadioChange = (event) => {
-//     setValue(event.target.value);
-//     setHelperText(' ');
-//     setError(false);
-//   };
-
-//   const handleSubmit = (event, idx) => {
-//     event.preventDefault();
-
-//     console.log(event);
-//     handleOpenCreateCycle();
-//     setText((prev) => ({
-//       ...prev,
-//       [idx]: event.target.name
-//     }));
-//   };
-
-//   let variable = [];
-
-//   for (let i = 0; i < Object.keys(text).length; i++) {
-//     const obj = {};
-//     const pos = Object.keys(text)[i];
-//     obj['txt'] = text[pos];
-//     obj['descr'] = description[pos] || '';
-//     variable.push(obj);
-//   }
-
-//   console.log(variable);
-//   console.log({ clickedIdx });
-
-//   return (
-//     <>
-//       {mason.map((values, idx) => {
-//         return (
-//           <form key={idx}>
-//             <FormControl sx={{ m: 3 }} error={error} variant="standard">
-//               <FormLabel id="demo-error-radios">{values.info_name}</FormLabel>
-//               <RadioGroup
-//                 aria-labelledby="demo-error-radios"
-//                 name={values.info_name}
-//                 value={value[idx]}
-//                 onChange={(event) => {
-//                   setValue((prev) => ({
-//                     ...prev,
-//                     [idx]: event.target.value
-//                   }));
-//                 }}
-//               >
-//                 <FormControlLabel
-//                   value="yes"
-//                   control={<Radio />}
-//                   type="submit"
-//                   label="yes"
-//                   onClick={(event) => {
-//                     setShowDetails((showDetails) => ({
-//                       ...showDetails,
-//                       // [idx]: !showDetails[idx]
-//                       [idx]: true
-//                     }));
-//                     setClickedIdx(idx);
-//                     setText((prev) => ({
-//                       ...prev,
-//                       [idx]: event.target.name
-//                     }));
-//                   }}
-//                 />
-//                 <FormControlLabel
-//                   value="no"
-//                   control={<Radio />}
-//                   label="no"
-//                   onClick={(event) => {
-//                     setClickedIdx(idx);
-//                     setShowDetails((showDetails) => ({
-//                       ...showDetails,
-//                       // [idx]: !showDetails[idx]
-//                       [idx]: false
-//                     }));
-//                     delete text[idx];
-//                     delete description[idx];
-//                   }}
-//                 />
-//               </RadioGroup>
-//               {/* <FormHelperText>{helperText}</FormHelperText> */}
-//             </FormControl>
-//             {showDetails[idx] && (
-//               <Button
-//                 onClick={() => {
-//                   setClickedIdx(idx);
-//                   handleOpenCreateCycle();
-//                 }}
-//                 color="primary"
-//                 sx={{
-//                   backgroundColor: '#0093df',
-//                   color: '#fff',
-//                   textTransform: 'capitalize'
-//                 }}
-//                 className="hover:bg-black"
-//               >
-//                 Details
-//               </Button>
-//             )}
-//           </form>
-//         );
-//       })}
-
-//       <Button onClick={handleOpenCreateCycle}>Click</Button>
-//       <Modal
-//         open={openCreateModal}
-//         onClose={handleCloseCreateModel}
-//         aria-labelledby="parent-modal-title"
-//         aria-describedby="parent-modal-description"
-//       >
-//         <Box className="absolute w-[50%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] md:w-[90%]">
-//           <div
-//             action=""
-//             // onSubmit={createNewCycle}
-//             className=" relative w-[100%] rounded-[5px] h-[455px] m-auto p-[10px] pt-[5px] bg-dark-bg bg-[#f0f0f0] "
-//           >
-//             <h1 className="text-center font-bold text-white text-[22px] m-[20px]">
-//               {text[clickedIdx]}
-//             </h1>
-//             <IoIcons.IoClose
-//               className="absolute top-[20px] right-[20px] text-[35px] cursor-pointer"
-//               onClick={handleCloseCreateModel}
-//             />
-//             <hr style={{ marginBottom: '4px' }} />
-//             <div>
-//               <TextField
-//                 variant="outlined"
-//                 fullWidth
-//                 label="Description"
-//                 name="description"
-//                 placeholder="Description"
-//                 margin="normal"
-//                 value={description[clickedIdx]}
-//                 onChange={(event) => {
-//                   // setDescription(event.target.value);
-//                   setDescription((prev) => ({
-//                     ...prev,
-//                     [clickedIdx]: event.target.value
-//                   }));
-//                 }}
-//                 required
-//                 size="small"
-//               />
-//             </div>
-//             <Button
-//               onClick={(event) => {
-//                 handleCloseCreateModel();
-//               }}
-//               color="primary"
-//               sx={{
-//                 backgroundColor: '#0093df',
-//                 color: '#fff',
-//                 textTransform: 'capitalize',
-//                 fontWeight: 'bold'
-//               }}
-//               className="hover:bg-black mx-auto"
-//             >
-//               save
-//             </Button>
-//           </div>
-//         </Box>
-//       </Modal>
-//     </>
-//   );
-// }
