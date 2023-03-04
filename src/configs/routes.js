@@ -13,6 +13,7 @@ import DashboardSideBar from '../components/DashboardSideBar';
 import PatientProfile from '../pages/PatientProfile';
 import PatientAppointments from '../pages/PatientAppointments';
 import Login from '../pages/Login';
+import DoctorProfile from '../pages/DoctorProfile';
 
 const routes = createBrowserRouter([
   {
@@ -43,6 +44,11 @@ const routes = createBrowserRouter([
   {
     path: '/doctor_page/:id',
     element: <DoctorPage />,
+    children: []
+  },
+  {
+    path: '/doctor',
+    element: <DoctorProfile />,
     children: []
   },
   {

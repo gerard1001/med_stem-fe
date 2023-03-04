@@ -64,7 +64,7 @@ const DashboardSideBar = () => {
 
   const sideList = () => (
     <Box
-      className={`w-[220px] h-[calc(100vh-64px)] border-r border-[#0093df] overflow-auto flex flex-col`}
+      className={`w-[220px] border-r border-[#0093df] overflow-auto flex flex-col fixed bg-[#fff]  top-[60px] md:top-0 left-0 bottom-0 z-20`}
       component="div"
     >
       <Box
@@ -84,7 +84,7 @@ const DashboardSideBar = () => {
         </IconButton>
       </Box>
       <Divider />
-      <Box className="h-[calc(100%-64px)] min-h-[60vh] flex flex-col justify-between">
+      <Box className="h-[calc(100%-64px)] flex flex-col justify-between">
         <Box className="h-[55%]">
           <List>
             {listItems.map((listItem, index) => (
@@ -110,10 +110,10 @@ const DashboardSideBar = () => {
   );
   console.log({ open });
   return (
-    <>
+    <Box>
       <CssBaseline />
 
-      <Box component="nav">
+      <Box component="nav" className="fixed left-0 top-0 right-0 z-50">
         <AppBar
           position="static"
           sx={{
@@ -166,7 +166,7 @@ const DashboardSideBar = () => {
       >
         <Box>{sideList()}</Box>
       </Box>
-    </>
+    </Box>
   );
 };
 
