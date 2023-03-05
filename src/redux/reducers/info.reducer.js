@@ -7,11 +7,9 @@ const initialState = {
   error: ''
 };
 
-export const getInfoList = createAsyncThunk('info/fetchInfo', async () => {
-  return axios.get('http://localhost:3030/api/v1/medical_info').then((res) => {
-    return res.data;
-  });
-});
+export const getInfoList = createAsyncThunk('info/fetchInfo', async () =>
+  axios.get(`${process.env.BACKEND_URL}/medical_info`).then((res) => res.data)
+);
 
 const infoSlice = createSlice({
   name: 'info',

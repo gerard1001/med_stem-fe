@@ -10,26 +10,20 @@ const initialState = {
 
 export const getPatientList = createAsyncThunk(
   'users/fetchPatients',
-  async () => {
-    return axios
-      .get('http://localhost:3030/api/v1/users/clients')
-      .then((res) => {
-        return res.data;
-      });
-  }
+  async () =>
+    axios
+      .get(`${process.env.BACKEND_URL}/users/clients`)
+      .then((res) => res.data)
 );
 
 export const getOnePatient = createAsyncThunk(
   'users/fetchPatient',
-  async (patientId) => {
-    return axios
+  async (patientId) =>
+    axios
       .get(
-        `http://localhost:3030/api/v1/users/clients/64fc1233-8b59-5643-8e9a-c9a8f38bf6b6`
+        `${process.env.BACKEND_URL}/users/clients/64fc1233-8b59-5643-8e9a-c9a8f38bf6b6` // TOOD: let's rember to change this
       )
-      .then((res) => {
-        return res.data;
-      });
-  }
+      .then((res) => res.data)
 );
 
 const patientSlice = createSlice({

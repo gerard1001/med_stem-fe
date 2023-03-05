@@ -8,26 +8,16 @@ const initialState = {
   error: ''
 };
 
-export const getDoctorList = createAsyncThunk(
-  'users/fetchDoctors',
-  async () => {
-    return axios
-      .get('http://localhost:3030/api/v1/users/doctors')
-      .then((res) => {
-        return res.data;
-      });
-  }
+export const getDoctorList = createAsyncThunk('users/fetchDoctors', async () =>
+  axios.get(`${process.env.BACKEND_URL}/users/doctors`).then((res) => res.data)
 );
 
 export const getOneDoctor = createAsyncThunk(
   'users/fetchDoctor',
-  async (doctorId) => {
-    return axios
-      .get(`http://localhost:3030/api/v1/users/doctors/${doctorId}`)
-      .then((res) => {
-        return res.data;
-      });
-  }
+  async (doctorId) =>
+    axios
+      .get(`${process.env.BACKEND_URL}/users/doctors/${doctorId}`)
+      .then((res) => res.data)
 );
 
 const doctorSlice = createSlice({

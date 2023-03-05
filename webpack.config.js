@@ -2,13 +2,23 @@ const path = require('path');
 const webpack = require('webpack');
 const dotenv = require('dotenv');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 dotenv.config();
 
+function prepareBackendUrl(url) {
+  if (url.endsWith('/')) {
+    return url.split('').slice(0, -1).join('');
+  }
+  return url;
+}
+
+// HERE is where we add envs to have them shown in react
 const envKeys = {
-  'process.env.DEPLOY_PRIME_URL': JSON.stringify(process.env.DEPLOY_PRIME_URL),
-  'process.env.BACKEND_URL': JSON.stringify(process.env.BACKEND_URL)
+  'process.env.BACKEND_URL': prepareBackendUrl(
+    JSON.stringify(process.env.BACKEND_URL)
+  )
 };
 
 module.exports = {
@@ -23,13 +33,13 @@ module.exports = {
       dynamicImport: true
     }
   },
-  devtool: 'eval-source-map',
+  devtool: process.env.NODE_ENV === 'production' ? false : 'inline-source-map',
   mode: process.env.NODE_ENV || 'development',
-  resolve: { extensions: ['*', '.js', '.jsx'] },
+  resolve: { extensions: ['.js', '.jsx'] },
   devServer: {
     port: process.env.PORT || '3000',
     historyApiFallback: true,
-    headers: { 'Access-Control-Allow-Origin': '*' },
+    liveReload: true,
     open: true,
     hot: true
   },
@@ -54,7 +64,15 @@ module.exports = {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebPackPlugin({ template: 'public/index.html' }),
+    new CopyWebpackPlugin({
+      patterns: [{ from: './public/assets', to: 'assets' }]
+    }),
     new webpack.DefinePlugin(envKeys),
     new CleanWebpackPlugin()
-  ]
+  ],
+  optimization: {
+    splitChunks: {
+      chunks: 'all'
+    }
+  }
 };

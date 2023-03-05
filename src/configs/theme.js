@@ -76,7 +76,7 @@ const theme = createTheme({
     MuiInputBase: {
       styleOverrides: {
         root: {
-          ['& .Mui-focused']: {
+          '& .Mui-focused': {
             border: 'none'
           },
           borderRadius: '10px'

@@ -9,11 +9,8 @@ const initialState = {
 
 export const getDepartmentList = createAsyncThunk(
   'departments/fetchDepartments',
-  async () => {
-    return axios.get('http://localhost:3030/api/v1/department').then((res) => {
-      return res.data;
-    });
-  }
+  async () =>
+    axios.get(`${process.env.BACKEND_URL}/department`).then((res) => res.data)
 );
 
 const departmentSlice = createSlice({
