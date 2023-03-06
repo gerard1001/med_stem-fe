@@ -23,7 +23,8 @@
     "camelcase": "off",
     "no-plusplus": "off",
     "no-shadow": "off",
-    "no-param-reassign": "off"
+    "no-param-reassign": "off",
+    "react/jsx-props-no-spreading": "off"
     // "react/jsx-no-undef": "off",
     // "react/jsx-wrap-multilines": "off",
   }

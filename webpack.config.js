@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const dotenv = require('dotenv');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+// const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 dotenv.config();
@@ -22,11 +22,10 @@ const envKeys = {
 };
 
 module.exports = {
-  target: 'web',
-  entry: path.join(__dirname, 'src', 'index.js'),
+  entry: path.join(__dirname, './src/index.js'),
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: '[name].js',
+    filename: '[name].bundle.js',
     publicPath: '/',
     environment: {
       module: true,
@@ -39,7 +38,6 @@ module.exports = {
   devServer: {
     port: process.env.PORT || '3000',
     historyApiFallback: true,
-    liveReload: true,
     open: true,
     hot: true
   },
@@ -62,11 +60,11 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
+    // new webpack.HotModuleReplacementPlugin(),
     new HtmlWebPackPlugin({ template: 'public/index.html' }),
-    new CopyWebpackPlugin({
-      patterns: [{ from: './public/assets', to: 'assets' }]
-    }),
+    // new CopyWebpackPlugin({
+    //   patterns: [{ from: './public/assets', to: 'assets' }]
+    // }),
     new webpack.DefinePlugin(envKeys),
     new CleanWebpackPlugin()
   ],

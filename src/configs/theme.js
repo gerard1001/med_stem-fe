@@ -12,10 +12,14 @@ const theme = createTheme({
       main: '#ffffff'
     },
     black: {
-      main: '#000000'
+      main: '#2E3033'
+    },
+    gray: {
+      light: '#EEF1F5',
+      main: '#6A6F75'
     },
     text: {
-      primary: '#000000',
+      primary: '#2E3033',
       disabled: '#6A6F75'
     },
     background: {
@@ -29,7 +33,7 @@ const theme = createTheme({
   },
   typography: {
     allVariants: {
-      fontFamily: ['Inter', 'sans-serif'].join(',')
+      fontFamily: 'Inter, sans-serif'
       // fontSize: {
       //   xs: '.75rem',
       //   sm: '.875rem',
@@ -105,6 +109,13 @@ const theme = createTheme({
         root: {
           textTransform: 'capitalize'
           // fontSize: '18px'
+        },
+        outlined: {
+          borderWidth: '2px',
+          borderRadius: '15px',
+          ':hover': {
+            borderWidth: '2px'
+          }
         }
       }
     }

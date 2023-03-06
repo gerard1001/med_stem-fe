@@ -2,10 +2,13 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /** @type {import('tailwindcss').Config} */
 
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 module.exports = {
   content: ['./src/**/*.{js,jsx}', './public/index.html'],
   darkMode: 'class',
   mode: 'jit',
+  important: '#root',
   theme: {
     extend: {
       screens: {
@@ -18,22 +21,23 @@ module.exports = {
       },
       colors: {
         primary: '#1A4CFF',
-        secondary: '#051B6C'
+        secondary: '#051B6C',
+        dark: '#2E3033'
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif']
+        sans: ['Inter', ...defaultTheme.fontFamily.sans]
       },
       fontSize: {
         xs: '.75rem',
         sm: '.875rem',
         base: '1rem',
         lg: '1.125rem',
-        xl: '1.25rem',
-        '2xl': '1.5rem',
-        '3xl': '1.875rem',
-        '4xl': '2.25rem',
-        '5xl': '3rem',
-        '6xl': '4rem'
+        xl: '1.25rem'
+        // '2xl': '1.5rem',
+        // '3xl': '1.875rem',
+        // '4xl': '2.25rem',
+        // '5xl': '3rem',
+        // '6xl': '4rem'
       },
       fontWeight: {
         light: 300,
@@ -65,7 +69,8 @@ module.exports = {
     }
   },
   corePlugins: {
-    aspectRatio: false
+    aspectRatio: false,
+    preflight: false
   },
   plugins: [
     require('@tailwindcss/typography'),

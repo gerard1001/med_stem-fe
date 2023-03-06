@@ -14,6 +14,8 @@ import PatientProfile from '../pages/PatientProfile';
 import PatientAppointments from '../pages/PatientAppointments';
 import Login from '../pages/Login';
 import DoctorProfile from '../pages/DoctorProfile';
+import Calendar from '../components/Calendar';
+import PatientsCalendar from '../pages/PatientsCalendar';
 
 const routes = createBrowserRouter([
   {
@@ -65,6 +67,10 @@ const routes = createBrowserRouter([
     path: '/patient/appointments',
     element: <PatientAppointments />,
     children: []
+  },
+  {
+    path: '/patient/calendar',
+    element: <PatientsCalendar />
   },
   {
     path: '/dashboard',
