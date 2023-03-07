@@ -16,11 +16,17 @@ import Login from '../pages/Login';
 import DoctorProfile from '../pages/DoctorProfile';
 import Calendar from '../components/Calendar';
 import PatientsCalendar from '../pages/PatientsCalendar';
+import DoctorPatient from '../pages/DoctorPatient';
 
 const routes = createBrowserRouter([
   {
     path: '/',
     element: <LandingPage />,
+    children: []
+  },
+  {
+    path: '/bit',
+    element: <DashboardSideBar />,
     children: []
   },
   {
@@ -50,7 +56,7 @@ const routes = createBrowserRouter([
   },
   {
     path: '/doctor',
-    element: <DoctorProfile />,
+    element: <DoctorPatient />,
     children: []
   },
   {

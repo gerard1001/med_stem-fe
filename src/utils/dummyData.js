@@ -973,3 +973,60 @@ export const prev_appointments = [
     }
   }
 ];
+
+export const table_data = [
+  {
+    name: 'Torie Rustman',
+    id: '6844103517',
+    next_app: '1979-11-16T23:04:32Z',
+    last_app: '1979-11-16T23:04:32Z'
+  },
+  {
+    name: 'Kordula Gecks',
+    id: '8429683893',
+    next_app: '1997-08-06T21:07:34Z',
+    last_app: '1997-08-06T21:07:34Z'
+  },
+  {
+    name: 'Vikki Simoens',
+    id: '8672773997',
+    next_app: '2016-04-28T16:59:19Z',
+    last_app: '2016-04-28T16:59:19Z'
+  },
+  {
+    name: 'Burnaby Cowern',
+    id: '4257971694',
+    next_app: '2017-10-25T08:05:50Z',
+    last_app: '2017-10-25T08:05:50Z'
+  },
+  {
+    name: 'Teddie Traice',
+    id: '3932158370',
+    next_app: '2015-04-20T11:45:34Z',
+    last_app: '2015-04-20T11:45:34Z'
+  },
+  {
+    name: 'Sapphira Hutchinges',
+    id: '5094928131',
+    next_app: '1995-06-15T22:08:17Z',
+    last_app: '1995-06-15T22:08:17Z'
+  },
+  {
+    name: 'Shayna Dimitresco',
+    id: '1216713219',
+    next_app: '1997-10-28T11:25:07Z',
+    last_app: '1997-10-28T11:25:07Z'
+  },
+  {
+    name: 'Caron Tomkinson',
+    id: '6895680771',
+    next_app: '1989-03-14T19:48:26Z',
+    last_app: '1989-03-14T19:48:26Z'
+  },
+  {
+    name: 'Hulda Ceresa',
+    id: '2117090201',
+    next_app: '2016-04-26T18:07:18Z',
+    last_app: '2016-04-26T18:07:18Z'
+  }
+];
