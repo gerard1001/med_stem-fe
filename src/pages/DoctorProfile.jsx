@@ -17,7 +17,7 @@ const DoctorProfile = () => {
   }, []);
 
   return (
-    <Box className="pl-[220px] md:pl-0 pt-20">
+    <Box className="pl-[220px] lg:pl-0 pt-20">
       <DashboardSideBar />
       <Box className="w-[90%] block mx-auto">
         <Box>
@@ -25,8 +25,8 @@ const DoctorProfile = () => {
             Profile and Settings
           </Typography>
         </Box>
-        <Box className="flex flex-row lg:flex-col items-start w-[100%] mx-auto md:w-[90%]">
-          <Box className="md:w-[90%] w-1/3">
+        <Box className="flex flex-row gap-5 lg:flex-col items-start w-[100%] mx-auto lg:w-[90%]">
+          <Box className="lg:w-[90%] w-2/5">
             <Typography
               variant="subtitle1"
               fontWeight="600"
@@ -101,7 +101,7 @@ const DoctorProfile = () => {
               Edit
             </Button>
           </Box>
-          <Box className="md:w-[90%] w-1/3">
+          <Box className="lg:w-[90%] w-2/5">
             <Typography
               variant="subtitle1"
               fontWeight="600"
@@ -148,7 +148,7 @@ const DoctorProfile = () => {
               />
               <Button
                 sx={{
-                  marginTop: { md: '40px', xs: '15px' },
+                  marginTop: { lg: '40px', xs: '15px' },
                   color: '#fff',
                   width: '240px',
                   color: '#1A4CFF',
@@ -161,10 +161,10 @@ const DoctorProfile = () => {
               </Button>
             </Box>
           </Box>
-          <Box className="md:w-[90%] w-1/3">
-            <Box className="w-[100%] md:mb-[80px] md:w-[100%] md:mt-10 flex flex-col items-center">
-              <Box className="p-10 rounded-[50%] bg-[#a2ccff]">
-                <FiUser className="text-[60px]" />
+          <Box className="lg:w-[90%] lg:mx-auto w-1/5">
+            <Box className="w-[100%] lg:mb-[80px] lg:w-[100%] lg:mt-10 flex flex-col items-center">
+              <Box className="p-10 rounded-[50%] bg-[#e8f0fe]">
+                <FiUser className="text-[60px] text-slate-500" />
               </Box>
               <Box>
                 <Button

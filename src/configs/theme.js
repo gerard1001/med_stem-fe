@@ -118,6 +118,11 @@ const theme = createTheme({
           }
         }
       }
+    },
+    MuiTableCell: {
+      head: {
+        backgroundColor: 'red !important'
+      }
     }
   }
 });
