@@ -78,12 +78,8 @@
     "@mui/x-date-pickers": "^6.0.0",
     "@reduxjs/toolkit": "^1.8.1",
     "axios": "^0.27.2",
-<<<<<<< HEAD
     "clsx": "^1.2.1",
     "date-fns": "^2.29.3",
-=======
-    "dayjs": "^1.11.7",
->>>>>>> 611eb8f (table for patients and right bar)
     "dotenv": "^16.0.3",
     "mui-datatables": "^4.3.0",
     "react": "^18.0.0",
