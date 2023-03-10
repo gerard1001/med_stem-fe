@@ -34,7 +34,7 @@ const DoctorPage = () => {
     <Box className="">
       <HomeNavBar />
       <Box className="flex w-[80%] lg:w-[100%] md:p-4 md:flex-col md:items-center mt-10 md:mt-1 mx-auto md:pt-12">
-        <Box className="w-4/5 md:w-[100%] relative flex flex-row md:flex-col items-start">
+        <Box className="w-4/5 md:w-[100%] relative flex flex-row md:flex-col items-start mb-16">
           <Box className="w-[10%]">
             <Box
               className="border-[#2b8aff] rounded-[10px] text-primary border w-fit px-4 py-1 absolute left-5 md:left-1 text-[16px] cursor-pointer hover:border-none hover:bg-[#a2ccff]"
@@ -65,9 +65,11 @@ const DoctorPage = () => {
                   </Typography>
                   <Typography
                     variant="body1"
-                    className="text-[#050e17] font-bold"
+                    className="text-[#050e17] font-bold line-clamp-3"
                   >
-                    {`${doctorData?.first_name} ${doctorData?.last_name}`}, MD
+                    {`${doctorData?.departments
+                      .map((value) => value.speciality_name)
+                      .join(', ')}`}
                   </Typography>
                 </Box>
                 <br />
@@ -112,6 +114,7 @@ const DoctorPage = () => {
               maxWidth: '220px',
               ':hover': { backgroundColor: '#1A4CFA' }
             }}
+            className={`bg-[#1A4CFF] capitalize text-white`}
           >
             Make appointment{' '}
           </Button>

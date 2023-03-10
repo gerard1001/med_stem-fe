@@ -23,6 +23,8 @@ const Confirm = ({ data }) => {
     handleNext();
   };
 
+  console.log({ data });
+
   return (
     <>
       <List disablePadding className="h-[45vh] overflow-auto">
@@ -85,6 +87,12 @@ const Confirm = ({ data }) => {
 
         <ListItem>
           <ListItemText primary="Address 1" secondary={data.address_1} />
+        </ListItem>
+
+        <Divider />
+
+        <ListItem>
+          <ListItemText primary="Address 1" secondary={data.address_2} />
         </ListItem>
 
         <Divider />

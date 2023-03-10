@@ -16,13 +16,18 @@ const ContactInfo = ({}) => {
   } = useFormContext();
 
   const handleNext = () => {
-    trigger(['email', 'country', 'address_1', 'city', 'phone']).then(
-      (value) => {
-        if (value) {
-          setValue('activeStep', 2);
-        }
+    trigger([
+      'email',
+      'country',
+      'address_1',
+      'address_2',
+      'city',
+      'phone'
+    ]).then((value) => {
+      if (value) {
+        setValue('activeStep', 2);
       }
-    );
+    });
   };
 
   const handleBack = () => {
@@ -38,41 +43,10 @@ const ContactInfo = ({}) => {
       <Box spacing={2}>
         <Box
           spacing={2}
-          className="flex flex-row items-start justify-evenly md:flex-col w-[100%]"
+          className="flex flex-row items-center justify-evenly md:flex-col w-[100%]"
         >
           <Box className="block w-[45%] md:w-full md:max-w-[400px]">
-            <Box>
-              {/* <Autocomplete
-                id="country-select-demo"
-                sx={{ padding: 0, minWidth: '220px' }}
-                margin="normal"
-                options={countries}
-                autoHighlight
-                getOptionLabel={(option) => option.label}
-                onChange={handleChange}
-                renderInput={(params) => (
-                  <TextField
-                    variant="outlined"
-                    {...params}
-                    label="Country"
-                    name="country"
-                    inputProps={{
-                      ...params.inputProps,
-                      autoComplete: 'new-password'
-                    }}
-                    value={country}
-                    margin="normal"
-                    // onChange={handleChange}
-                    onChange={(e) => {
-                      const val = e.target.innerText.split(" (");
-                      setCountry(val[0]);
-                    }}
-                    error={!!formErrors.country}
-                    helperText={formErrors.country}
-                    size="small"
-                  />
-                )}
-              /> */}
+            <Box className="w-[100%] min-w-[220px]">
               <Controller
                 control={control}
                 name="country"
@@ -95,7 +69,30 @@ const ContactInfo = ({}) => {
                 }}
               />
             </Box>
-            <Box>
+            <Box className="w-[100%] min-w-[220px]">
+              <Controller
+                control={control}
+                name="city"
+                render={({ field }) => {
+                  return (
+                    <TextField
+                      {...field}
+                      variant="outlined"
+                      fullWidth
+                      label="city"
+                      name="city"
+                      placeholder="Enter your city name"
+                      margin="normal"
+                      error={!!errors.city}
+                      helperText={!!errors.city && errors.city.message}
+                      required
+                      size="small"
+                    />
+                  );
+                }}
+              />
+            </Box>
+            <Box className="w-[100%] min-w-[220px]">
               <Controller
                 control={control}
                 name="address_1"
@@ -120,7 +117,57 @@ const ContactInfo = ({}) => {
                 }}
               />
             </Box>
-            <Box>
+          </Box>
+          <Box className="block w-[45%] md:w-full md:max-w-[400px]">
+            <Box className="w-[100%] min-w-[220px]">
+              <Controller
+                control={control}
+                name="address_2"
+                render={({ field }) => {
+                  return (
+                    <TextField
+                      {...field}
+                      variant="outlined"
+                      fullWidth
+                      label="Address 2"
+                      name="Address 2"
+                      placeholder="Enter your address 2 name"
+                      margin="normal"
+                      error={!!errors.address_2}
+                      helperText={
+                        !!errors.address_2 && errors.address_2.message
+                      }
+                      required
+                      size="small"
+                    />
+                  );
+                }}
+              />
+            </Box>
+            <Box className="w-[100%] min-w-[220px]">
+              <Controller
+                control={control}
+                name="phone"
+                render={({ field }) => {
+                  return (
+                    <TextField
+                      {...field}
+                      variant="outlined"
+                      fullWidth
+                      label="phone"
+                      name="phone"
+                      placeholder="Phone number"
+                      margin="normal"
+                      error={!!errors.phone}
+                      helperText={!!errors.phone && errors.phone.message}
+                      required
+                      size="small"
+                    />
+                  );
+                }}
+              />
+            </Box>
+            <Box className="w-[100%] min-w-[220px]">
               <Controller
                 control={control}
                 name="email"
@@ -143,54 +190,6 @@ const ContactInfo = ({}) => {
                 }}
               />
             </Box>
-          </Box>
-          <Box className="block w-[45%] md:w-full md:max-w-[400px]">
-            <Box>
-              <Controller
-                control={control}
-                name="city"
-                render={({ field }) => {
-                  return (
-                    <TextField
-                      {...field}
-                      variant="outlined"
-                      fullWidth
-                      label="city"
-                      name="city"
-                      placeholder="Enter your city name"
-                      margin="normal"
-                      error={!!errors.city}
-                      helperText={!!errors.city && errors.city.message}
-                      required
-                      size="small"
-                    />
-                  );
-                }}
-              />
-            </Box>
-            <Box>
-              <Controller
-                control={control}
-                name="phone"
-                render={({ field }) => {
-                  return (
-                    <TextField
-                      {...field}
-                      variant="outlined"
-                      fullWidth
-                      label="phone"
-                      name="phone"
-                      placeholder="Phone number"
-                      margin="normal"
-                      error={!!errors.phone}
-                      helperText={!!errors.phone && errors.phone.message}
-                      required
-                      size="small"
-                    />
-                  );
-                }}
-              />
-            </Box>{' '}
           </Box>
         </Box>
       </Box>

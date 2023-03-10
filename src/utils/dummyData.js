@@ -1030,3 +1030,5 @@ export const table_data = [
     last_app: '2016-04-26T18:07:18Z'
   }
 ];
+
+export const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];

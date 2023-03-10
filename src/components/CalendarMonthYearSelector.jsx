@@ -1,3 +1,4 @@
+// Component for selecting the month and year //
 import { Box, IconButton, Menu, Stack, Typography } from '@mui/material';
 import { DateCalendar } from '@mui/x-date-pickers';
 import clsx from 'clsx';

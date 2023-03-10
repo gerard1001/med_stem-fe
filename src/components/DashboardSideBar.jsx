@@ -11,7 +11,9 @@ import {
   ListItemText,
   CssBaseline,
   Drawer,
-  Typography
+  Typography,
+  Menu,
+  MenuItem
 } from '@mui/material';
 import { AiOutlineUser } from 'react-icons/ai';
 import { FaApple } from 'react-icons/fa';
@@ -27,6 +29,9 @@ import { VscGraphLine } from 'react-icons/vsc';
 import { FaBars } from 'react-icons/fa';
 import { IoCalculatorOutline } from 'react-icons/io5';
 import { BsPlusCircle } from 'react-icons/bs';
+import { useNavigate } from 'react-router';
+import { MdSignalCellularNull } from 'react-icons/md';
+
 const listItems = [
   {
     listIcon: <FiUsers className="text-[20px]" />,
@@ -66,13 +71,25 @@ const DashboardSideBar = () => {
   const [openRightSideBar, setOpenRightSideBar] = useState(false);
   const [showRightBar, setShowRightBar] = useState(false); // This state willl be set to true when we are on pages with right side bar
 
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const openMenu = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const toggleSlider = () => {
     setOpen((open) => !open);
   };
   const toggleRightBar = () => {
     setOpenRightSideBar((open) => !open);
   };
-
+  const removeToken = (event) => {
+    event.preventDefault();
+    // localStorage.removeItem('userLoginData');
+  };
   const RightSideList = () => (
     <Box
       className={`w-[220px] border-l border-[#0093df] overflow-auto flex flex-col fixed bg-[#fff]  top-[60px] lg:top-0 right-0 bottom-0 z-20`}
@@ -148,7 +165,17 @@ const DashboardSideBar = () => {
         <Box className="h-[55%]">
           <List>
             {listItems.map((listItem, index) => (
-              <ListItem button key={index}>
+              <ListItem
+                button
+                key={index}
+                id="demo-positioned-button"
+                aria-controls={
+                  openMenu && index === 4 ? 'demo-positioned-menu' : undefined
+                }
+                aria-haspopup="true"
+                aria-expanded={openMenu && index === 4 ? 'true' : undefined}
+                onClick={index === 4 ? handleClick : undefined}
+              >
                 <ListItemIcon>{listItem.listIcon}</ListItemIcon>
                 <ListItemText primary={listItem.listText} />
               </ListItem>
@@ -158,7 +185,11 @@ const DashboardSideBar = () => {
         <Box className="h-[45%]  border-t border-[#0093df]">
           <List>
             {accItems.map((listItem, index) => (
-              <ListItem button key={index}>
+              <ListItem
+                button
+                key={index}
+                onClick={index === 1 ? removeToken(event) : null}
+              >
                 <ListItemIcon>{listItem.listIcon}</ListItemIcon>
                 <ListItemText primary={listItem.listText} />
               </ListItem>
@@ -168,6 +199,8 @@ const DashboardSideBar = () => {
       </Box>
     </Box>
   );
+
+  const nav = useNavigate();
   return (
     <Box>
       <CssBaseline />
@@ -202,8 +235,9 @@ const DashboardSideBar = () => {
 
               <Box className="pr-5">
                 <Typography variant="subtitle1" color="primary">
-                  Hello,
-                  <br /> Dr. Kim
+                  <p className="leading-5">Hello,</p>
+                  <p className="leading-5">Dr. Kim</p>
+
                   {showRightBar && (
                     <IconButton
                       sx={{
@@ -263,6 +297,68 @@ const DashboardSideBar = () => {
       >
         <Box>{LeftSideList()}</Box>
       </Box>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={openMenu}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button'
+        }}
+      >
+        <MenuItem
+          className="text-[16px] text-slate-500"
+          onClick={() => {
+            handleClose();
+            nav('/add/doctor');
+          }}
+        >
+          {' '}
+          <BsPlusCircle className="text-[16px] mr-2" />{' '}
+          <Typography variant="body1" fontSize="16px" sx={{ marginX: '10px' }}>
+            Speciality
+          </Typography>
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            nav('/add/speciality');
+          }}
+          className="text-[16px] text-slate-500"
+        >
+          {' '}
+          <BsPlusCircle className="text-[16px] mr-2" />{' '}
+          <Typography variant="body1" fontSize="16px" sx={{ marginX: '10px' }}>
+            Doctor
+          </Typography>
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            nav('/patient');
+          }}
+          className="text-[16px] text-slate-500"
+        >
+          {' '}
+          <BsPlusCircle className="text-[16px] mr-2" />{' '}
+          <Typography variant="body1" fontSize="16px" sx={{ marginX: '10px' }}>
+            Patient
+          </Typography>
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            nav('/add/schedule');
+          }}
+          className="text-[16px] text-slate-500"
+        >
+          {' '}
+          <BsPlusCircle className="text-[16px] mr-2" />{' '}
+          <Typography variant="body1" fontSize="16px" sx={{ marginX: '10px' }}>
+            Work schedule
+          </Typography>
+        </MenuItem>
+      </Menu>
     </Box>
   );
 };

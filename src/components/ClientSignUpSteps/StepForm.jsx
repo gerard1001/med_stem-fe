@@ -33,6 +33,7 @@ const defaultValues = {
   birth_date: '',
   country: '',
   address_1: '',
+  address_2: '',
   city: '',
   phone: '',
   password: '',
@@ -70,6 +71,7 @@ const schema = yup
     birth_date: yup.date().required(),
     country: yup.string().required(),
     address_1: yup.string().required(),
+    address_2: yup.string().required(),
     city: yup.string().required(),
     phone: yup.string().min(4).max(12).required()
   })
@@ -95,6 +97,8 @@ const StepForm = ({ getStatus }) => {
   }, [activeStep]);
 
   const nav = useNavigate();
+
+  console.log({ form });
 
   return (
     <FormProvider {...methods}>
@@ -127,7 +131,7 @@ const StepForm = ({ getStatus }) => {
           {activeStep === 1 && <ContactInfo />}
           {activeStep === 2 && <MedicalInfo />}
           {activeStep === 3 && <MedicalHistory />}
-          {activeStep === 4 && <Password />}
+          {activeStep === 4 && <Password data={form} />}
           {activeStep === 5 && <Confirm data={form} />}
         </Box>
       )}

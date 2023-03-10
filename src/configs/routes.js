@@ -17,16 +17,14 @@ import DoctorProfile from '../pages/DoctorProfile';
 import Calendar from '../components/Calendar';
 import PatientsCalendar from '../pages/PatientsCalendar';
 import DoctorPatient from '../pages/DoctorPatient';
+import DoctorSignupForm from '../components/DoctorSignupForm';
+import AddSpecialityForm from '../components/AddSpecialityForm';
+import AdminCalendar from '../pages/AdminCalendar';
 
 const routes = createBrowserRouter([
   {
     path: '/',
     element: <LandingPage />,
-    children: []
-  },
-  {
-    path: '/bit',
-    element: <DashboardSideBar />,
     children: []
   },
   {
@@ -91,6 +89,19 @@ const routes = createBrowserRouter([
         element: <SchedulePage />
       }
     ]
+  },
+
+  {
+    path: '/add/doctor',
+    element: <DoctorSignupForm />
+  },
+  {
+    path: '/add/speciality',
+    element: <AddSpecialityForm />
+  },
+  {
+    path: '/add/schedule',
+    element: <AdminCalendar />
   }
 ]);
 

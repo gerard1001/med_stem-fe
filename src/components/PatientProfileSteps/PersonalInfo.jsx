@@ -147,6 +147,20 @@ const PatientInfo = () => {
                 <Grid item xs={6}>
                   <Item>
                     {' '}
+                    <Typography variant="body2">Address 1</Typography>
+                    <Typography
+                      variant="subtitle1"
+                      fontWeight="500"
+                      fontSize="17px"
+                      className="capitalize"
+                    >
+                      {patientData?.address_2}
+                    </Typography>
+                  </Item>
+                </Grid>
+                <Grid item xs={6}>
+                  <Item>
+                    {' '}
                     <Typography variant="body2">Address 2</Typography>
                     <Typography
                       variant="subtitle1"

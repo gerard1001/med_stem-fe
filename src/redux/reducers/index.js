@@ -5,6 +5,7 @@ import doctorReducer from './doctor.reducer';
 import departmentReducer from './department.reducer';
 import patientReducer from './patient.reducer';
 import stepReducer from './step.reducer';
+import scheduleReducer from './schedule.reducer';
 
 const allReducers = combineReducers({
   user: userReducer,
@@ -12,7 +13,8 @@ const allReducers = combineReducers({
   doctor: doctorReducer,
   patient: patientReducer,
   department: departmentReducer,
-  step: stepReducer
+  step: stepReducer,
+  schedule: scheduleReducer
 });
 
 export default allReducers;

@@ -13,10 +13,10 @@ import {
   Typography,
   Grid
 } from '@mui/material';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+// import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+// import { LocalizationProvider } from '@mui/x-date-pickers';
+// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { FiFilter } from 'react-icons/fi';
 import { RiSearchLine, RiSortDesc } from 'react-icons/ri';
 import { BsThreeDots } from 'react-icons/bs';
@@ -178,7 +178,7 @@ const DoctorPatient = () => {
                 sx={{ width: '150px', minWidth: '120px' }}
                 onChange={handleChange}
               />
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
+              {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   label="Birth Date"
                   value={value}
@@ -236,7 +236,7 @@ const DoctorPatient = () => {
                     <TextField size="small" {...params} />
                   )}
                 />
-              </LocalizationProvider>
+              </LocalizationProvider> */}
             </Box>
           )}
         </Box>

@@ -26,8 +26,6 @@ const HomeNavBar = (props) => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
-  console.log(isLoggedIn, '88888888888888888888888888');
-
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
@@ -170,7 +168,7 @@ const HomeNavBar = (props) => {
           </Typography>
           <Box
             sx={{
-              display: { xs: 'none', sm: 'block', gap: 2 },
+              display: { xs: 'none', sm: 'flex', gap: 2 },
               fontSize: '18px'
             }}
           >
@@ -185,26 +183,30 @@ const HomeNavBar = (props) => {
                     ? nav('/about')
                     : nav('/find_doctor');
                 }}
-                sx={{ color: '#1A4CFF', fontSize: '18px' }}
+                sx={{ color: '#1A4CFF', fontSize: '18px', mx: 2 }}
               >
                 {item}
               </Button>
             ))}
           </Box>
 
-          {isLoggedIn ? (
+          {true ? (
             <Box
-              sx={{ display: { xs: 'none', sm: 'block' }, fontSize: '18px' }}
+              sx={{
+                display: { xs: 'none', sm: 'block' },
+                fontSize: '18px',
+                mx: 2
+              }}
             >
               <Button
                 color="primary"
-                sx={{ color: '#1A4CFF', fontSize: '18px' }}
+                sx={{ color: '#1A4CFF', fontSize: '18px', mx: 2 }}
               >
                 <FiIcons.FiSearch />
               </Button>
               <Button
                 color="primary"
-                sx={{ color: '#1A4CFF', fontSize: '18px' }}
+                sx={{ color: '#1A4CFF', fontSize: '18px', mx: 2 }}
                 onClick={() => {
                   nav('/patient/appointments');
                 }}
@@ -213,7 +215,7 @@ const HomeNavBar = (props) => {
               </Button>
               <Button
                 color="primary"
-                sx={{ color: '#1A4CFF', fontSize: '18px' }}
+                sx={{ color: '#1A4CFF', fontSize: '18px', mx: 2 }}
                 onClick={() => {
                   nav('/patient');
                 }}
@@ -231,6 +233,7 @@ const HomeNavBar = (props) => {
                   color="primary"
                   sx={{
                     fontSize: '18px',
+                    mx: 2,
                     ...(idx === 1 && {
                       border: '1px solid #1A4CFF'
                     })

@@ -5,7 +5,6 @@ import {
   MenuItem,
   InputLabel,
   Select,
-  //   FormControl,
   TextField,
   Grid
 } from '@mui/material';
@@ -15,25 +14,53 @@ import FormHelperText from '@mui/material/FormHelperText';
 import FormLabel from '@mui/material/FormLabel';
 import * as IoIcons from 'react-icons/io5';
 import { Controller, useFormContext } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { registerClient } from '../../redux/reducers/patient.reducer';
 
-const Password = ({}) => {
+const Password = ({ data }) => {
   const {
     control,
     setValue,
-    formState: { errors },
+    formState: { errors, isDirty, isValid },
     trigger
   } = useFormContext();
 
-  const handleNext = () => {
-    trigger(['password', 'confirm']).then((value) => {
-      if (value) {
-        setValue('activeStep', 5);
-      }
-    });
-  };
+  const dispatch = useDispatch();
 
   const handleBack = () => {
     setValue('activeStep', 3);
+  };
+
+  const info = data.info;
+
+  const yesValues = Object.keys(info).filter(
+    (key) => info[key].value === 'yes'
+  );
+
+  const resultArray = yesValues.map((key) => {
+    const valueObject = info[key];
+    return `${key}#%#%${valueObject.details || ''}`;
+  });
+  const med_info = resultArray.join('#&#&');
+
+  let finalData = data;
+
+  finalData.arr = med_info;
+  delete finalData.info;
+  delete finalData.activeStep;
+
+  console.log(resultArray.join('#&#&'));
+
+  console.log(finalData);
+  console.log(finalData.first_name);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    trigger(['password', 'confirm']).then((value) => {
+      if (value) {
+        dispatch(registerClient(finalData));
+      }
+    });
   };
 
   return (
@@ -91,7 +118,8 @@ const Password = ({}) => {
           <IoIcons.IoArrowBack />
         </div>
         <Button
-          onClick={handleNext}
+          disabled={!isDirty && !isValid}
+          onClick={handleSubmit}
           variant="contained"
           style={{
             background: '#1A4CFF',

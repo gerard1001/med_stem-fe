@@ -2,7 +2,7 @@ import React from 'react';
 import { IconButton, TextField } from '@mui/material';
 import * as IoIcons from 'react-icons/io5';
 
-const SearchBar = ({ setSearchQuery }) => (
+const SearchBar = ({ searchQuery, setSearchQuery }) => (
   <form className="relative w-full h-min">
     <TextField
       id="search-bar"
@@ -10,14 +10,17 @@ const SearchBar = ({ setSearchQuery }) => (
       onInput={(e) => {
         setSearchQuery(e.target.value);
       }}
+      value={searchQuery}
       label="First name, last name or keyword"
       variant="outlined"
       placeholder="Search..."
       sx={{ backgroundColor: '#EDF0F2', width: '100%' }}
     />
     <IconButton
-      type="submit"
       aria-label="search"
+      onClick={() => {
+        setSearchQuery('');
+      }}
       sx={{
         position: 'absolute',
         transform: 'translate(-50%, -50%)',

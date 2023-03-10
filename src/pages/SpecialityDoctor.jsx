@@ -124,6 +124,7 @@ const SpecialityDoctor = () => {
                   ':hover': { backgroundColor: '#1A4CFA' }
                 })
               }}
+              className={`${doctorId && 'bg-[#1A4CFF]'} capitalize text-white`}
             >
               Next
             </Button>

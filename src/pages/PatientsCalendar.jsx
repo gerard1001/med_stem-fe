@@ -14,6 +14,8 @@ function PatientsCalendar() {
     calendarRef.current.calendar.gotoDate(new Date(viewDate));
   }, [viewDate]);
 
+  console.log({ viewDate, calendarRef });
+
   return (
     <Box className="sm:p-4 p-8 flex flex-col sm:gap-0 gap-3">
       <Stack
@@ -59,6 +61,8 @@ function PatientsCalendar() {
               <Box className="grow px-[10px]">
                 <Typography>{props.date.getDate()}</Typography>
               </Box>
+              {/* If active step we ad the plus sign */}
+
               <Box
                 className="flex flex-col px-2 py-1 rounded-[4px]"
                 bgcolor="gray.light"
