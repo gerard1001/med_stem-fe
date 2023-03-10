@@ -8,3 +8,7 @@ global.React = React;
 
 const container = document.getElementById('root');
 ReactDOMClient.createRoot(container).render(<App />);
+
+if (module.hot) {
+  module.hot.accept();
+}

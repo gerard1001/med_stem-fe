@@ -19,7 +19,7 @@ import {
 import { styled } from '@mui/material/styles';
 import BackButton from '../components/BackButton';
 import Calendar from '../components/Calendar';
-import CalendarMonthYearSelector from '../components/CalendarMonthYearSelector';
+import CalendarMonthYearSelector from '../components/Calendar/CalendarMonthYearSelector';
 import { useSelector, useDispatch } from 'react-redux';
 import { getDoctorList } from '../redux/reducers/doctor.reducer';
 import { filterData } from './FindDoctor';

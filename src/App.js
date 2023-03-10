@@ -18,10 +18,6 @@ const cache = createCache({
 });
 
 function App() {
-  if (module.hot) {
-    module.hot.accept();
-  }
-
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <CacheProvider value={cache}>

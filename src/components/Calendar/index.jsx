@@ -26,7 +26,10 @@ const StyledBox = styled(Box)(({ theme }) => ({
   },
   '& .fc-daygrid-day-top': {
     height: '100%',
-    flexGrow: 1
+    flexGrow: 1,
+    '& a': {
+      padding: 0
+    }
   },
   '& .fc-daygrid-day-number': {
     width: '100%'

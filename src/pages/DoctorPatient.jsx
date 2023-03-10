@@ -134,7 +134,7 @@ const DoctorPatient = () => {
             </Box>
           </Grid>
         </Grid>
-        <Box clasName="flex flex-row flex-wrap items-center w-[100%]"></Box>
+        <Box clasName="flex flex-row flex-wrap items-center w-[100%]" />
         <Box>
           {!search && columnFilter && (
             <Box className="flex items-center my-1 gap-1 py-2 min-w-[100%] overflow-x-auto">

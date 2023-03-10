@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography, useMediaQuery } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 const links = [
@@ -8,6 +8,8 @@ const links = [
 ];
 
 function DashboardNavBar() {
+  const isMobile = useMediaQuery('(max-width: 600px)');
+
   return (
     <Box className="py-4 px-8 flex flex-row justify-between border bottom-1">
       <Typography>Igicupuri</Typography>
