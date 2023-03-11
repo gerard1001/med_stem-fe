@@ -6,6 +6,7 @@ import About from '../pages/About';
 import Account from '../pages/Account';
 import AdminCalendar from '../pages/AdminCalendar';
 import Analytics from '../pages/Analytics';
+import Bill from '../pages/Bill';
 import Dashboard from '../pages/Dashboard';
 import DoctorPage from '../pages/DoctorPage';
 import DoctorPatient from '../pages/DoctorPatient';
@@ -62,10 +63,6 @@ const routes = createBrowserRouter([
     element: <Dashboard />,
     children: [
       {
-        path: 'patient',
-        element: <Outlet />
-      },
-      {
         path: 'account',
         element: <Account />
       },
@@ -74,12 +71,20 @@ const routes = createBrowserRouter([
         element: <PatientAppointments />
       },
       {
+        path: 'patient',
+        element: <Outlet />
+      },
+      {
         path: 'analytics',
         element: <Analytics />
       },
       {
         path: 'schedule',
         element: <SchedulePage />
+      },
+      {
+        path: 'bill',
+        element: <Bill />
       },
       {
         path: 'add',

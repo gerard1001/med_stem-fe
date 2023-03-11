@@ -16,42 +16,67 @@ import { BsPlusCircle } from 'react-icons/bs';
 import { FiLogOut, FiUsers } from 'react-icons/fi';
 import { GrClose } from 'react-icons/gr';
 import { IoCalculatorOutline } from 'react-icons/io5';
-import { RiCalendarTodoLine } from 'react-icons/ri';
+import { RiBillLine, RiCalendarTodoLine } from 'react-icons/ri';
 import { VscGraphLine } from 'react-icons/vsc';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-const listItems = [
-  {
-    listIcon: <FiUsers className="text-[20px]" />,
-    listText: 'Patients'
-  },
-  {
-    listIcon: <RiCalendarTodoLine className="text-[20px]" />,
-    listText: 'Schedule'
-  },
-  {
-    listIcon: <VscGraphLine className="text-[20px]" />,
-    listText: 'Analytics'
-  },
-  {
-    listIcon: <IoCalculatorOutline className="text-[20px]" />,
-    listText: 'Calculator'
-  },
-  {
-    listIcon: <BsPlusCircle className="text-[20px]" />,
-    listText: 'Add'
+const listItems = (role) => {
+  const common = [
+    {
+      listIcon: <FiUsers className="text-[20px]" />,
+      listText: 'Patients',
+      url: '/dashboard/patient'
+    },
+    {
+      listIcon: <RiCalendarTodoLine className="text-[20px]" />,
+      listText: 'Schedule',
+      url: '/dashboard/schedule'
+    },
+    {
+      listIcon: <VscGraphLine className="text-[20px]" />,
+      listText: 'Analytics',
+      url: '/dashboard/analytics'
+    }
+  ];
+  if (role === 'admin') {
+    return [
+      ...common,
+      {
+        listIcon: <IoCalculatorOutline className="text-[20px]" />,
+        listText: 'Calculator',
+        url: '/dashboard/calculator'
+      },
+      {
+        listIcon: <BsPlusCircle className="text-[20px]" />,
+        listText: 'Add'
+      }
+    ];
   }
-];
+  if (role === 'doctor') {
+    return [
+      ...common,
+      {
+        listIcon: <RiBillLine className="text-[20px]" />,
+        listText: 'Bill',
+        url: '/dashboard/bill'
+      }
+    ];
+  }
 
+  return [];
+};
 const accItems = [
   {
     listIcon: <AiOutlineUser className="text-[20px]" />,
-    listText: 'Account'
+    listText: 'Account',
+    url: '/dashboard/account'
   }
 ];
 
 const DashboardLeftSideBar = ({ toggleLeftSideBar }) => {
   const nav = useNavigate();
+  const { loginData } = useSelector((state) => state.user);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openMenu = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -81,8 +106,9 @@ const DashboardLeftSideBar = ({ toggleLeftSideBar }) => {
         <Box className="h-[calc(100%-64px)] bg-white flex flex-col justify-between">
           <Box className="h-[55%]">
             <List>
-              {listItems.map((listItem, index) => (
+              {listItems(loginData?.Role.role).map((listItem, index) => (
                 <ListItem
+                  role="button"
                   id="demo-positioned-button"
                   aria-controls={
                     openMenu && index === 4 ? 'demo-positioned-menu' : undefined
@@ -90,7 +116,7 @@ const DashboardLeftSideBar = ({ toggleLeftSideBar }) => {
                   className="cursor-pointer hover:bg-[#caedff] hover:text-primary"
                   aria-haspopup="true"
                   aria-expanded={openMenu && index === 4 ? 'true' : undefined}
-                  onClick={index === 4 ? handleClick : undefined}
+                  onClick={index === 4 ? handleClick : () => nav(listItem.url)}
                 >
                   <ListItemIcon>{listItem.listIcon}</ListItemIcon>
                   <ListItemText primary={listItem.listText} />
@@ -102,7 +128,10 @@ const DashboardLeftSideBar = ({ toggleLeftSideBar }) => {
           <Box className="h-[45%]  border-t border-[#0093df]">
             <List>
               {accItems.map((listItem) => (
-                <ListItem className="cursor-pointer hover:bg-[#caedff] hover:text-primary">
+                <ListItem
+                  onClick={() => nav(listItem.url)}
+                  className="cursor-pointer hover:bg-[#caedff] hover:text-primary"
+                >
                   <ListItemIcon>{listItem.listIcon}</ListItemIcon>
                   <ListItemText primary={listItem.listText} />
                 </ListItem>

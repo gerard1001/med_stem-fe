@@ -24,6 +24,9 @@ const HomeNavBar = (props) => {
   const { pathname } = useLocation();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const isLoggedIn = JSON.parse(localStorage.getItem('userLoginData'))?.token;
+  const isClient =
+    JSON.parse(localStorage.getItem('userLoginData'))?.user?.Role.role ===
+    'client';
   const [onHome, setOnHome] = React.useState(pathname === '/');
   const [onAbout, setOnAbout] = React.useState(false);
   const [onfindDoc, setOnfindDoc] = React.useState(false);
@@ -185,7 +188,7 @@ const HomeNavBar = (props) => {
     props.window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <Box className={`flex flex-col w-full ${props.children ? 'h - full' : ''}`}>
+    <Box className={`flex flex-col w-full ${props.children ? 'h-full' : ''}`}>
       <Box
         sx={{
           display: 'flex',
@@ -267,7 +270,40 @@ const HomeNavBar = (props) => {
               ))}
             </Box>
 
-            {isLoggedIn ? (
+            {isLoggedIn && !isClient && (
+              <Box
+                sx={{
+                  display: { xs: 'none', sm: 'block' },
+                  fontSize: { md: '17px', xs: '14px' },
+                  mx: 2
+                }}
+              >
+                <Button
+                  color="primary"
+                  sx={{
+                    color: '#1A4CFF',
+                    fontSize: { md: '17px', xs: '14px' },
+                    mx: { md: '5px', xs: '4px' }
+                  }}
+                >
+                  <FiIcons.FiSearch />
+                </Button>
+                <Button
+                  color="primary"
+                  sx={{
+                    color: '#1A4CFF',
+                    fontSize: { md: '17px', xs: '14px' },
+                    mx: { md: '5px', xs: '4px' }
+                  }}
+                  onClick={() => {
+                    nav('/dashboard');
+                  }}
+                >
+                  Dashboard
+                </Button>
+              </Box>
+            )}
+            {isLoggedIn && isClient && (
               <Box
                 sx={{
                   display: { xs: 'none', sm: 'block' },
@@ -312,7 +348,8 @@ const HomeNavBar = (props) => {
                   Account
                 </Button>
               </Box>
-            ) : (
+            )}
+            {!isLoggedIn && (
               <Box
                 sx={{
                   display: { xs: 'none', sm: 'block' },

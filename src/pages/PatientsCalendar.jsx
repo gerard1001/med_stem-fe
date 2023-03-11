@@ -1,10 +1,23 @@
-import { Box, Stack, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  Stack,
+  Typography,
+  useMediaQuery
+} from '@mui/material';
 import { addDays, getDate, getDay, isEqual } from 'date-fns';
-import React, { memo, useEffect, useRef, useState } from 'react';
+import React, { memo, useContext, useEffect, useRef, useState } from 'react';
+import { FiChevronLeft } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
 import BackButton from '../components/BackButton';
 import Calendar from '../components/Calendar';
 import CalendarMonthYearSelector from '../components/Calendar/CalendarMonthYearSelector';
+import { DashboardContext } from '../context/DashboardContext';
 import { setSelectedDate } from '../redux/reducers/calendar.reducer';
 
 const data = [
@@ -17,66 +30,100 @@ const data = [
 function PatientsCalendar() {
   const calendarRef = useRef(null);
   const [viewDate, setViewDate] = useState(new Date());
+  const [openRightSideBar, setOpenRightSideBar] = useState(null);
   const selectedDate = useSelector((state) => state.calendar.selectedDate);
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down('md'));
+
+  const toggleRightSideBar = () => {
+    setOpenRightSideBar((open) => !open);
+  };
 
   useEffect(() => {
     calendarRef.current.calendar.gotoDate(new Date(viewDate));
   }, [viewDate]);
 
-  console.log({ viewDate, calendarRef });
-
   return (
-    <Box className="sm:p-4 p-8 flex flex-col sm:gap-0 gap-3">
-      <Stack
-        direction="row"
-        gap={{ xs: 1, sm: 3 }}
-        justifyContent="space-between"
-        alignItems="center"
-        flexWrap="wrap"
-        mb={{ xs: 2, sm: 5 }}
-      >
+    <Box className="flex flex-row w-full h-full">
+      <Box className="sm:p-4 p-8 flex flex-col grow sm:gap-0 gap-3 overflow-y-auto">
+        <IconButton
+          sx={{
+            position: 'absolute',
+            backgroundColor: '#9b9b9b2d',
+            color: '#000',
+            top: '60px',
+            right: '16px',
+            display: { md: 'none', xs: 'block' }
+          }}
+        >
+          <FiChevronLeft onClick={toggleRightSideBar} />
+        </IconButton>
         <Stack
           direction="row"
-          className="gap-3 items-center sm:w-full overflow-hidden"
+          gap={{ xs: 1, sm: 3 }}
+          justifyContent="space-between"
+          alignItems="center"
+          flexWrap="wrap"
+          mb={{ xs: 2, sm: 5 }}
         >
-          <BackButton />
-          <Typography
-            fontSize={{ xs: 16, sm: 32 }}
-            className="leading-none"
-            noWrap
+          <Stack
+            direction="row"
+            className="gap-3 items-center sm:w-full overflow-hidden"
           >
-            Select date and time
-          </Typography>
+            <BackButton />
+            <Typography
+              fontSize={{ xs: 16, sm: 32 }}
+              className="leading-none"
+              noWrap
+            >
+              Select date and time
+            </Typography>
+          </Stack>
+          <Stack direction="row" justifyContent="end" className="sm:w-full">
+            <CalendarMonthYearSelector
+              viewDate={viewDate}
+              setViewDate={setViewDate}
+            />
+          </Stack>
         </Stack>
-        <Stack direction="row" justifyContent="end" className="sm:w-full">
-          <CalendarMonthYearSelector
-            viewDate={viewDate}
-            setViewDate={setViewDate}
+        <Box className="sm:px-0 px-20">
+          <Calendar
+            ref={calendarRef}
+            dayCellContent={(props) => {
+              return <Daycell selectedDate={selectedDate} {...props} />;
+            }}
           />
-        </Stack>
-      </Stack>
-      <Box className="sm:px-0 px-20">
-        <Calendar
-          ref={calendarRef}
-          dayCellContent={(props) => {
-            return <Daycell selectedDate={selectedDate} {...props} />;
-          }}
-        />
+        </Box>
       </Box>
+      <Drawer
+        open={openRightSideBar}
+        anchor="right"
+        variant={isMobile ? 'temporary' : 'permanent'}
+        onClose={() => {
+          setOpenRightSideBar(false);
+        }}
+        sx={{
+          '& .MuiDrawer-paper': {
+            width: '250px'
+          }
+        }}
+        // classes={{
+        //   paper: 'relative'
+        // }}
+        ModalProps={{
+          keepMounted: false
+        }}
+        className="transition duration-150 ease-in-out"
+      >
+        <CalendarRightSideBar />
+      </Drawer>
     </Box>
   );
 }
 
 function checkIsIn(arr, date2) {
   let isIn = false;
-  // if (!date2) return isIn;
 
   arr.forEach((date1) => {
-    // console.log(
-    //   'isEqual',
-    //   new Date(date1).toDateString(),
-    //   new Date(date2).toDateString()
-    // );
     if (new Date(date1).toDateString() === new Date(date2).toDateString()) {
       isIn = true;
     }
@@ -125,5 +172,30 @@ const Daycell = memo(({ date, isOther, selectedDate, ...props }) => {
     </Box>
   );
 });
+
+const CalendarRightSideBar = () => {
+  const appointmentHours = [
+    '09:00 - 09:30',
+    '09:00 - 09:30',
+    '09:00 - 09:30',
+    '09:00 - 09:30'
+  ];
+  return (
+    <List disablePadding className="border-l border-primary w-full h-full">
+      {appointmentHours.map((hour) => (
+        <ListItemText
+          className="border-b border-primary"
+          primary={hour}
+          classes={{ primary: 'p-3 text-center' }}
+        />
+      ))}
+      <Stack direction="row" alignItems="center" justifyContent="center">
+        <Button variant="contained" color="primary" className="bg-primary m-4">
+          Make Appointment
+        </Button>
+      </Stack>
+    </List>
+  );
+};
 
 export default PatientsCalendar;

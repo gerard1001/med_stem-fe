@@ -3,7 +3,9 @@ import { createTheme } from '@mui/material';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1A4CFF'
+      light: '#71A9F7',
+      main: '#1A4CFF',
+      dark: '#214ADD'
     },
     secondary: {
       main: '#051B6C'
@@ -21,10 +23,6 @@ const theme = createTheme({
     text: {
       primary: '#2E3033',
       disabled: '#6A6F75'
-    },
-    background: {
-      default: '#FFF',
-      paper: '#FAFAFA'
     },
     action: {
       disabled: '#C0C0C0',
@@ -122,6 +120,13 @@ const theme = createTheme({
     MuiTableCell: {
       head: {
         backgroundColor: 'red !important'
+      }
+    },
+    MuiDivider: {
+      styleOverrides: {
+        root: {
+          borderColor: 'primary.dark'
+        }
       }
     }
   }

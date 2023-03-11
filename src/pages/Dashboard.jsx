@@ -1,5 +1,6 @@
 import { Box, Drawer, useMediaQuery } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import DashboardLeftSideBar from '../components/DashboardLeftSideBar';
 import DashboardNavBar from '../components/DashboardNavBar';
@@ -7,15 +8,17 @@ import HomeNavBar from '../components/HomeNavBar';
 import DashboardContextProvider, {
   DashboardContext
 } from '../context/DashboardContext';
+import { setLoginData } from '../redux/reducers/user.reducer';
 
 const Dashboard = () => {
   const { pathname } = useLocation();
   const userData = JSON.parse(localStorage.getItem('userLoginData'));
 
+  const dispatch = useDispatch();
   const [openLeftSideBar, setOpenLeftSideBar] = useState(false);
   const [openRightSideBar, setOpenRightSideBar] = useState(false);
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down('md'));
-  const isClient = userData.user.Role.role === 'client';
+  const isClient = userData?.user?.Role?.role === 'client';
 
   const { rightSideBarContent, rightSideBarSize } =
     useContext(DashboardContext);
@@ -39,6 +42,9 @@ const Dashboard = () => {
       setOpenRightSideBar(false);
     }
   }, [isMobile]);
+  useEffect(() => {
+    dispatch(setLoginData(userData?.user));
+  }, []);
 
   if (!userData?.token) {
     return <Navigate to="/login" replace />; // redirect to login if not logged in
