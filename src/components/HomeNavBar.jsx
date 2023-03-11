@@ -24,7 +24,7 @@ const userItems = ['Login', 'Sign up'];
 const HomeNavBar = (props) => {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const isLoggedIn = !!localStorage.getItem('userLoginData');
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -91,7 +91,7 @@ const HomeNavBar = (props) => {
                   textAlign: 'center'
                 }}
                 onClick={() => {
-                  nav('/patient/appointments');
+                  nav('/dashboard/patient/appointments');
                 }}
               >
                 <ListItemText primary="Appointment" />
@@ -104,7 +104,7 @@ const HomeNavBar = (props) => {
                   textAlign: 'center'
                 }}
                 onClick={() => {
-                  nav('/patient');
+                  nav('/dashboard/patient');
                 }}
               >
                 <ListItemText primary="Account" />
@@ -208,7 +208,7 @@ const HomeNavBar = (props) => {
                 color="primary"
                 sx={{ color: '#1A4CFF', fontSize: '18px', mx: 2 }}
                 onClick={() => {
-                  nav('/patient/appointments');
+                  nav('/dashboard/patient/appointments');
                 }}
               >
                 Appointment
@@ -217,7 +217,7 @@ const HomeNavBar = (props) => {
                 color="primary"
                 sx={{ color: '#1A4CFF', fontSize: '18px', mx: 2 }}
                 onClick={() => {
-                  nav('/patient');
+                  nav('/dashboard/patient');
                 }}
               >
                 Account

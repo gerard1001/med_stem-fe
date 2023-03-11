@@ -10,7 +10,7 @@ const PatientProfile = () => {
 
   return (
     <div>
-      <HomeNavBar />
+      {/* <HomeNavBar /> */}
       {step === 0 && <PersonaInfo />}
       {step === 1 && <ContactInfo />}
       {step === 2 && <MedicalHistory />}

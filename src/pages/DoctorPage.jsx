@@ -1,25 +1,20 @@
+import { Box, Button, Typography } from '@mui/material';
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { getOneDoctor } from '../redux/reducers/doctor.reducer';
-import HomeNavBar from '../components/HomeNavBar';
-import { Box, Typography, Button } from '@mui/material';
 import * as IoIcons from 'react-icons/io5';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router';
+import HomeNavBar from '../components/HomeNavBar';
 import Loader from '../components/Loader/Loader';
+import { getOneDoctor } from '../redux/reducers/doctor.reducer';
 
 const DoctorPage = () => {
+  const navigate = useNavigate();
   const doctor = useSelector((state) => state.doctor);
 
   const dispatch = useDispatch();
 
-  let urlId = window.location.href.substring(
-    window.location.href.lastIndexOf('/') + 1
-  );
+  const { id: doctorId } = useParams();
 
-  let doctorId;
-
-  urlId.includes('?')
-    ? (doctorId = urlId.slice(0, urlId.lastIndexOf('?')))
-    : (doctorId = urlId);
   React.useEffect(() => {
     dispatch(getOneDoctor(doctorId));
   }, []);
@@ -27,7 +22,7 @@ const DoctorPage = () => {
   const doctorData = doctor?.single_data?.data;
 
   const handleBack = () => {
-    history.back();
+    navigate(-1);
   };
 
   return (
@@ -105,7 +100,7 @@ const DoctorPage = () => {
         <Box className="w-1/5 md:w-[100%] flex items-end flex-col-reverse">
           <Button
             onClick={() => {
-              nav(`/`);
+              navigate(`/find_doctor/appointment/${doctorId}`);
             }}
             sx={{
               marginTop: '40px',
@@ -114,7 +109,7 @@ const DoctorPage = () => {
               maxWidth: '220px',
               ':hover': { backgroundColor: '#1A4CFA' }
             }}
-            className={`bg-[#1A4CFF] capitalize text-white`}
+            className="bg-[#1A4CFF] capitalize text-white"
           >
             Make appointment{' '}
           </Button>

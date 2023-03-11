@@ -1,30 +1,29 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { getDoctorList } from '../redux/reducers/doctor.reducer';
-import { getDepartmentList } from '../redux/reducers/department.reducer';
-import { Typography, Box, IconButton, TextField, Button } from '@mui/material';
-import * as CiIcons from 'react-icons/ci';
-import * as AiIcons from 'react-icons/ai';
-import * as IoIcons from 'react-icons/io5';
-import HomeNavBar from '../components/HomeNavBar';
+/* eslint-disable no-nested-ternary */
+import { Box, Button, Typography } from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import React from 'react';
+import * as AiIcons from 'react-icons/ai';
+import * as CiIcons from 'react-icons/ci';
+import * as IoIcons from 'react-icons/io5';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
-import SearchBar from '../components/SearchBar';
+import HomeNavBar from '../components/HomeNavBar';
 import Loader from '../components/Loader/Loader';
+import SearchBar from '../components/SearchBar';
+import { getDepartmentList } from '../redux/reducers/department.reducer';
+import { getDoctorList } from '../redux/reducers/doctor.reducer';
 
 export const filterData = (query, data) => {
   if (!query) {
     return data;
-  } else {
-    return data?.filter(
-      (values) =>
-        values.first_name.toLowerCase().includes(query.toLowerCase()) ||
-        values.last_name.toLowerCase().includes(query.toLowerCase())
-    );
   }
+  return data?.filter(
+    (values) =>
+      values.first_name.toLowerCase().includes(query.toLowerCase()) ||
+      values.last_name.toLowerCase().includes(query.toLowerCase())
+  );
 };
 
 const FindDoctor = () => {
@@ -89,7 +88,6 @@ const FindDoctor = () => {
 
   return (
     <Box className="w-[100%] px-16 md:px-4 max-w-[900px] mx-auto">
-      {' '}
       <HomeNavBar />
       <Box
         className={`${
@@ -229,7 +227,7 @@ const FindDoctor = () => {
                 <Button
                   disabled={!doctorId}
                   onClick={() => {
-                    nav(`/doctor_page/${doctorId}`);
+                    nav(`/find_doctor/doctor_page/${doctorId}`);
                   }}
                   sx={{
                     width: '120px',
@@ -280,7 +278,7 @@ const FindDoctor = () => {
                     return (
                       <Box
                         key={data.department_id}
-                        className={`flex flex-col items-center px-5`}
+                        className="flex flex-col items-center px-5"
                         onClick={() => {
                           setSpecialityId(data.department_id);
                         }}
@@ -314,7 +312,7 @@ const FindDoctor = () => {
                 <Button
                   disabled={!specialityId}
                   onClick={() => {
-                    nav(`/speciality/${specialityId}`);
+                    nav(`/find_doctor/speciality/${specialityId}`);
                   }}
                   sx={{
                     width: '120px',

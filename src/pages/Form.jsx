@@ -1,13 +1,14 @@
-import { Box, useTheme } from '@mui/material';
+import { Box, IconButton, useTheme } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import React from 'react';
 import * as IoIcons from 'react-icons/im';
-import HomeNavBar from '../components/HomeNavBar';
+import { useNavigate } from 'react-router';
 import StepForm from '../components/ClientSignUpSteps/StepForm';
-import { Controller, useFormContext } from 'react-hook-form';
+import HomeNavBar from '../components/HomeNavBar';
 
 const Form = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const [status, setStatus] = React.useState();
 
   const getStatus = (data) => {
@@ -33,9 +34,14 @@ const Form = () => {
             position: 'relative'
           }}
         >
-          <div className="absolute right-5 top-5  bg-[#bfbfbf] text-[#7b7b7b] text-[14px] rounded-md p-1">
+          <IconButton
+            onClick={() => {
+              navigate(-1);
+            }}
+            className="absolute right-5 top-5  bg-[#bfbfbf] text-[#7b7b7b] text-[14px] rounded-md p-1 cursor-pointer"
+          >
             <IoIcons.ImCross />
-          </div>
+          </IconButton>
           <StepForm getStatus={getStatus} />
         </Paper>
       </Box>

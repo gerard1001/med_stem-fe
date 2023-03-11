@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
 import React from 'react';
 import Analytics from '../pages/Analytics';
 import Dashboard from '../pages/Dashboard';
@@ -20,88 +20,100 @@ import DoctorPatient from '../pages/DoctorPatient';
 import DoctorSignupForm from '../components/DoctorSignupForm';
 import AddSpecialityForm from '../components/AddSpecialityForm';
 import AdminCalendar from '../pages/AdminCalendar';
+import Account from '../pages/Account';
 
 const routes = createBrowserRouter([
   {
     path: '/',
-    element: <LandingPage />,
-    children: []
+    element: <LandingPage />
   },
   {
     path: '/about',
-    element: <About />,
-    children: []
+    element: <About />
   },
   {
     path: '/signup',
-    element: <Form />,
-    children: []
+    element: <Form />
   },
   {
     path: '/login',
-    element: <Login />,
-    children: []
+    element: <Login />
   },
   {
     path: '/find_doctor',
-    element: <FindDoctor />,
-    children: []
-  },
-  {
-    path: '/doctor_page/:id',
-    element: <DoctorPage />,
-    children: []
-  },
-  {
-    path: '/doctor',
-    element: <DoctorPatient />,
-    children: []
-  },
-  {
-    path: '/speciality/:id',
-    element: <SpecialityDoctor />,
-    children: []
-  },
-  {
-    path: '/patient',
-    element: <PatientProfile />,
-    children: []
-  },
-  {
-    path: '/patient/appointments',
-    element: <PatientAppointments />,
-    children: []
-  },
-  {
-    path: '/patient/calendar',
-    element: <PatientsCalendar />
+    element: <Outlet />,
+    children: [
+      {
+        path: '',
+        element: <FindDoctor />
+      },
+      {
+        path: 'doctor_page/:id',
+        element: <DoctorPage />
+      },
+      {
+        path: 'speciality/:id',
+        element: <SpecialityDoctor />
+      },
+      {
+        path: 'appointment/:id',
+        element: <PatientsCalendar />
+      }
+    ]
   },
   {
     path: '/dashboard',
     element: <Dashboard />,
     children: [
       {
-        path: '',
+        path: 'patient',
+        element: <Outlet />
+      },
+      {
+        path: 'account',
+        element: <Account />
+      },
+      {
+        path: 'appointments',
+        element: <PatientAppointments />
+      },
+      {
+        path: 'analytics',
         element: <Analytics />
       },
       {
         path: 'schedule',
         element: <SchedulePage />
+      },
+      {
+        path: 'add',
+        element: <Outlet />,
+        children: [
+          {
+            path: 'speciality',
+            element: <AddSpecialityForm />
+          },
+          {
+            path: 'schedule',
+            element: <AdminCalendar />
+          },
+          {
+            path: 'doctor',
+            element: <DoctorSignupForm />
+          }
+        ]
       }
     ]
   },
 
   {
-    path: '/add/doctor',
-    element: <DoctorSignupForm />
-  },
+    path: '/doctor',
+    element: <DoctorPatient />,
+    children: []
+  }, // will be sent to its appropriate page shortlly
   {
-    path: '/add/speciality',
-    element: <AddSpecialityForm />
-  },
-  {
-    path: '/add/schedule',
-    element: <AdminCalendar />
+    path: '*',
+    element: <Navigate to="/" replace />
   }
 ]);
 

@@ -1,94 +1,73 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import { ImCross } from 'react-icons/im';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { useNavigate } from 'react-router-dom';
-import { useForm, Controller } from 'react-hook-form';
-import { useSelector, useDispatch } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import CssBaseline from '@mui/material/CssBaseline';
+import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import * as React from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { ImCross } from 'react-icons/im';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import * as yup from 'yup';
-import {
-  setLoggedIn,
-  loginUser,
-  getUsersAction
-} from '../redux/reducers/user.reducer';
+import axiosInstance from '../axios/axios.instance';
+import LoadingButton from '../components/LoadingButton';
 
 const schema = yup.object().shape({
   email: yup.string().email().required(),
   password: yup.string().required()
 });
 
-const userInfo = JSON.parse(localStorage.getItem('userLoginData'))?.user;
-
 const Login = () => {
-  const userData = useSelector((state) => state.user);
-  const [userType, setUserType] = React.useState(null);
   const nav = useNavigate();
+  const [loading, setLoading] = React.useState(false);
   const {
     handleSubmit,
     control,
-    formState: { errors },
-    trigger,
-    reset
+    formState: { errors }
   } = useForm({
     resolver: yupResolver(schema)
   });
 
-  const dispatch = useDispatch();
-
-  React.useEffect(() => {
-    dispatch(getUsersAction());
-  }, []);
-
-  React.useEffect(() => {
-    setUserType(userData?.loginData?.data?.data?.user);
-  }, [userData]);
-
-  // const userType = userData?.loginData?.data?.data?.user;
-  const status = userData?.loginData?.status;
-  console.log(userData, '!!!!!!!!!!!!!!');
-  console.log(userType, '!!!!!!!TYPE!!!!!!!');
-
-  const onSubmit = ({ email, password }) => {
-    dispatch(
-      loginUser({
-        email,
-        password
-      })
-    );
-    // userInfo ? nav('/patient') : doctorInfo ? nav('/doctor') : nav('/');
-
-    console.log(userData, '!!!!!!!!!!!!!!');
-    console.log(userType, '@@@@');
-
-    console.log(userType, '####');
-
-    // status === 201
-    //   ? reset({
-    //       email: '',
-    //       password: ''
-    //     })
-    //   : null;
-  };
-
-  if (userType?.role_id === 3) {
-    nav('/patient');
+  // Redirect to dashboard if already logged in
+  const userData = JSON.parse(localStorage.getItem('userLoginData'));
+  if (userData?.token) {
+    return <Navigate to="/dashboard" />;
   }
-  if (userType?.role_id === 2) {
-    nav('/doctor');
-  }
-  if (userType?.role_id === 1) {
-    nav('/dashboard');
-  }
+
   const handleBack = () => {
-    history.back();
+    nav(-1);
   };
+
+  const onSubmit = async ({ email, password }) => {
+    try {
+      setLoading(true);
+      const response = await axiosInstance
+        .post(`/users/login`, {
+          email,
+          password
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+
+      if (response.status === 201) {
+        localStorage.setItem(
+          'userLoginData',
+          JSON.stringify(response?.data?.data)
+        );
+      }
+
+      nav('/dashboard');
+
+      return response;
+    } catch (error) {
+      toast.error(error.response?.data?.message);
+    }
+  };
+
   return (
     <>
       <Box className="absolute w-fit max-w-lg top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
@@ -103,12 +82,13 @@ const Login = () => {
           }}
         >
           <CssBaseline />
-          <div
-            className="absolute right-5 top-5  bg-[#bfbfbf] text-[#7b7b7b] text-[14px] rounded-md p-1"
+          <Box
+            component="div"
+            className="absolute right-5 top-5  bg-[#bfbfbf] text-[#7b7b7b] text-[14px] rounded-md p-1 cursor-pointer"
             onClick={handleBack}
           >
             <ImCross />
-          </div>
+          </Box>
           <Box
             sx={{
               display: 'flex',
@@ -120,25 +100,22 @@ const Login = () => {
               Enter MedStem
             </Typography>
             <Typography variant="subtitle1">
-              You don't have an account?{' '}
-              <span
+              You don&apos;t have an account?{' '}
+              <Box
+                component="span"
                 className="text-primary font-bold cursor-pointer"
                 onClick={() => {
                   nav('/signup');
                 }}
               >
                 Register
-              </span>
+              </Box>
             </Typography>
             <Box
               component="form"
               sx={{ mt: 1 }}
               noValidate
               onSubmit={handleSubmit(onSubmit)}
-              // onSubmit={() => {
-              //   dispatch(setLoggedIn());
-              //   nav('/patient');
-              // }}
             >
               <Controller
                 name="email"
@@ -161,7 +138,6 @@ const Login = () => {
                   />
                 )}
               />
-
               <Controller
                 name="password"
                 control={control}
@@ -190,15 +166,16 @@ const Login = () => {
                   </Link>
                 </Grid>
               </Grid>
-              <Button
+              <LoadingButton
                 type="submit"
                 fullWidth
+                loading={loading}
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                className={`bg-[#1A4CFF] capitalize text-white`}
+                className="bg-[#1A4CFF] capitalize text-white"
               >
                 Enter
-              </Button>
+              </LoadingButton>
             </Box>
           </Box>
         </Container>

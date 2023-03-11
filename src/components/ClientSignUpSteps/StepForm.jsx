@@ -1,17 +1,16 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import React, { useEffect, useState } from 'react';
-import Confirm from './Confirm';
-import Success from './Success';
-import PersonalInfo from './PersonalInfo';
-import MedicalHistory from './MedicalHistory';
-import Password from './Password';
-import ContactInfo from './ContactInfo';
-import MedicalInfo from './MedicalInfo';
+import React from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import { useNavigate } from 'react-router';
+import * as yup from 'yup';
+import Confirm from './Confirm';
+import ContactInfo from './ContactInfo';
+import MedicalHistory from './MedicalHistory';
+import MedicalInfo from './MedicalInfo';
+import Password from './Password';
+import PersonalInfo from './PersonalInfo';
 
 const labels = [
   'First Step',
@@ -44,7 +43,7 @@ const schema = yup
   .object({
     first_name: yup.string().min(4).max(16).required(),
     last_name: yup.string().min(4).max(16).required(),
-    id_number: yup.string().min(8).max(16).required(),
+    id_number: yup.number('Id number must be a number').required(),
     email: yup.string().email().required(),
     password: yup
       .string()
@@ -102,39 +101,34 @@ const StepForm = ({ getStatus }) => {
 
   return (
     <FormProvider {...methods}>
-      {activeStep === labels.length ? (
-        <Success />
-      ) : (
-        <Box>
-          {' '}
-          <Box style={{ margin: '30px 0 10px' }}>
-            <Typography variant="h4" align="center" className="font-bold">
-              Welcome to Medstem
-            </Typography>
-            <Typography
-              variant="subtitle2"
-              align="center"
-              style={{ margin: '10px 0' }}
+      <Box>
+        <Box style={{ margin: '30px 0 10px' }}>
+          <Typography variant="h4" align="center" className="font-bold">
+            Welcome to Medstem
+          </Typography>
+          <Typography
+            variant="subtitle2"
+            align="center"
+            style={{ margin: '10px 0' }}
+          >
+            Already have an account?{' '}
+            <span
+              className="text-primary font-bold cursor-pointer"
+              onClick={() => {
+                nav('/login');
+              }}
             >
-              Already have an account?{' '}
-              <span
-                className="text-primary font-bold cursor-pointer"
-                onClick={() => {
-                  nav('/login');
-                }}
-              >
-                Log in
-              </span>
-            </Typography>
-          </Box>
-          {activeStep === 0 && <PersonalInfo />}
-          {activeStep === 1 && <ContactInfo />}
-          {activeStep === 2 && <MedicalInfo />}
-          {activeStep === 3 && <MedicalHistory />}
-          {activeStep === 4 && <Password data={form} />}
-          {activeStep === 5 && <Confirm data={form} />}
+              Log in
+            </span>
+          </Typography>
         </Box>
-      )}
+        {activeStep === 0 && <PersonalInfo />}
+        {activeStep === 1 && <ContactInfo />}
+        {activeStep === 2 && <MedicalInfo />}
+        {activeStep === 3 && <MedicalHistory />}
+        {activeStep === 4 && <Password data={form} />}
+        {activeStep === 5 && <Confirm data={form} />}
+      </Box>
     </FormProvider>
   );
 };

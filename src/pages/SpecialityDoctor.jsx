@@ -111,7 +111,7 @@ const SpecialityDoctor = () => {
             <Button
               disabled={!doctorId}
               onClick={() => {
-                nav(`/doctor_page/${doctorId}`);
+                nav(`/find_doctor/appointment/${doctorId}`);
               }}
               sx={{
                 width: '120px',
