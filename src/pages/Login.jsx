@@ -13,6 +13,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import axiosInstance from '../axios/axios.instance';
+import HomeNavBar from '../components/HomeNavBar';
 import LoadingButton from '../components/LoadingButton';
 
 const schema = yup.object().shape({
@@ -38,7 +39,7 @@ const Login = () => {
   }
 
   const handleBack = () => {
-    nav(-1);
+    nav('/');
   };
 
   const onSubmit = async ({ email, password }) => {
@@ -69,8 +70,8 @@ const Login = () => {
   };
 
   return (
-    <>
-      <Box className="absolute w-fit max-w-lg top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
+    <HomeNavBar>
+      <Box className="flex items-center justify-center h-full w-full sm:px-8">
         <Container
           component="main"
           maxWidth="xs"
@@ -80,6 +81,7 @@ const Login = () => {
             py: 8,
             position: 'relative'
           }}
+          className="max-w-[380px] px-6 sm:px-2"
         >
           <CssBaseline />
           <Box
@@ -180,7 +182,7 @@ const Login = () => {
           </Box>
         </Container>
       </Box>
-    </>
+    </HomeNavBar>
   );
 };
 

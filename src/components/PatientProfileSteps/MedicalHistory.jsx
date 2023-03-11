@@ -1,16 +1,16 @@
-import React from 'react';
-import PatientProfileNavigation from './PatientProfileNavigation';
 import {
   Box,
   Button,
-  Typography,
   FormControl,
   FormControlLabel,
   Radio,
   RadioGroup,
-  TextField
+  TextField,
+  Typography
 } from '@mui/material';
-import { infos, spec_infos, med_info } from '../../utils/dummyData';
+import React from 'react';
+import { med_info } from '../../utils/dummyData';
+import PatientProfileNavigation from './PatientProfileNavigation';
 
 const MedicalHistory = () => {
   const spec_med_info = med_info?.filter(
@@ -19,7 +19,7 @@ const MedicalHistory = () => {
 
   return (
     <div>
-      <Box className="w-[80%] mx-auto max-w-[1200px]">
+      <Box className="w-full">
         <PatientProfileNavigation />
         <Box className="h-[90vh] overflow-auto pb-8 mb-24">
           <Box className="mt-8 mb-5 flex flex-row items-center justify-between">

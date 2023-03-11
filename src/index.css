@@ -38,7 +38,7 @@ input:focus {
 }
 
 *::-webkit-scrollbar-track {
-  background: var(--primary);
+  background: transparent;
   border-radius: 5px;
 }
 

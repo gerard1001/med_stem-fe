@@ -80,8 +80,8 @@ const SpecialityDoctor = () => {
         <Box>
           <Box className="flex flex-col items-end w-fit p-0 mx-auto pb-10">
             <List
-              className="max-w-[640px] w-[100%] px-5 mx-auto mb-5 overflow-auto"
-              sx={{ marginX: 'auto', marginTop: 5 }}
+              className="max-w-[900px] w-[100%] h-[60vh] px-5 mx-auto mb-5 overflow-auto"
+              sx={{ marginX: 'auto', marginTop: 1 }}
             >
               {dataFiltered?.map((data, idx) => {
                 return (
@@ -101,8 +101,13 @@ const SpecialityDoctor = () => {
                       className="w-[40px] h-[40px] mr-4 rounded-[50%]"
                     />
                     <ListItemText
-                      primary={`${data.first_name} ${data.last_name}, M.D - ${data.speciality}`}
+                      primary={`${data.first_name} ${
+                        data.last_name
+                      }, M.D - ${data.departments
+                        .map((value) => value.speciality_name)
+                        .join(', ')}`}
                       secondary={`Total experience (years): ${data.experience_years},  Cost per appointment: ${data.cost_per_appointment}$`}
+                      classes={{ primary: 'truncate' }}
                     />
                   </ListItem>
                 );

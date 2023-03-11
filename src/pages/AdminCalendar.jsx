@@ -29,7 +29,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { days } from '../utils/dummyData';
 import { createSchedule } from '../redux/reducers/schedule.reducer';
-import DashboardSidebar from '../components/DashboardSideBar';
 import { BsPlusCircle } from 'react-icons/bs';
 
 const schema = yup.object().shape({
@@ -115,9 +114,8 @@ function AdminCalendar() {
   };
 
   return (
-    <Box className="flex flex-row items-start pl-[220px] pr-[300px] ">
-      <DashboardSidebar />
-      <Box className="sm:p-4 pt-16 px-8 flex flex-col w-[100%] sm:gap-0 gap-3">
+    <Box className="flex flex-row items-start pr-[250px] ">
+      <Box className="sm:p-4 pt-16 px-8 flex flex-col w-[100%] sm:gap-0">
         <Stack
           direction="row"
           gap={{ xs: 1, sm: 3 }}
@@ -128,10 +126,12 @@ function AdminCalendar() {
         >
           <Stack
             direction="row"
-            className="gap-3 items-center sm:w-full overflow-visible p-4"
+            className="items-center sm:w-full overflow-visible px-4"
           >
             <Typography
               fontSize={{ xs: 16, sm: 20 }}
+              fontWeight="500"
+              mt="10px"
               className="leading-none"
               noWrap
             >
@@ -148,18 +148,14 @@ function AdminCalendar() {
         <Stack
           direction="row"
           justifyContent="space-between"
-          className="gap-3 items-center sm:w-full overflow-visible p-4"
+          className="flex flex-row items-center sm:w-full overflow-visible p-4"
         >
           <Stack
             direction="row"
-            className="gap-3 items-center overflow-visible"
+            className="gap-3 w-1/2 items-center overflow-visible"
             maxHeight={60}
           >
-            <Typography
-              fontSize={{ xs: 16, sm: 20 }}
-              className="leading-none"
-              noWrap
-            >
+            <Typography fontSize={{ xs: 16 }} className="leading-none" noWrap>
               Select doctor
             </Typography>
 
@@ -168,7 +164,10 @@ function AdminCalendar() {
               setSearchQuery={setSearchQuery}
             />
           </Stack>
-          <Stack direction="row" className="flex items-center gap-1">
+          <Stack
+            direction="row"
+            className="flex items-center justify-center gap-1 w-1/2"
+          >
             <BsPlusCircle className="text-[20px]" /> Work Schedule
           </Stack>
         </Stack>
@@ -194,11 +193,11 @@ function AdminCalendar() {
           />
         </Box>
       </Box>
-      <Box className="w-[300px] p-2 z-50 bg-white fixed right-0 top-16 bottom-0 h-[calc(100vh-64px)] border-l border-t border-sky-400">
+      <Box className="w-[250px] p-2 z-50 bg-white fixed right-0 top-16 bottom-0 h-[calc(100vh-64px)] border-l border-t border-sky-400">
         <form onSubmit={handleSubmit(onSubmit)} className="w-[100%] p-2 z-50">
           <Grid container rowSpacing={1} columnSpacing={1}>
             <Grid xs={12} pt={3} pl={1}>
-              <Typography variant="body1" fontWeight="600">
+              <Typography variant="body1" fontWeight="500" mt="10px">
                 Select time period
               </Typography>
             </Grid>
@@ -244,7 +243,7 @@ function AdminCalendar() {
               />
             </Grid>
             <Grid xs={12} pt={1} pl={1}>
-              <Typography variant="body1" fontWeight="600">
+              <Typography variant="body1" fontWeight="500" mt="10px">
                 Work days
               </Typography>
             </Grid>
@@ -260,6 +259,7 @@ function AdminCalendar() {
                     </InputLabel>
                     <Select
                       {...field}
+                      required
                       labelId="demo-multiple-checkbox-label"
                       id="demo-multiple-checkbox"
                       size="small"
@@ -284,7 +284,7 @@ function AdminCalendar() {
               />
             </Grid>
             <Grid xs={12} pt={1} pl={1}>
-              <Typography variant="body1" fontWeight="600">
+              <Typography variant="body1" fontWeight="500" mt="10px">
                 Work hours
               </Typography>
             </Grid>
@@ -329,11 +329,11 @@ function AdminCalendar() {
               />
             </Grid>
             <Grid xs={12} pt={1} pl={1}>
-              <Typography variant="body1" fontWeight="600">
+              <Typography variant="body1" fontWeight="500" mt="10px">
                 Duration of Appointment
               </Typography>
             </Grid>
-            <Grid item xs={8}>
+            <Grid item xs={6}>
               <Controller
                 control={control}
                 name="appointment_duration"
@@ -343,7 +343,7 @@ function AdminCalendar() {
                     variant="outlined"
                     margin="normal"
                     sx={{ margin: 0, maxWidth: '400px' }}
-                    className="w-[100%] min-w-[220px]"
+                    className="w-[100%]"
                     size="small"
                   >
                     <InputLabel required>Select time</InputLabel>

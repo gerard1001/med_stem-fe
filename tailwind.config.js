@@ -8,7 +8,7 @@ module.exports = {
   content: ['./src/**/*.{js,jsx}', './public/index.html'],
   darkMode: 'class',
   mode: 'jit',
-  important: '#root',
+  // important: '#root',
   theme: {
     extend: {
       screens: {

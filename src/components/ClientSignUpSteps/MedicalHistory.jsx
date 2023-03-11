@@ -53,8 +53,7 @@ const MedicalHistory = ({}) => {
         </Box>
       )}
       {!med_info?.loading && (
-        <>
-          {' '}
+        <Box className="md:px-2">
           {spec_med_info?.map((values, idx) => (
             <Box key={values.info_description}>
               <Box key={values.info_id} className="block">
@@ -119,7 +118,7 @@ const MedicalHistory = ({}) => {
               <Divider sx={{ marginTop: 3 }} />
             </Box>
           ))}
-        </>
+        </Box>
       )}
       <Box className="relative flex items-center mt-12 justify-center">
         <Box

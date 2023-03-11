@@ -20,7 +20,6 @@ import {
   Box
 } from '@mui/material';
 import { registerDoctor } from '../redux/reducers/doctor.reducer';
-import DashboardSideBar from './DashboardSideBar';
 
 const schema = yup.object().shape({
   first_name: yup.string().required(),
@@ -149,13 +148,20 @@ const DoctorSignupForm = () => {
 
   return (
     <Box>
-      <DashboardSideBar />
-      <Box className="pl-[220px] pt-20 w-[90%] mx-auto lg:pl-0 relative pb-10">
+      <Box className=" pt-20 w-[90%] mx-auto lg:pl-0 relative pb-10 mb-10">
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Typography variant="h6" sx={{ mb: '20px' }}>
+          <Typography
+            variant="h6"
+            sx={{ mb: '20px', textAlign: { md: 'left', xs: 'center' } }}
+            className=""
+          >
             Add Doctor
           </Typography>
-          <Typography variant="subtitle1" fontWeight="600">
+          <Typography
+            variant="subtitle1"
+            fontWeight="600"
+            sx={{ textAlign: { md: 'left', xs: 'center' } }}
+          >
             Personal Information
           </Typography>
           <Box
@@ -218,7 +224,7 @@ const DoctorSignupForm = () => {
                 />
               </Box>
             </Box>
-            <Box className="flex flex-col gap-4 w-[40%] md:w-full md:max-w-[400px]">
+            <Box className="flex flex-col gap-4 p-2 w-[40%] md:w-full md:max-w-[400px]">
               <Box className="w-[100%] min-w-[220px]" sx={{ height: '40px' }}>
                 <Controller
                   control={control}
@@ -295,7 +301,7 @@ const DoctorSignupForm = () => {
                 />
               </Box>
             </Box>
-            <Box className="block w-[20%] md:w-full md:max-w-[400px]">
+            <Box className="block w-[20%] md:mt-5 md:w-full md:max-w-[400px]">
               <Controller
                 name="picture"
                 control={control}
@@ -320,7 +326,7 @@ const DoctorSignupForm = () => {
                     className="w-[150px] h-[150px] mx-auto lg:w-[150px] lg:h-[150px] rounded-[50%]"
                   />
                 ) : (
-                  <Box className="rounded-[50%] bg-[#e8f0fe] w-[150px] h-[150px] relative">
+                  <Box className="rounded-[50%] bg-[#e8f0fe] w-[150px] h-[150px] md:w-[80px]  md:h-[80px] relative">
                     <FiUser className="absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] text-[30px] mr-0 w-[30px] text-slate-500 mx-auto" />
                   </Box>
                 )}
@@ -343,22 +349,29 @@ const DoctorSignupForm = () => {
             </Box>
           </Box>
 
-          <Typography variant="subtitle1" fontWeight="600" sx={{ my: '20px' }}>
+          <Typography
+            variant="subtitle1"
+            fontWeight="600"
+            sx={{ my: '20px', textAlign: { md: 'left', xs: 'center' } }}
+          >
             Personal Information
           </Typography>
 
           <Box
             spacing={2}
-            className="flex flex-row items-start justify-evenly md:flex-col w-[100%]"
+            className="flex flex-row items-start lg:items-center justify-evenly md:flex-col w-[100%] flex-grow gap-2"
           >
-            <Box className="flex flex-col gap-4 w-1/3 md:w-full md:max-w-[400px]">
+            <Box className="flex flex-col gap-4 w-1/3 md:w-full md:max-w-[350px]">
               <Box className="w-[100%] min-w-[220px]">
                 <Controller
                   name="departmentName"
                   control={control}
                   defaultValue={[]}
                   render={({ field }) => (
-                    <FormControl size="small" sx={{ width: 350 }}>
+                    <FormControl
+                      size="small"
+                      sx={{ width: { lg: 350, md: '237.67px', xs: '100%' } }}
+                    >
                       <InputLabel id="demo-multiple-checkbox-label">
                         Speciality
                       </InputLabel>
@@ -406,7 +419,7 @@ const DoctorSignupForm = () => {
                       label="Category"
                       variant="outlined"
                       size="small"
-                      sx={{ width: '100%', maxWidth: '350px' }}
+                      sx={{ width: '100%', maxWidth: '350px', mb: 1 }}
                       error={!!errors.category}
                       helperText={errors.category?.message}
                     />

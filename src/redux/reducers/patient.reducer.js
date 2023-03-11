@@ -8,6 +8,24 @@ const initialState = {
   error: ''
 };
 
+export const registerClient = createAsyncThunk(
+  'users/registerClient',
+  async (data) => {
+    const response = await axios
+      .post(`${process.env.BACKEND_URL}/users/client/register`, data)
+      .then((res) => {
+        console.log(res);
+        res.data;
+      })
+      .catch((error) => {
+        console.log({ error });
+        throw Error(error.response.data.message);
+      });
+
+    console.log({ response });
+  }
+);
+
 export const getPatientList = createAsyncThunk(
   'users/fetchPatients',
   async () =>
@@ -53,6 +71,24 @@ const patientSlice = createSlice({
       state.error = '';
     });
     builder.addCase(getOnePatient.rejected, (state, action) => {
+      state.loading = false;
+      state.single_data = {};
+      state.error = action.error.message;
+    });
+    builder.addCase(registerClient.pending, (state, action) => {
+      state.loading = true;
+      state.single_data = {};
+    });
+    builder.addCase(registerClient.fulfilled, (state, action) => {
+      alert('Registration successful');
+      console.log(action);
+      state.loading = false;
+      state.single_data = action.payload;
+      state.error = '';
+    });
+    builder.addCase(registerClient.rejected, (state, action) => {
+      alert(action.error.message);
+      console.log(action);
       state.loading = false;
       state.single_data = {};
       state.error = action.error.message;

@@ -1,26 +1,22 @@
-import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
 import React from 'react';
+import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
+import AddSpecialityForm from '../components/AddSpecialityForm';
+import DoctorSignupForm from '../components/DoctorSignupForm';
+import About from '../pages/About';
+import Account from '../pages/Account';
+import AdminCalendar from '../pages/AdminCalendar';
 import Analytics from '../pages/Analytics';
 import Dashboard from '../pages/Dashboard';
-import LandingPage from '../pages/LandingPage';
-import SchedulePage from '../pages/SchedulePage';
-import Form from '../pages/Form';
-import About from '../pages/About';
-import FindDoctor from '../pages/FindDoctor';
-import SpecialityDoctor from '../pages/SpecialityDoctor';
 import DoctorPage from '../pages/DoctorPage';
-import DashboardSideBar from '../components/DashboardSideBar';
-import PatientProfile from '../pages/PatientProfile';
-import PatientAppointments from '../pages/PatientAppointments';
-import Login from '../pages/Login';
-import DoctorProfile from '../pages/DoctorProfile';
-import Calendar from '../components/Calendar';
-import PatientsCalendar from '../pages/PatientsCalendar';
 import DoctorPatient from '../pages/DoctorPatient';
-import DoctorSignupForm from '../components/DoctorSignupForm';
-import AddSpecialityForm from '../components/AddSpecialityForm';
-import AdminCalendar from '../pages/AdminCalendar';
-import Account from '../pages/Account';
+import FindDoctor from '../pages/FindDoctor';
+import Form from '../pages/Form';
+import LandingPage from '../pages/LandingPage';
+import Login from '../pages/Login';
+import PatientAppointments from '../pages/PatientAppointments';
+import PatientsCalendar from '../pages/PatientsCalendar';
+import SchedulePage from '../pages/SchedulePage';
+import SpecialityDoctor from '../pages/SpecialityDoctor';
 
 const routes = createBrowserRouter([
   {

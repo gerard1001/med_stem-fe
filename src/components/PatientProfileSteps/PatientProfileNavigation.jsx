@@ -13,8 +13,6 @@ const PatientProfileNavigation = () => {
 
   const dispatch = useDispatch();
 
-  console.log(step, '***********');
-
   return (
     <div>
       <Box className="flex flex-center gap-3">

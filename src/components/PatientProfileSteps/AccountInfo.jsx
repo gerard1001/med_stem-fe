@@ -1,13 +1,29 @@
+import {
+  Box,
+  Button,
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+  Typography
+} from '@mui/material';
 import React from 'react';
-import PatientProfileNavigation from './PatientProfileNavigation';
-import { Box, Button, Typography, Paper, Grid, TextField } from '@mui/material';
-import HomeNavBar from '../HomeNavBar';
+import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { FiUser } from 'react-icons/fi';
+import PatientProfileNavigation from './PatientProfileNavigation';
 
 const AccountInfo = () => {
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
   return (
     <div>
-      <Box className="w-[80%] max-w-[1200px] mx-auto">
+      <Box className="w-full">
         <PatientProfileNavigation />
 
         <Box className="mt-8 mb-5">
@@ -41,20 +57,66 @@ const AccountInfo = () => {
                 size="small"
                 sx={{ borderRadius: '20px', maxWidth: '300px' }}
               />
-              <TextField
-                label="New password"
-                placeholder="New password"
+              <FormControl
+                sx={{ maxWidth: '300px' }}
                 variant="outlined"
                 size="small"
-                sx={{ borderRadius: '20px', maxWidth: '300px' }}
-              />
-              <TextField
-                label="Repeat new password"
-                placeholder="Repeat new password"
+              >
+                <InputLabel htmlFor="outlined-adornment-password">
+                  Password
+                </InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-password"
+                  type={showPassword ? 'text' : 'password'}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {showPassword ? (
+                          <AiFillEyeInvisible className="text-[20px]" />
+                        ) : (
+                          <AiFillEye className="text-[20px]" />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  label="New password"
+                />
+              </FormControl>
+              <FormControl
+                sx={{ maxWidth: '300px' }}
                 variant="outlined"
                 size="small"
-                sx={{ borderRadius: '20px', maxWidth: '300px' }}
-              />
+              >
+                <InputLabel htmlFor="outlined-adornment-password">
+                  Password
+                </InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-password"
+                  type={showPassword ? 'text' : 'password'}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {showPassword ? (
+                          <AiFillEyeInvisible className="text-[20px]" />
+                        ) : (
+                          <AiFillEye className="text-[20px]" />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  label="Repeat new password"
+                />
+              </FormControl>
               <Button
                 sx={{
                   marginTop: '40px',

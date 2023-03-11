@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import PatientAppointmentNavigation from './PatientAppoinmentNavigation';
 import { expected_appointments } from '../../utils/dummyData';
 import {
@@ -16,7 +16,7 @@ import {
 const ExpectedAppointment = () => {
   return (
     <div>
-      <Box className="w-[80%] mx-auto max-w-[1200px]">
+      <Box className="w-full">
         <PatientAppointmentNavigation />
         <TableContainer component={Paper}>
           <Table
@@ -25,17 +25,31 @@ const ExpectedAppointment = () => {
           >
             <TableHead>
               <TableRow>
-                <TableCell sx={{ color: '#797979' }}>Doctor name</TableCell>
-                <TableCell align="left" sx={{ color: '#797979' }}>
+                <TableCell sx={{ color: '#797979', fontSize: '14px' }}>
+                  Doctor name
+                </TableCell>
+                <TableCell
+                  align="left"
+                  sx={{ color: '#797979', fontSize: '14px' }}
+                >
                   Speciality
                 </TableCell>
-                <TableCell align="left" sx={{ color: '#797979' }}>
+                <TableCell
+                  align="left"
+                  sx={{ color: '#797979', fontSize: '14px' }}
+                >
                   Appointment num
                 </TableCell>
-                <TableCell align="left" sx={{ color: '#797979' }}>
+                <TableCell
+                  align="left"
+                  sx={{ color: '#797979', fontSize: '14px' }}
+                >
                   Date
                 </TableCell>
-                <TableCell align="left" sx={{ color: '#797979' }}>
+                <TableCell
+                  align="left"
+                  sx={{ color: '#797979', fontSize: '14px' }}
+                >
                   Options
                 </TableCell>
               </TableRow>
@@ -49,28 +63,57 @@ const ExpectedAppointment = () => {
                   <TableCell component="th" scope="row">
                     {row.doctor.first_name} {row.doctor.last_name}
                   </TableCell>
-                  <TableCell align="left">{row.doctor.speciality}</TableCell>
-                  <TableCell align="left">{row.appointment_number}</TableCell>
-                  <TableCell align="left">{row.appointment_date}</TableCell>
-                  <TableCell align="left">
-                    <Button
+                  <TableCell
+                    align="left"
+                    sx={{ color: '#797979', fontSize: '14px' }}
+                  >
+                    {row.doctor.speciality}
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    sx={{ color: '#797979', fontSize: '14px' }}
+                  >
+                    {row.appointment_number}
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    sx={{ color: '#797979', fontSize: '14px' }}
+                  >
+                    {row.appointment_date}
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    sx={{
+                      color: '#797979',
+                      fontSize: '12px',
+                      display: 'flex',
+                      flexWrap: 'wrap',
+                      overflow: 'auto',
+                      gap: '4px'
+                    }}
+                  >
+                    <Typography
                       style={{
                         backgroundColor: '#fafcfd',
                         color: '#797979',
-                        textTransform: 'capitalize'
+                        textTransform: 'capitalize',
+                        cursor: 'pointer',
+                        fontSize: '14px'
                       }}
                     >
                       Edit
-                    </Button>
-                    <Button
+                    </Typography>
+                    <Typography
                       style={{
                         backgroundColor: '#fafcfd',
                         color: '#797979',
-                        textTransform: 'capitalize'
+                        textTransform: 'capitalize',
+                        cursor: 'pointer',
+                        fontSize: '14px'
                       }}
                     >
                       cancel
-                    </Button>
+                    </Typography>
                   </TableCell>
                 </TableRow>
               ))}

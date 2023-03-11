@@ -1,22 +1,22 @@
-import React from 'react';
-import PatientAppointmentNavigation from './PatientAppoinmentNavigation';
-import { Box, Typography } from '@mui/material';
-import { prev_appointments } from '../../utils/dummyData';
 import {
+  Box,
   Button,
   Paper,
-  TableRow,
-  TableHead,
-  TableContainer,
-  TableCell,
   Table,
-  TableBody
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow
 } from '@mui/material';
+import React from 'react';
+import { prev_appointments } from '../../utils/dummyData';
+import PatientAppointmentNavigation from './PatientAppoinmentNavigation';
 
 const PreviousAppointment = () => {
   return (
     <div>
-      <Box className="w-[80%] mx-auto max-w-[1200px]">
+      <Box className="w-full">
         <PatientAppointmentNavigation />
         <TableContainer component={Paper}>
           <Table

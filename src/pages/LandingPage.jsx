@@ -1,13 +1,11 @@
-import React from 'react';
-import HomeNavBar from '../components/HomeNavBar';
 import { Box } from '@mui/material';
-import Footer from '../components/Footer';
+import React from 'react';
+import { useNavigate } from 'react-router';
 import img1 from '../../public/assets/image 1.png';
 import img2 from '../../public/assets/image 2.png';
 import img3 from '../../public/assets/image 3.png';
 import img4 from '../../public/assets/image 4.png';
 import img5 from '../../public/assets/image 5.png';
-import svg1 from '../../public/assets/Vector.svg';
 import svg2 from '../../public/assets/Vector-1.svg';
 import svg3 from '../../public/assets/Vector-2.svg';
 import svg4 from '../../public/assets/Vector-3.svg';
@@ -15,15 +13,16 @@ import svg5 from '../../public/assets/Vector-4.svg';
 import svg6 from '../../public/assets/Vector-5.svg';
 import svg7 from '../../public/assets/Vector-6.svg';
 import svg8 from '../../public/assets/Vector-7.svg';
-import { useNavigate } from 'react-router';
+import svg1 from '../../public/assets/Vector.svg';
+import Footer from '../components/Footer';
+import HomeNavBar from '../components/HomeNavBar';
 
 const LandingPage = () => {
   const nav = useNavigate();
   return (
-    <Box className="bg-white min-h-screen">
-      <HomeNavBar />
-      <div className="w-[82%] xl:w-[100%] mx-auto bg-white px-4">
-        <section className="flex items-center lg:flex-col lg:gap-16 justify-between pt-12 md:pt-0">
+    <HomeNavBar>
+      <div className="w-[82%] xl:w-[100%] mx-auto bg-white px-8">
+        <section className="flex items-center lg:flex-col lg:gap-16 justify-between pt-12 md:pt-5">
           <div className="w-[45%] xl:w-full flex flex-col items-baseline lg:items-center">
             <div
               className="text-secondary font-bold text-6xl md:text-4xl leading-[1.1]"
@@ -240,7 +239,7 @@ const LandingPage = () => {
         </section>
       </div>
       <Footer />
-    </Box>
+    </HomeNavBar>
   );
 };
 

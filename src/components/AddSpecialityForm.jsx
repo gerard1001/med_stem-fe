@@ -20,7 +20,6 @@ import {
   Box
 } from '@mui/material';
 import { registerDoctor } from '../redux/reducers/doctor.reducer';
-import DashboardSideBar from './DashboardSideBar';
 
 const schema = yup.object().shape({
   department_name: yup.string().required(),
@@ -105,13 +104,20 @@ const AddSpecialityForm = () => {
 
   return (
     <Box>
-      {/* <DashboardSideBar /> */}
-      <Box className="pl-[220px] pt-20 w-[90%] mx-auto lg:pl-0 relative pb-10 min-h-[70vh]">
+      <Box className="pt-20 w-[90%] max-w-[900px] mx-auto lg:pl-0 relative pb-10 min-h-[70vh]">
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Typography variant="h6" sx={{ mb: '20px' }}>
+          <Typography
+            variant="h6"
+            sx={{ mb: '20px' }}
+            className="lg:text-center"
+          >
             Add Doctor
           </Typography>
-          <Typography variant="subtitle1" fontWeight="600">
+          <Typography
+            variant="subtitle1"
+            fontWeight="600"
+            className="lg:text-center"
+          >
             Personal Information
           </Typography>
           <Box
@@ -147,7 +153,7 @@ const AddSpecialityForm = () => {
                       {...field}
                       label="About"
                       variant="outlined"
-                      sx={{ height: '120px', width: '100%', maxWidth: '680px' }}
+                      sx={{ width: '100%', maxWidth: '680px' }}
                       error={!!errors.speciality_name}
                       helperText={errors.speciality_name?.message}
                     />
@@ -155,72 +161,72 @@ const AddSpecialityForm = () => {
                 />
               </Box>
             </Box>
-            <Box className="block w-[30%] md:w-full md:max-w-[400px]">
-              <Controller
-                name="picture"
-                control={control}
-                defaultValue=""
-                render={({ field }) => (
-                  <TextField
-                    type="file"
-                    id="file-input"
-                    sx={{ display: 'none' }}
-                    onChange={(e) => {
-                      handleInputChange(e);
-                      field.onChange(e.target.files[0]);
-                    }}
-                  />
-                )}
-              />
-              <Box className="flex flex-col gap-2 items-center w-fit mx-auto">
-                {picture.filepreview !== null ? (
-                  <img
-                    src={picture.filepreview}
-                    alt="UploadImage"
-                    className="w-[150px] h-[150px] mx-auto lg:w-[150px] lg:h-[150px] rounded-[50%]"
-                  />
-                ) : (
-                  <Box className="rounded-[50%] bg-[#e8f0fe] w-[150px] h-[150px] relative">
-                    <FiUser className="absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] text-[30px] mr-0 w-[30px] text-slate-500 mx-auto" />
-                  </Box>
-                )}
+            <Box className="flex flex-col items-center justify-center w-[30%] md:mt-10 md:w-full md:max-w-[400px]">
+              <Box>
+                <Controller
+                  name="picture"
+                  control={control}
+                  defaultValue=""
+                  render={({ field }) => (
+                    <TextField
+                      type="file"
+                      id="file-input"
+                      sx={{ display: 'none' }}
+                      onChange={(e) => {
+                        handleInputChange(e);
+                        field.onChange(e.target.files[0]);
+                      }}
+                    />
+                  )}
+                />
+                <Box className="flex flex-col gap-2 items-center w-fit mx-auto">
+                  {picture.filepreview !== null ? (
+                    <img
+                      src={picture.filepreview}
+                      alt="UploadImage"
+                      className="w-[150px] h-[150px] mx-auto lg:w-[150px] lg:h-[150px] rounded-[50%]"
+                    />
+                  ) : (
+                    <Box className="rounded-[50%] bg-[#e8f0fe] w-[150px] h-[150px] relative">
+                      <FiUser className="absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] text-[30px] mr-0 w-[30px] text-slate-500 mx-auto" />
+                    </Box>
+                  )}
 
+                  <Button
+                    onClick={handleUpload}
+                    sx={{
+                      color: '#fff',
+                      width: { md: '120px', xs: '80px' },
+                      color: '#1A4CFF',
+                      border: '1px solid #1A4CFF',
+                      borderRadius: '20px',
+                      marginX: 'auto',
+                      ':hover': { backgroundColor: '#a2ccff', border: 'none' }
+                    }}
+                  >
+                    Upload
+                  </Button>
+                </Box>
+              </Box>
+              <Box>
                 <Button
-                  onClick={handleUpload}
+                  type="submit"
                   sx={{
                     color: '#fff',
                     width: { md: '120px', xs: '80px' },
                     color: '#1A4CFF',
                     border: '1px solid #1A4CFF',
                     borderRadius: '20px',
+                    marginTop: '30px',
                     marginX: 'auto',
                     ':hover': { backgroundColor: '#a2ccff', border: 'none' }
                   }}
                 >
-                  Upload
+                  Save
                 </Button>
               </Box>
-            </Box>
+            </Box>{' '}
           </Box>
-
-          <Button
-            type="submit"
-            sx={{
-              position: 'absolute',
-              bottom: '0',
-              right: '30px',
-              color: '#fff',
-              width: { md: '120px', xs: '80px' },
-              color: '#1A4CFF',
-              border: '1px solid #1A4CFF',
-              borderRadius: '20px',
-              marginTop: '30px',
-              marginX: 'auto',
-              ':hover': { backgroundColor: '#a2ccff', border: 'none' }
-            }}
-          >
-            Save
-          </Button>
         </form>
       </Box>
     </Box>

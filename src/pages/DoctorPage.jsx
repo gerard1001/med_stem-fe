@@ -28,7 +28,7 @@ const DoctorPage = () => {
   return (
     <Box className="">
       <HomeNavBar />
-      <Box className="flex w-[80%] lg:w-[100%] md:p-4 md:flex-col md:items-center mt-10 md:mt-1 mx-auto md:pt-12">
+      <Box className="flex w-[100%]  max-w-[1200px] px-32 md:px-[10%] sm:px-4 pb-32 md:flex-col md:items-center mt-10 md:mt-1 mx-auto md:pt-12">
         <Box className="w-4/5 md:w-[100%] relative flex flex-row md:flex-col items-start mb-16">
           <Box className="w-[10%]">
             <Box

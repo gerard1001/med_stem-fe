@@ -1,5 +1,4 @@
 import React from 'react';
-import DashboardSideBar from '../components/DashboardSideBar';
 import { useSelector, useDispatch } from 'react-redux';
 import { getOneDoctor } from '../redux/reducers/doctor.reducer';
 import { Box, Typography, TextField, Button } from '@mui/material';
@@ -18,7 +17,6 @@ const DoctorProfile = () => {
 
   return (
     <Box className="pl-[220px] lg:pl-0 pt-20">
-      <DashboardSideBar />
       <Box className="w-[90%] block mx-auto">
         <Box>
           <Typography variant="h6" sx={{ mb: '20px' }}>
