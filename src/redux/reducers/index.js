@@ -7,6 +7,8 @@ import stepReducer from './step.reducer';
 import scheduleReducer from './schedule.reducer';
 import calendarReducer from './calendar.reducer';
 import userReducer from './user.reducer';
+import appointmentReducer from './appointment.reducer';
+import workDaysReducer from './workDays.reducer';
 
 const allReducers = combineReducers({
   info: infoReducer,
@@ -16,7 +18,9 @@ const allReducers = combineReducers({
   step: stepReducer,
   schedule: scheduleReducer,
   calendar: calendarReducer,
-  user: userReducer
+  user: userReducer,
+  appointment: appointmentReducer,
+  workDays: workDaysReducer
 });
 
 export default allReducers;

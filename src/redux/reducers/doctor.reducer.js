@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import axiosInstance from '../../axios/axios.instance';
 
 const initialState = {
   loading: false,
@@ -31,10 +32,12 @@ export const getDoctorList = createAsyncThunk('users/fetchDoctors', async () =>
 
 export const getOneDoctor = createAsyncThunk(
   'users/fetchDoctor',
-  async (doctorId) =>
-    axios
-      .get(`${process.env.BACKEND_URL}/users/doctors/${doctorId}`)
-      .then((res) => res.data)
+  async (doctorId) => {
+    const response = await axiosInstance.get(
+      `${process.env.BACKEND_URL}/users/doctors/${doctorId}`
+    );
+    return response.data;
+  }
 );
 
 const doctorSlice = createSlice({

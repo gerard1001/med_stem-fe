@@ -1,38 +1,77 @@
+/* eslint-disable no-underscore-dangle */
 import {
   Box,
   Button,
+  Divider,
   Drawer,
   IconButton,
   List,
-  ListItem,
+  ListItemButton,
   ListItemText,
   Stack,
   Typography,
   useMediaQuery
 } from '@mui/material';
-import { addDays, getDate, getDay, isEqual } from 'date-fns';
-import React, { memo, useContext, useEffect, useRef, useState } from 'react';
+import { getDay, getDaysInMonth, getMonth, isEqual } from 'date-fns';
+import _ from 'lodash';
+import React, { memo, useEffect, useRef, useState } from 'react';
 import { FiChevronLeft } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router';
+import { toast } from 'react-toastify';
+import CreateAppointmentModal from '../components/Appointment/CreateAppointmentModal';
 import BackButton from '../components/BackButton';
 import Calendar from '../components/Calendar';
 import CalendarMonthYearSelector from '../components/Calendar/CalendarMonthYearSelector';
-import { DashboardContext } from '../context/DashboardContext';
+import {
+  getDoctorAppointments,
+  selectAppointmentsById
+} from '../redux/reducers/appointment.reducer';
 import { setSelectedDate } from '../redux/reducers/calendar.reducer';
+import { getOneDoctor } from '../redux/reducers/doctor.reducer';
+import {
+  getDoctorWorkDays,
+  selectWorkDaysDoctors
+} from '../redux/reducers/workDays.reducer';
 
-const data = [
-  addDays(new Date(), 0),
-  addDays(new Date(), 3),
-  addDays(new Date(), 7),
-  addDays(new Date(), 11)
-];
+// const formatData = (workDays, appointments, date, doctor) => {
+//   const totalDays = getDaysInMonth(getMonth(date));
+//   const currentDay = 0;
+//   let data = {};
+
+//   workDays.forEach((workDay) => {
+//     const itsAppointment = _.filter(appointments, (o) => o._id === workDay._id);
+//     if (itsAppointment.length > 0) {
+//       const slots = itsAppointment.map(
+//         (appointment) => appointment.appointment_period
+//       );
+//       data = {
+//         ...data,
+//         [workDay._id]: { slots, from: workDay.from, to: workDay.to }
+//       };
+//     }
+//   });
+
+//   let finalData = {};
+
+//   Object.keys(data).forEach(() => {});
+// };
 
 function PatientsCalendar() {
+  const dispatch = useDispatch();
+  const { id: doctorId } = useParams();
   const calendarRef = useRef(null);
   const [viewDate, setViewDate] = useState(new Date());
   const [openRightSideBar, setOpenRightSideBar] = useState(null);
+  const [loading, setLoading] = useState(false);
   const selectedDate = useSelector((state) => state.calendar.selectedDate);
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down('md'));
+  const workDays = useSelector((state) =>
+    selectWorkDaysDoctors(state, doctorId)
+  );
+  const appointments = useSelector((state) =>
+    selectAppointmentsById(state, doctorId)
+  );
 
   const toggleRightSideBar = () => {
     setOpenRightSideBar((open) => !open);
@@ -41,11 +80,28 @@ function PatientsCalendar() {
   useEffect(() => {
     calendarRef.current.calendar.gotoDate(new Date(viewDate));
   }, [viewDate]);
+  useEffect(() => {
+    setLoading(true);
+    dispatch(getOneDoctor(doctorId));
+    dispatch(getDoctorWorkDays(doctorId)).then(({ error }) => {
+      if (error) {
+        toast.error(error.message);
+      }
+    });
+    dispatch(getDoctorAppointments(doctorId)).then(({ error }) => {
+      if (error) {
+        toast.error(error.message);
+      }
+      setLoading(false);
+    });
+  }, [doctorId]);
+  useEffect(() => {}, [doctorId]);
 
   return (
     <Box className="flex flex-row w-full h-full">
       <Box className="sm:p-4 p-8 flex flex-col grow sm:gap-0 gap-3 overflow-y-auto">
         <IconButton
+          onClick={toggleRightSideBar}
           sx={{
             position: 'absolute',
             backgroundColor: '#9b9b9b2d',
@@ -55,7 +111,7 @@ function PatientsCalendar() {
             display: { md: 'none', xs: 'block' }
           }}
         >
-          <FiChevronLeft onClick={toggleRightSideBar} />
+          <FiChevronLeft />
         </IconButton>
         <Stack
           direction="row"
@@ -88,8 +144,8 @@ function PatientsCalendar() {
         <Box className="sm:px-0 px-20">
           <Calendar
             ref={calendarRef}
-            dayCellContent={(props) => {
-              return <Daycell selectedDate={selectedDate} {...props} />;
+            dayCellContent={({ isOther, date }) => {
+              return <Daycell {...{ isOther, date, selectedDate, loading }} />;
             }}
           />
         </Box>
@@ -103,41 +159,29 @@ function PatientsCalendar() {
         }}
         sx={{
           '& .MuiDrawer-paper': {
-            width: '250px'
+            maxWidth: '250px',
+            width: '100%'
           }
         }}
-        // classes={{
-        //   paper: 'relative'
-        // }}
+        classes={{
+          paper: isMobile ? 'absolute' : 'relative'
+        }}
         ModalProps={{
           keepMounted: false
         }}
         className="transition duration-150 ease-in-out"
       >
-        <CalendarRightSideBar />
+        <CalendarRightSideBar {...{ loading }} />
       </Drawer>
     </Box>
   );
 }
 
-function checkIsIn(arr, date2) {
-  let isIn = false;
-
-  arr.forEach((date1) => {
-    if (new Date(date1).toDateString() === new Date(date2).toDateString()) {
-      isIn = true;
-    }
-  });
-
-  return isIn;
-}
-
-const Daycell = memo(({ date, isOther, selectedDate, ...props }) => {
+const Daycell = memo(({ date, isOther, selectedDate, loading }) => {
   const dispatch = useDispatch();
 
   const isSelected = isEqual(new Date(selectedDate), new Date(date));
-  const isGrayed = checkIsIn(data, new Date(date));
-  // console.log('isGrayed', isGrayed, date, data);
+  const isGrayed = getDay(date) === 0 || getDay(date) === 6;
 
   return (
     <Box
@@ -147,10 +191,11 @@ const Daycell = memo(({ date, isOther, selectedDate, ...props }) => {
         height: '100%',
         border: `1px solid transparent`,
         ...(isGrayed && { backgroundColor: '#F7F8FA' }),
-        ...(isSelected && { borderColor: theme.palette.primary.light })
+        ...(isSelected && { borderColor: theme.palette.primary.main })
       })}
       onClick={() => {
-        !isGrayed &&
+        !loading &&
+          !isGrayed &&
           !isOther &&
           dispatch(setSelectedDate(new Date(date).toISOString()));
       }}
@@ -173,28 +218,63 @@ const Daycell = memo(({ date, isOther, selectedDate, ...props }) => {
   );
 });
 
-const CalendarRightSideBar = () => {
+const CalendarRightSideBar = ({ loading }) => {
   const appointmentHours = [
     '09:00 - 09:30',
-    '09:00 - 09:30',
-    '09:00 - 09:30',
-    '09:00 - 09:30'
+    '09:00 - 09:31',
+    '09:00 - 09:32',
+    '09:00 - 09:33'
   ];
+  const [selectedTime, setSelectedTime] = useState(appointmentHours[0]);
+  const [openModal, setOpenModal] = useState(false);
+  const doctor = useSelector((state) => state.doctor.single_data.data);
+
   return (
-    <List disablePadding className="border-l border-primary w-full h-full">
-      {appointmentHours.map((hour) => (
-        <ListItemText
-          className="border-b border-primary"
-          primary={hour}
-          classes={{ primary: 'p-3 text-center' }}
-        />
-      ))}
-      <Stack direction="row" alignItems="center" justifyContent="center">
-        <Button variant="contained" color="primary" className="bg-primary m-4">
-          Make Appointment
-        </Button>
-      </Stack>
-    </List>
+    <>
+      <List disablePadding className="border-l border-primary w-full h-full">
+        {appointmentHours.map((hour, index) => (
+          <>
+            <ListItemButton
+              key={hour}
+              onClick={() => {
+                !loading && setSelectedTime(hour);
+              }}
+              className="border-b border-primary p-3 text-center"
+              selected={hour === selectedTime}
+            >
+              <ListItemText primary={hour} />
+            </ListItemButton>
+            <Divider key={hour + index} sx={{ borderColor: 'primary.main' }} />
+          </>
+        ))}
+        <Stack direction="row" alignItems="center" justifyContent="center">
+          <Button
+            variant="contained"
+            color="primary"
+            className="bg-primary m-4"
+            onClick={() => {
+              !loading && setOpenModal(true);
+            }}
+          >
+            Make Appointment
+          </Button>
+        </Stack>
+      </List>
+      <CreateAppointmentModal
+        open={openModal || false}
+        {...{
+          doctorName: {
+            firstName: doctor?.first_name,
+            lastName: doctor?.last_name
+          },
+          specialities: doctor?.departments.map((dep) => dep.speciality_name),
+          onClose: () => {
+            setOpenModal(false);
+          },
+          selectedTime
+        }}
+      />
+    </>
   );
 };
 

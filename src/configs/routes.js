@@ -115,11 +115,11 @@ const routes = createBrowserRouter([
     children: []
   },
 
-  {
-    path: '/test1',
-    element: <PatientProfile />,
-    children: []
-  },
+  // {
+  //   path: '/test1',
+  //   element: <PatientProfile />,
+  //   children: []
+  // },
   {
     path: '*',
     element: <Navigate to="/" replace />

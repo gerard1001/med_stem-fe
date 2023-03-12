@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { IconButton } from '@mui/material';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,6 +14,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import axiosInstance from '../axios/axios.instance';
+import CloseXButton from '../components/CloseXButton';
 import HomeNavBar from '../components/HomeNavBar';
 import LoadingButton from '../components/LoadingButton';
 
@@ -84,13 +86,14 @@ const Login = () => {
           className="max-w-[380px] px-6 sm:px-2"
         >
           <CssBaseline />
-          <Box
+          <CloseXButton onClick={handleBack} />
+          {/* <Box
             component="div"
             className="absolute right-5 top-5  bg-[#bfbfbf] text-[#7b7b7b] text-[14px] rounded-md p-1 cursor-pointer"
             onClick={handleBack}
           >
             <ImCross />
-          </Box>
+          </Box> */}
           <Box
             sx={{
               display: 'flex',

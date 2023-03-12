@@ -1,7 +1,8 @@
 import { Box, Button, Grid, Paper, styled, Typography } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getOnePatient } from '../../redux/reducers/patient.reducer';
+import EditPatientPersonalProfileModal from '../EditPatientPersonalProfileModal';
 import Loader from '../Loader/Loader';
 import PatientProfileNavigation from './PatientProfileNavigation';
 
@@ -15,6 +16,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const PatientInfo = () => {
   const patient = useSelector((state) => state.patient);
+  const [openEditModal, setOpenEditModal] = useState(false);
 
   const patientData = patient?.single_data?.data;
   return (
@@ -192,7 +194,6 @@ const PatientInfo = () => {
           <Button
             sx={{
               marginTop: '40px',
-              color: '#fff',
               width: '120px',
               display: 'block',
               color: '#1A4CFF',
@@ -201,11 +202,21 @@ const PatientInfo = () => {
               marginX: 'auto',
               ':hover': { backgroundColor: '#a2ccff' }
             }}
+            onClick={() => {
+              setOpenEditModal(true);
+            }}
           >
             Edit
           </Button>
         </Box>
       </Box>
+      <EditPatientPersonalProfileModal
+        open={openEditModal}
+        onClose={() => {
+          setOpenEditModal(false);
+        }}
+        patientData={patientData}
+      />
     </div>
   );
 };

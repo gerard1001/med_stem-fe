@@ -48,11 +48,13 @@ const Calendar = forwardRef(({ ...rest }, ref) => (
   <Box className="w-full overflow-auto">
     <StyledBox>
       <FullCalendar
+        firstDay={1}
         aspectRatio={0.8}
         plugins={[dayGridPlugin]}
         initialView="dayGridMonth"
         headerToolbar={false}
         footerToolbar={false}
+        fixedWeekCount={false}
         ref={ref}
         eventContent={null}
         nowIndicatorContent={null}

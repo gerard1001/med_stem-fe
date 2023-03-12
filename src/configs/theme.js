@@ -25,7 +25,7 @@ const theme = createTheme({
       disabled: '#6A6F75'
     },
     action: {
-      disabled: '#C0C0C0',
+      // disabled: '#C0C0C0',
       disabledBackground: '#C0C0C0'
     }
   },

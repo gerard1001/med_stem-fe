@@ -47,7 +47,11 @@ export const getOnePatient = createAsyncThunk(
 const patientSlice = createSlice({
   name: 'patient',
   initialState,
-  reducers: {},
+  reducers: {
+    updatePatientData: (state, action) => {
+      state.single_data = action;
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(getPatientList.pending, (state) => {
       state.loading = true;
@@ -95,5 +99,7 @@ const patientSlice = createSlice({
     });
   }
 });
+
+export const { updatePatientData } = patientSlice.actions;
 
 export default patientSlice.reducer;

@@ -82,7 +82,8 @@ const Dashboard = () => {
             }}
             sx={{
               '& .MuiDrawer-paper': {
-                width: '250px'
+                maxWidth: '250px',
+                width: '100%'
               }
             }}
             classes={{
@@ -109,7 +110,8 @@ const Dashboard = () => {
             }}
             sx={{
               '& .MuiDrawer-paper': {
-                width: rightSideBarSize || '250px'
+                maxWidth: rightSideBarSize || '250px',
+                width: '100%'
               }
             }}
             classes={{

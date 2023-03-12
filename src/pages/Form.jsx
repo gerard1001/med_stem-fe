@@ -4,6 +4,7 @@ import React from 'react';
 import * as IoIcons from 'react-icons/im';
 import { useNavigate } from 'react-router';
 import StepForm from '../components/ClientSignUpSteps/StepForm';
+import CloseXButton from '../components/CloseXButton';
 import HomeNavBar from '../components/HomeNavBar';
 
 const Form = () => {
@@ -35,14 +36,19 @@ const Form = () => {
             }}
             className={`${status === 2 && 'mt-1'}`}
           >
-            <IconButton
+            <CloseXButton
+              onClick={() => {
+                navigate('/');
+              }}
+            />
+            {/* <IconButton
               onClick={() => {
                 navigate('/');
               }}
               className="absolute right-5 top-5  bg-[#bfbfbf] text-[#7b7b7b] text-[14px] rounded-md p-1 cursor-pointer"
             >
               <IoIcons.ImCross />
-            </IconButton>
+            </IconButton> */}
             <StepForm getStatus={getStatus} />
           </Paper>
         </Box>

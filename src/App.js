@@ -19,16 +19,16 @@ const cache = createCache({
 
 function App() {
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <CacheProvider value={cache}>
-        <ThemeProvider theme={theme}>
-          <Provider store={store}>
+    <CacheProvider value={cache}>
+      <ThemeProvider theme={theme}>
+        <Provider store={store}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
             <RouterProvider router={routes} />
             <ToastContainer theme="colored" />
-          </Provider>
-        </ThemeProvider>
-      </CacheProvider>
-    </LocalizationProvider>
+          </LocalizationProvider>
+        </Provider>
+      </ThemeProvider>
+    </CacheProvider>
   );
 }
 
