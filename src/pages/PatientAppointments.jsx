@@ -3,6 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import ExpectedAppointment from '../components/PatientAppointmentSteps/ExpectedAppointment';
 import PreviousAppointment from '../components/PatientAppointmentSteps/PreviousAppointment';
+import AppointmentDisplay from '../components/PatientAppointmentSteps/AppointmentDisplay';
 
 const PatientAppointments = () => {
   const step = useSelector((state) => state.step.appointment_step);

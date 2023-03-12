@@ -92,26 +92,26 @@ const DoctorPatient = () => {
         className="w-[100%] border border-[#71A9F7]
 ] flex flex-col justify-between py-3 px-2 my-3"
       >
-        <Grid container spacing={3}>
-          <Grid item xs={6}>
+        <Box className="flex flex-row items-center justify-between">
+          <Box>
             <Typography className="">Total Patients (102)</Typography>
-          </Grid>
-          <Grid item xs>
+          </Box>
+          <Box className="flex items-center">
             {search && (
-              <Box className="w-[1/3]">
+              <Box className="">
                 <TextField
                   size="small"
                   name="name"
-                  label="Global filter"
+                  label="Search..."
                   variant="outlined"
                   value={globalFilter}
                   onChange={handleGlobalChange}
                 />
               </Box>
             )}
-          </Grid>
-          <Grid item xs>
-            <Box className="flex items-center gap-4 w-[1/3]">
+          </Box>
+          <Box>
+            <Box className="flex items-center gap-4 ">
               <IconButton
                 onClick={() => {
                   setSearch(true);
@@ -132,8 +132,8 @@ const DoctorPatient = () => {
                 <FiFilter />
               </IconButton>
             </Box>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
         <Box clasName="flex flex-row flex-wrap items-center w-[100%]" />
         <Box>
           {!search && columnFilter && (
@@ -170,10 +170,10 @@ const DoctorPatient = () => {
               />
               <TextField
                 size="small"
-                name="email"
+                name="gender"
                 label="Gender"
                 variant="outlined"
-                value={filter.email}
+                value={filter?.gender}
                 className="w-[150px] text-[14px]"
                 sx={{ width: '150px', minWidth: '120px' }}
                 onChange={handleChange}
@@ -242,26 +242,61 @@ const DoctorPatient = () => {
         </Box>
       </Box>
       <Box className="w-[100%] border border-[#71A9F7] p-2 mt-4">
-        <TableContainer component={Paper}>
-          <Table className="" aria-label="simple table">
+        <TableContainer component={Paper} elevation={0}>
+          <Table className="text-[30px]" aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell align="center">Email</TableCell>
-                <TableCell align="center">Phone</TableCell>
-                <TableCell align="center">Options</TableCell>
+                <TableCell className="text-[17px] md:text-[14px]">
+                  {' '}
+                  Name
+                </TableCell>
+                <TableCell
+                  align="center"
+                  className="text-[17px] md:text-[14px]"
+                >
+                  Email
+                </TableCell>
+                <TableCell
+                  align="center"
+                  className="text-[17px] md:text-[14px]"
+                >
+                  Phone
+                </TableCell>
+                <TableCell
+                  align="center"
+                  className="text-[17px] md:text-[14px]"
+                >
+                  Options
+                </TableCell>
               </TableRow>
             </TableHead>
             {!search ? (
               <TableBody>
                 {filteredData.map((row) => (
                   <TableRow key={row.id}>
-                    <TableCell component="th" scope="row">
+                    <TableCell
+                      component="th"
+                      scope="row"
+                      className="text-[17px] md:text-[14px]"
+                    >
                       {row.name}
                     </TableCell>
-                    <TableCell align="center">{row.email}</TableCell>
-                    <TableCell align="center">{row.phone}</TableCell>
-                    <TableCell align="center">
+                    <TableCell
+                      align="center"
+                      className="text-[17px] md:text-[14px]"
+                    >
+                      {row.email}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      className="text-[17px] md:text-[14px]"
+                    >
+                      {row.phone}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      className="text-[17px] md:text-[14px]"
+                    >
                       <BsThreeDots className="w-min mx-auto" />
                     </TableCell>
                   </TableRow>
