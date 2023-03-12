@@ -1032,3 +1032,10 @@ export const table_data = [
 ];
 
 export const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+export const recoms = [
+  'Sleep not less than 7-8h/day',
+  'Control sugar consumption',
+  'Minimize stress',
+  'Decrease alcohol consumption'
+];

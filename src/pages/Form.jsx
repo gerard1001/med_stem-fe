@@ -16,12 +16,33 @@ const Form = () => {
   };
 
   return (
+<<<<<<< HEAD
     <HomeNavBar>
       <div className="">
         <Box
           className={`${
             status === 2 ? 'max-w-[1400px]' : 'max-w-[800px]'
           } mx-auto w-[80%] md:w-[98%] pb-16`}
+=======
+    <div className="">
+      <HomeNavBar />
+      <Box
+        className={`${
+          status === 2 ? 'max-w-[1400px]' : 'max-w-[800px]'
+        } mx-auto w-[80%] md:w-[98%] pb-16`}
+      >
+        <Paper
+          sx={{
+            marginTop: { md: theme.spacing(8) },
+            marginBottom: { md: theme.spacing(8), xs: theme.spacing(3) },
+            paddingX: { md: theme.spacing(3), xs: theme.spacing(0.5) },
+            paddingY: { md: theme.spacing(3), xs: theme.spacing(1) },
+            border: '1px solid #0093df',
+            borderRadius: { md: 5, xs: 1 },
+            position: 'relative'
+          }}
+          className={`${status === 2 && 'mt-1'}`}
+>>>>>>> b7a3a51 (Dashboard changes)
         >
           <Paper
             sx={{

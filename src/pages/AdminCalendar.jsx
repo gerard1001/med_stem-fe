@@ -110,6 +110,10 @@ function AdminCalendar() {
 
   return (
     <Box className="flex flex-row items-start pr-[250px] ">
+<<<<<<< HEAD
+=======
+      {/* <DashboardSidebar /> */}
+>>>>>>> b7a3a51 (Dashboard changes)
       <Box className="sm:p-4 pt-16 px-8 flex flex-col w-[100%] sm:gap-0">
         <Stack
           direction="row"

@@ -18,7 +18,7 @@ const ExpectedAppointment = () => {
     <div>
       <Box className="w-full">
         <PatientAppointmentNavigation />
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} elevation={0}>
           <Table
             sx={{ minWidth: 650, backgroundColor: '#fff' }}
             aria-label="simple table"

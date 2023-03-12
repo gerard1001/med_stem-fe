@@ -3,14 +3,21 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import ExpectedAppointment from '../components/PatientAppointmentSteps/ExpectedAppointment';
 import PreviousAppointment from '../components/PatientAppointmentSteps/PreviousAppointment';
+import AppointmentDisplay from '../components/PatientAppointmentSteps/AppointmentDisplay';
 
 const PatientAppointments = () => {
   const step = useSelector((state) => state.step.appointment_step);
   return (
     <Box className="w-full h-full p-16 md:p-8  mx-auto max-w-[1200px]">
       {step === 0 && <ExpectedAppointment />}
+<<<<<<< HEAD
       {step === 1 && <PreviousAppointment />}
     </Box>
+=======
+      {/* {step === 1 && <PreviousAppointment />} */}
+      {step === 1 && <AppointmentDisplay />}
+    </div>
+>>>>>>> b7a3a51 (Dashboard changes)
   );
 };
 

@@ -104,6 +104,10 @@ const AddSpecialityForm = () => {
 
   return (
     <Box>
+<<<<<<< HEAD
+=======
+      {/* <DashboardSideBar /> */}
+>>>>>>> b7a3a51 (Dashboard changes)
       <Box className="pt-20 w-[90%] max-w-[900px] mx-auto lg:pl-0 relative pb-10 min-h-[70vh]">
         <form onSubmit={handleSubmit(onSubmit)}>
           <Typography

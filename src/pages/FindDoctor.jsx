@@ -121,7 +121,76 @@ const FindDoctor = () => {
                 </Box>
                 <Typography>More search options </Typography>
               </Button>
+<<<<<<< HEAD
               {allDoctors && !moreOPtions ? (
+=======
+              <Button
+                color="black"
+                sx={{ mt: '16px' }}
+                onClick={() => {
+                  toggleSearchOptions();
+                  toggleSeeSpecialities();
+                }}
+              >
+                <Box
+                  sx={{
+                    marginRight: '8px'
+                  }}
+                >
+                  <CiIcons.CiStethoscope className="text-[20px] font-bold " />
+                </Box>
+                <Typography>search by speciality</Typography>
+              </Button>
+            </Box>
+          )}
+        </Box>
+      </Box>{' '}
+      {allDoctors && !moreOPtions && (
+        <>
+          {' '}
+          {doctors.loading && (
+            <Box className="w-[80px] h-[80px] mx-auto mt-12">
+              <Loader />
+            </Box>
+          )}
+          {!doctors.loading && (
+            <>
+              <Box className="flex flex-col items-end w-full p-0 mx-auto pb-10">
+                <List
+                  className="max-w-[900px] w-[100%] h-[80vh] pr-4 mx-auto my-10 overflow-auto"
+                  sx={{ marginX: 'auto', marginTop: 5 }}
+                >
+                  {dataFiltered?.map((data, idx) => {
+                    return (
+                      <ListItem
+                        key={data.doctor_id}
+                        className={`shadow-sm border hover:bg-[#EDF0F2] rounded-md my-4 cursor-pointer ${
+                          doctorId === data.doctor_id &&
+                          'border-[2px] border-[#0093df]'
+                        }`}
+                        onClick={() => {
+                          setDoctorId(data.doctor_id);
+                        }}
+                      >
+                        <img
+                          src={data.picture}
+                          alt=""
+                          className="w-[40px] h-[40px] mr-[4%] ml-[3%] rounded-[50%]"
+                        />
+                        <ListItemText
+                          primary={`${data.first_name} ${
+                            data.last_name
+                          }, M.D - ${data.departments
+                            .map((value) => value.speciality_name)
+                            .join(', ')}`}
+                          secondary={`Total experience (years): ${data.experience_years},  Cost per appointment: ${data.cost_per_appointment}$`}
+                          classes={{ primary: 'truncate' }}
+                        />
+                      </ListItem>
+                    );
+                  })}
+                </List>{' '}
+>>>>>>> b7a3a51 (Dashboard changes)
                 <Button
                   disableRipple
                   sx={{ mt: '16px', color: '#797979', cursor: 'default' }}
