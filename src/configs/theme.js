@@ -24,13 +24,6 @@ const theme = createTheme({
       primary: '#2E3033',
       disabled: '#6A6F75'
     },
-<<<<<<< HEAD
-=======
-    background: {
-      default: '#FFF',
-      // paper: '#FAFAFA'
-    },
->>>>>>> b7a3a51 (Dashboard changes)
     action: {
       disabled: '#C0C0C0',
       disabledBackground: '#C0C0C0'

@@ -10,14 +10,8 @@ const PatientAppointments = () => {
   return (
     <Box className="w-full h-full p-16 md:p-8  mx-auto max-w-[1200px]">
       {step === 0 && <ExpectedAppointment />}
-<<<<<<< HEAD
       {step === 1 && <PreviousAppointment />}
     </Box>
-=======
-      {/* {step === 1 && <PreviousAppointment />} */}
-      {step === 1 && <AppointmentDisplay />}
-    </div>
->>>>>>> b7a3a51 (Dashboard changes)
   );
 };
 

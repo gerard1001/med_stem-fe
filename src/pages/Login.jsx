@@ -70,13 +70,8 @@ const Login = () => {
   };
 
   return (
-<<<<<<< HEAD
     <HomeNavBar>
       <Box className="flex items-center justify-center h-full w-full sm:px-8">
-=======
-    <>
-      <Box className="flex items-center justify-center min-h-screen h-full w-full sm:px-2">
->>>>>>> b7a3a51 (Dashboard changes)
         <Container
           component="main"
           maxWidth="xs"
