@@ -25,7 +25,7 @@ export const getDoctorWorkDays = createAsyncThunk(
 
 const workDaysAdapter = createEntityAdapter();
 
-export const { selectById: selectWorkDaysDoctors } =
+export const { selectByDoctorId: selectWorkDaysDoctors } =
   workDaysAdapter.getSelectors((state) => state.workDays);
 
 const workDaysSlice = createSlice({

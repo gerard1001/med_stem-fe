@@ -74,6 +74,8 @@ function PatientsCalendar() {
     selectAppointmentsById(state, doctorId)
   );
 
+  console.log(calendarRef, 'calendarRef');
+
   const toggleRightSideBar = () => {
     setOpenRightSideBar((open) => !open);
   };
@@ -144,6 +146,7 @@ function PatientsCalendar() {
         </Stack>
         <Box className="sm:px-0 px-20">
           <DoctorAppointmentsCalendar
+            ref={calendarRef}
             {...{ handleDayClick, selectedDate, loading, viewDate }}
           />
         </Box>

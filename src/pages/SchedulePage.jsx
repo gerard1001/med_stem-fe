@@ -20,6 +20,8 @@ const SchedulePage = () => {
   const doctors = useSelector((state) => state.doctor?.data?.data);
   const { id: doctorId } = useParams();
 
+  console.log(calendarRef, 'CALENDAR REF');
+
   const handleDayClick = (date) => {
     setSelectedDate(date);
   };

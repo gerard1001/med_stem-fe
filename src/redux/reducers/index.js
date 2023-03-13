@@ -9,6 +9,7 @@ import calendarReducer from './calendar.reducer';
 import userReducer from './user.reducer';
 import appointmentReducer from './appointment.reducer';
 import workDaysReducer from './workDays.reducer';
+import patientAppointmentReducer from './patient.appointment.reducer';
 
 const allReducers = combineReducers({
   info: infoReducer,
@@ -20,7 +21,8 @@ const allReducers = combineReducers({
   calendar: calendarReducer,
   user: userReducer,
   appointment: appointmentReducer,
-  workDays: workDaysReducer
+  workDays: workDaysReducer,
+  patient_appointment: patientAppointmentReducer
 });
 
 export default allReducers;
