@@ -38,9 +38,7 @@ export const getOnePatient = createAsyncThunk(
   'users/fetchPatient',
   async (patientId) =>
     axios
-      .get(
-        `${process.env.BACKEND_URL}/users/clients/64fc1233-8b59-5643-8e9a-c9a8f38bf6b6` // TOOD: let's rember to change this
-      )
+      .get(`${process.env.BACKEND_URL}/users/clients/${patientId}`)
       .then((res) => res.data)
 );
 

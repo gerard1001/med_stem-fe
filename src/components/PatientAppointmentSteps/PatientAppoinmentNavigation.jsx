@@ -6,14 +6,27 @@ import {
 } from '../../redux/reducers/step.reducer';
 import { Box, Typography, IconButton, TextField } from '@mui/material';
 import { IoCloseSharp, IoSearch } from 'react-icons/io5';
+import { getOnePatient } from '../../redux/reducers/patient.reducer';
 
 const PatientAppointmentNavigation = () => {
   const step = useSelector((state) => state.step.appointment_step);
   const patient = useSelector((state) => state.patient.single_data.data);
 
+  const isClient =
+    JSON.parse(localStorage.getItem('userLoginData'))?.user?.Role.role ===
+    'client';
+  const clientId = JSON.parse(localStorage.getItem('userLoginData'))?.user
+    ?.client_id;
+
+  console.log({ isClient });
+
   const [hideSearch, setHideSearch] = React.useState(false);
 
   const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    dispatch(getOnePatient(clientId));
+  }, []);
 
   return (
     <div>
