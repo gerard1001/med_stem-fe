@@ -115,7 +115,7 @@ const Dashboard = () => {
               }
             }}
             classes={{
-              paper: 'relative'
+              paper: isMobile ? 'absolute' : 'relative'
             }}
             ModalProps={{
               keepMounted: false

@@ -17,16 +17,16 @@ import {
   Typography
 } from '@mui/material';
 import clsx from 'clsx';
+import { getYear } from 'date-fns';
 import { capitalize } from 'lodash';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
-const formatName = ({ first_name = '', last_name = '' }) => {
-  const splitLast = last_name.split(' ').filter((item) => item !== '');
-  return `${capitalize(first_name)} ${splitLast
-    .slice(0, -1)
-    .map((item) => item[0])
-    .join('. ')} ${splitLast.slice(-1)[0]}`;
+const formatName = ({ first_name = '', last_name = '', birth_date = null }) => {
+  return `${capitalize(first_name)} ${capitalize(last_name)} ${getYear(
+    new Date(birth_date)
+  )} y.`;
 };
+const formatId = ({ client_id = '' }) => `ID ${client_id}`;
 
 const StyledMenuItem = styled(MenuItem)(() => ({
   '& .Mui-selected': {
@@ -44,13 +44,13 @@ const StyledMenuItem = styled(MenuItem)(() => ({
   }
 }));
 
-function SelectDoctor({ selected, setSelected, doctors, className }) {
+function SelectPatient({ selected, setSelected, patients, className }) {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [value, setValue] = useState(selected ? formatName(selected) : '');
+  const [value, setValue] = useState(selected ? formatId(selected) : '');
 
   useEffect(() => {
     if (selected) {
-      setValue(formatName(selected));
+      setValue(formatId(selected));
     }
   }, [selected]);
 
@@ -60,7 +60,7 @@ function SelectDoctor({ selected, setSelected, doctors, className }) {
       className={clsx('flex-wrap gap-2 items-center', className)}
     >
       <Typography className="font-semibold text-lg opacity-70">
-        Select Doctor
+        Select Patient
       </Typography>
       <Box
         className={`h-[35px] max-w-[250px] w-full min-w-[100px] bg-[#E7E7E7] rounded-lg ${
@@ -91,23 +91,21 @@ function SelectDoctor({ selected, setSelected, doctors, className }) {
         >
           <Box className="w-full rounded-b-lg bg-[#e7e7e7] overflow-hidden">
             {useMemo(() => {
-              return doctors?.map((doctor) => (
+              return patients?.map((patient) => (
                 <StyledMenuItem
-                  selected={selected?.doctor_id === doctor.doctor_id}
+                  selected={selected?.client_id === patient.client_id}
                   onClick={(e) => {
-                    setSelected(doctor);
+                    setSelected(patient);
                   }}
                 >
                   <ListItemText
-                    primary={`${formatName(doctor)}, M.D`}
-                    secondary={
-                      doctor.departments[0]?.speciality_name || 'no speciality'
-                    }
+                    primary={`${formatId(patient)}, M.D`}
+                    secondary={formatName(patient)}
                     classes={{ primary: 'truncate', secondary: 'truncate' }}
                   />
                 </StyledMenuItem>
               ));
-            }, [doctors, selected])}
+            }, [patients, selected])}
           </Box>
         </Popper>
       </Box>
@@ -115,4 +113,4 @@ function SelectDoctor({ selected, setSelected, doctors, className }) {
   );
 }
 
-export default SelectDoctor;
+export default SelectPatient;
