@@ -17,6 +17,7 @@ import * as FaIcons from 'react-icons/fa';
 import * as FiIcons from 'react-icons/fi';
 import * as IoIcons from 'react-icons/io5';
 import { useLocation, useNavigate } from 'react-router';
+import LoadingButton from './LoadingButton';
 
 const navItems = ['Home', 'About Us', 'Find a Doctor'];
 const userItems = ['Login', 'Sign up'];
@@ -24,7 +25,7 @@ const userItems = ['Login', 'Sign up'];
 const HomeNavBar = (props) => {
   const { pathname } = useLocation();
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const isLoggedIn = JSON.parse(localStorage.getItem('userLoginData'))?.token;
+  const isLoggedIn = !!JSON.parse(localStorage.getItem('userLoginData'))?.token;
   const isClient =
     JSON.parse(localStorage.getItem('userLoginData'))?.user?.Role.role ===
     'client';
@@ -201,7 +202,7 @@ const HomeNavBar = (props) => {
         <AppBar
           position="static"
           component="nav"
-          sx={{ backgroundColor: '#fff', width: '100%', zIndex: 1200 }}
+          sx={{ backgroundColor: '#fff', width: '100%', zIndex: 1200, px: 2 }}
           elevation={0}
         >
           <Toolbar
@@ -309,27 +310,30 @@ const HomeNavBar = (props) => {
             {isLoggedIn && isClient && (
               <Box
                 sx={{
-                  display: { xs: 'none', sm: 'block' },
-                  fontSize: { md: '17px', xs: '14px' },
-                  mx: 2
+                  display: { xs: 'none', sm: 'flex' },
+                  fontSize: { md: '17px', xs: '14px' }
+                  // mx: 2
                 }}
+                className="flex-row flex-nowrap md:gap-1 gap-5 items-center pl-2"
               >
-                <Button
+                <IconButton
                   color="primary"
                   sx={{
                     color: '#1A4CFF',
                     fontSize: { md: '17px', xs: '14px' },
-                    mx: { md: '5px', xs: '4px' }
+                    px: 0
+                    // mx: { md: '5px', xs: '4px' }
                   }}
                 >
                   <FiIcons.FiSearch />
-                </Button>
+                </IconButton>
                 <Button
                   color="primary"
                   sx={{
                     color: '#1A4CFF',
                     fontSize: { md: '17px', xs: '14px' },
-                    mx: { md: '5px', xs: '4px' }
+                    px: 0
+                    // mx: { md: '5px', xs: '4px' }
                   }}
                   onClick={() => {
                     nav('/dashboard/appointments');
@@ -342,7 +346,8 @@ const HomeNavBar = (props) => {
                   sx={{
                     color: '#1A4CFF',
                     fontSize: { md: '17px', xs: '14px' },
-                    mx: { md: '5px', xs: '4px' }
+                    px: 0
+                    // mx: { md: '5px', xs: '4px' }
                   }}
                   onClick={() => {
                     nav('/dashboard/account');
@@ -350,6 +355,15 @@ const HomeNavBar = (props) => {
                 >
                   Account
                 </Button>
+                <LoadingButton
+                  variant="outlined"
+                  onClick={() => {
+                    localStorage.removeItem('userLoginData');
+                    nav('/');
+                  }}
+                >
+                  Logout
+                </LoadingButton>
               </Box>
             )}
             {!isLoggedIn && (

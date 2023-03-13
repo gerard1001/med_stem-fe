@@ -117,6 +117,7 @@ const DashboardLeftSideBar = ({ toggleLeftSideBar }) => {
                   aria-haspopup="true"
                   aria-expanded={openMenu && index === 4 ? 'true' : undefined}
                   onClick={index === 4 ? handleClick : () => nav(listItem.url)}
+                  key={listItem.listText}
                 >
                   <ListItemIcon>{listItem.listIcon}</ListItemIcon>
                   <ListItemText primary={listItem.listText} />

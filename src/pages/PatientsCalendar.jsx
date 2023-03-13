@@ -23,6 +23,7 @@ import CreateAppointmentModal from '../components/Appointment/CreateAppointmentM
 import BackButton from '../components/BackButton';
 import Calendar from '../components/Calendar';
 import CalendarMonthYearSelector from '../components/Calendar/CalendarMonthYearSelector';
+import DoctorAppointmentsCalendar from '../components/Calendar/DoctorAppointmentsCalendar';
 import {
   getDoctorAppointments,
   selectAppointmentsById
@@ -76,10 +77,10 @@ function PatientsCalendar() {
   const toggleRightSideBar = () => {
     setOpenRightSideBar((open) => !open);
   };
+  const handleDayClick = (date) => {
+    setSelectedDate(date);
+  };
 
-  useEffect(() => {
-    calendarRef.current.calendar.gotoDate(new Date(viewDate));
-  }, [viewDate]);
   useEffect(() => {
     setLoading(true);
     dispatch(getOneDoctor(doctorId));
@@ -142,11 +143,8 @@ function PatientsCalendar() {
           </Stack>
         </Stack>
         <Box className="sm:px-0 px-20">
-          <Calendar
-            ref={calendarRef}
-            dayCellContent={({ isOther, date }) => {
-              return <Daycell {...{ isOther, date, selectedDate, loading }} />;
-            }}
+          <DoctorAppointmentsCalendar
+            {...{ handleDayClick, selectedDate, loading, viewDate }}
           />
         </Box>
       </Box>
@@ -176,47 +174,6 @@ function PatientsCalendar() {
     </Box>
   );
 }
-
-const Daycell = memo(({ date, isOther, selectedDate, loading }) => {
-  const dispatch = useDispatch();
-
-  const isSelected = isEqual(new Date(selectedDate), new Date(date));
-  const isGrayed = getDay(date) === 0 || getDay(date) === 6;
-
-  return (
-    <Box
-      className="text-green flex flex-col p-1 cursor-pointer"
-      sx={(theme) => ({
-        width: '100%',
-        height: '100%',
-        border: `1px solid transparent`,
-        ...(isGrayed && { backgroundColor: '#F7F8FA' }),
-        ...(isSelected && { borderColor: theme.palette.primary.main })
-      })}
-      onClick={() => {
-        !loading &&
-          !isGrayed &&
-          !isOther &&
-          dispatch(setSelectedDate(new Date(date).toISOString()));
-      }}
-    >
-      <Box className="grow px-[10px]">
-        <Typography>{date.getDate()}</Typography>
-      </Box>
-      {!isGrayed && (
-        <Box
-          className="flex flex-col px-2 py-1 rounded-[4px]"
-          bgcolor="gray.light"
-        >
-          <Typography>8</Typography>
-          <Typography color="gray.main" className="text-xs leading-tight">
-            available apointments
-          </Typography>
-        </Box>
-      )}
-    </Box>
-  );
-});
 
 const CalendarRightSideBar = ({ loading }) => {
   const appointmentHours = [

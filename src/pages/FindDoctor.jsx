@@ -37,7 +37,7 @@ const FindDoctor = () => {
   const [hideSearchBox, setHideSearchBox] = React.useState(true);
   const [specialityId, setSpecialityId] = React.useState('');
   const [doctorId, setDoctorId] = React.useState('');
-  const isLoggedIn = !!JSON.parse(localStorage.getItem('userLoginData')).token;
+  const isLoggedIn = !!JSON.parse(localStorage.getItem('userLoginData'))?.token;
 
   const filteredData = doctors?.data?.data;
 

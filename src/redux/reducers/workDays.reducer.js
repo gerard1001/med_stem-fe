@@ -7,9 +7,12 @@ import axiosInstance from '../../axios/axios.instance';
 
 export const getDoctorWorkDays = createAsyncThunk(
   'workDays/doctor/get',
-  async (id) => {
+  async ({ id, month, year }) => {
+    const params = { month, year };
     try {
-      const response = await axiosInstance.get(`/work_days/doctor/${id}`);
+      const response = await axiosInstance.get(`/work_days/doctor/${id}`, {
+        params
+      });
       return {
         id,
         workDays: response.data.data

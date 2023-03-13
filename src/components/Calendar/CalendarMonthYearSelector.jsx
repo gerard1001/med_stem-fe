@@ -16,7 +16,12 @@ function CalendarMonthYearSelector({
   const viewDateRef = useRef(viewDate);
 
   return (
-    <Stack direction="row" className={clsx('gap-3', className)} {...rest}>
+    <Stack
+      direction="row"
+      alignItems="center"
+      className={clsx('gap-3', className)}
+      {...rest}
+    >
       <IconButton
         className="p-0"
         onClick={() => {
