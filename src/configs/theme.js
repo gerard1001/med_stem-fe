@@ -8,6 +8,7 @@ const theme = createTheme({
       dark: '#214ADD'
     },
     secondary: {
+      light: '#0800AF',
       main: '#051B6C'
     },
     white: {
@@ -105,14 +106,18 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          textTransform: 'capitalize'
+          borderRadius: '16px',
+          textTransform: 'capitalize',
+          paddingLeft: '1rem',
+          paddingRight: '1rem'
           // fontSize: '18px'
         },
         outlined: {
-          borderWidth: '2px',
-          borderRadius: '15px',
+          borderWidth: '1px',
+          borderColor: 'primary.main',
           ':hover': {
-            borderWidth: '2px'
+            borderWidth: '1px',
+            backgroundColor: '#d2dbff'
           }
         }
       }

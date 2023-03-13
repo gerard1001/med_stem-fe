@@ -7,6 +7,8 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import axiosInstance from '../../axios/axios.instance';
+import BackButton from '../BackButton';
+import LoadingButton from '../LoadingButton';
 
 const Password = ({ data }) => {
   const navigate = useNavigate();
@@ -109,8 +111,17 @@ const Password = ({ data }) => {
           </Box>
         </Box>
       </FormControl>
-      <div className="relative flex items-center mt-12 justify-center">
-        <Box
+      <div className="relative flex items-center mt-12 justify-between">
+        <BackButton className="w-fit left-5" onClick={handleBack} />
+        <LoadingButton
+          disabled={!isValid}
+          className="px-10"
+          variant="contained"
+          onClick={handleSubmit}
+        >
+          Complete
+        </LoadingButton>
+        {/* <Box
           component="div"
           className="border-[#2b8aff] rounded-[10px] text-primary border w-fit px-3 py-1 absolute left-5 text-[16px] cursor-pointer hover:border-none hover:bg-[#a2ccff]"
           onClick={handleBack}
@@ -130,8 +141,8 @@ const Password = ({ data }) => {
           className="bg-[#1A4CFF] capitalize text-white"
         >
           Complete
-        </Button>
-        <div className="border-[#2b8aff] rounded-[10px] border w-fit px-3 absolute right-5 text-[16px]">
+        </Button> */}
+        <div className="border-[#2b8aff] rounded-[10px] border w-fit px-3 py-1 right-5 text-[16px]">
           5/5
         </div>
       </div>

@@ -8,7 +8,7 @@ module.exports = {
   content: ['./src/**/*.{js,jsx}', './public/index.html'],
   darkMode: 'class',
   mode: 'jit',
-  // important: '#root',
+  important: true,
   theme: {
     extend: {
       screens: {
@@ -67,15 +67,15 @@ module.exports = {
       backgroundColor: ['active'],
       textColor: ['active']
     }
-  }
-  // corePlugins: {
-  //   aspectRatio: false,
-  //   preflight: false
-  // },
-  // plugins: [
-  //   require('@tailwindcss/typography'),
-  //   require('@tailwindcss/forms'),
-  //   require('@tailwindcss/line-clamp'),
-  //   require('@tailwindcss/aspect-ratio')
-  // ]
+  },
+  corePlugins: {
+    aspectRatio: false
+    // preflight: false
+  },
+  plugins: [
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/line-clamp'),
+    require('@tailwindcss/aspect-ratio')
+  ]
 };

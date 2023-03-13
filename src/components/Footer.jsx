@@ -1,8 +1,8 @@
 import React from 'react';
 
 const Footer = () => (
-  <div className="bg-[#E8ECFC] ">
-    <div className="flex md:flex-col md:justify-start md:items-start md:w-fit  mx-auto md:gap-10 flex-row items-start justify-evenly pt-5 pb-10 text-[16px]">
+  <div className="bg-[#E8ECFC]">
+    <div className="flex md:flex-col md:justify-start md:items-start md:w-fit  mx-auto md:gap-10 flex-row items-start justify-evenly p-10 text-[16px]">
       <div>
         <h1 className="text-primary text-xl font-bold mb-5">MedStem</h1>
         <p className="text-[#6A6F75]">

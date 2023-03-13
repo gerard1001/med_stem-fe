@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import React, { Fragment } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
+import LoadingButton from '../LoadingButton';
 
 const PersonalInfo = ({}) => {
   const isValid = true;
@@ -200,7 +201,15 @@ const PersonalInfo = ({}) => {
         style={{ display: 'flex', marginTop: 50, justifyContent: 'center' }}
         className="relative"
       >
-        <Button
+        <LoadingButton
+          className="px-10"
+          variant="contained"
+          disabled={!isValid}
+          onClick={handleNext}
+        >
+          Continue
+        </LoadingButton>
+        {/* <Button
           variant="contained"
           disabled={!isValid}
           style={
@@ -222,8 +231,8 @@ const PersonalInfo = ({}) => {
           } capitalize text-white`}
         >
           Continue
-        </Button>
-        <div className="border-[#2b8aff] rounded-[10px] border w-fit px-3 absolute right-5 text-[16px]">
+        </Button> */}
+        <div className="border-[#2b8aff] rounded-[10px] border w-fit px-3 py-1 absolute right-5 text-[16px]">
           1/5
         </div>
       </div>

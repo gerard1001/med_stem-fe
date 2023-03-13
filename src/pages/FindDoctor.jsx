@@ -8,9 +8,10 @@ import * as AiIcons from 'react-icons/ai';
 import * as CiIcons from 'react-icons/ci';
 import * as IoIcons from 'react-icons/io5';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router';
+import { Navigate, useNavigate } from 'react-router';
 import HomeNavBar from '../components/HomeNavBar';
 import Loader from '../components/Loader/Loader';
+import LoadingButton from '../components/LoadingButton';
 import SearchBar from '../components/SearchBar';
 import { getDepartmentList } from '../redux/reducers/department.reducer';
 import { getDoctorList } from '../redux/reducers/doctor.reducer';
@@ -36,6 +37,7 @@ const FindDoctor = () => {
   const [hideSearchBox, setHideSearchBox] = React.useState(true);
   const [specialityId, setSpecialityId] = React.useState('');
   const [doctorId, setDoctorId] = React.useState('');
+  const isLoggedIn = !!JSON.parse(localStorage.getItem('userLoginData')).token;
 
   const filteredData = doctors?.data?.data;
 
@@ -86,9 +88,13 @@ const FindDoctor = () => {
     };
   }, []);
 
+  if (!isLoggedIn) {
+    return <Navigate to="/login" replace />;
+  }
+
   return (
     <HomeNavBar>
-      <Box className="w-[100%] px-16 md:px-4 max-w-[900px] mx-auto">
+      <Box className="w-[100%] px-8 pt-8 max-w-[900px] mx-auto">
         <Box
           className={`${
             false
@@ -224,28 +230,28 @@ const FindDoctor = () => {
                       );
                     })}
                   </List>{' '}
-                  <Button
+                  <LoadingButton
                     disabled={!doctorId}
                     onClick={() => {
                       nav(`/find_doctor/doctor_page/${doctorId}`);
                     }}
-                    sx={{
-                      width: '120px',
-                      backgroundColor: '#D1D1D1',
-                      color: '#000',
-                      marginTop: '40px',
-                      ...(doctorId && {
-                        backgroundColor: '#1A4CFF',
-                        color: '#fff',
-                        ':hover': {}
-                      })
-                    }}
-                    className={`${
-                      doctorId && 'bg-[#1A4CFF]'
-                    } capitalize text-white`}
+                    // sx={{
+                    //   width: '120px',
+                    //   backgroundColor: '#D1D1D1',
+                    //   color: '#000',
+                    //   marginTop: '40px',
+                    //   ...(doctorId && {
+                    //     backgroundColor: '#1A4CFF',
+                    //     color: '#fff',
+                    //     ':hover': {}
+                    //   })
+                    // }}
+                    // className={`${
+                    //   doctorId && 'bg-[#1A4CFF]'
+                    // } capitalize text-white`}
                   >
                     Next
-                  </Button>
+                  </LoadingButton>
                 </Box>
               </>
             )}
@@ -266,7 +272,7 @@ const FindDoctor = () => {
                     className="w-full"
                     sx={{
                       display: 'grid',
-                      gap: '30px',
+                      gap: '10px',
                       gridTemplateColumns: {
                         md: 'repeat(5, minmax(0, 1fr))',
                         sm: 'repeat(3, minmax(0, 1fr))',
@@ -313,28 +319,28 @@ const FindDoctor = () => {
                       );
                     })}
                   </Box>
-                  <Button
+                  <LoadingButton
                     disabled={!specialityId}
                     onClick={() => {
                       nav(`/find_doctor/speciality/${specialityId}`);
                     }}
-                    sx={{
-                      width: '120px',
-                      backgroundColor: '#D1D1D1',
-                      color: '#000',
-                      marginTop: '40px',
-                      ...(specialityId && {
-                        backgroundColor: '#1A4CFF',
-                        color: '#fff',
-                        ':hover': { backgroundColor: '#1A4CFA' }
-                      })
-                    }}
-                    className={`${
-                      specialityId && 'bg-[#1A4CFF]'
-                    } capitalize text-white`}
+                    // sx={{
+                    //   width: '120px',
+                    //   backgroundColor: '#D1D1D1',
+                    //   color: '#000',
+                    //   marginTop: '40px',
+                    //   ...(specialityId && {
+                    //     backgroundColor: '#1A4CFF',
+                    //     color: '#fff',
+                    //     ':hover': { backgroundColor: '#1A4CFA' }
+                    //   })
+                    // }}
+                    // className={`${
+                    //   specialityId && 'bg-[#1A4CFF]'
+                    // } capitalize text-white`}
                   >
                     Next
-                  </Button>
+                  </LoadingButton>
                 </Box>
               </>
             )}

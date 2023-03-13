@@ -5,6 +5,8 @@ import Autocomplete from '@mui/material/Autocomplete';
 import * as IoIcons from 'react-icons/io5';
 import { countries } from '../../utils/dummyData';
 import { Controller, useFormContext } from 'react-hook-form';
+import LoadingButton from '../LoadingButton';
+import BackButton from '../BackButton';
 
 const ContactInfo = ({}) => {
   const {
@@ -193,26 +195,22 @@ const ContactInfo = ({}) => {
           </Box>
         </Box>
       </Box>
-      <div className="relative flex items-center mt-12 justify-center">
-        <Box
-          className="border-[#2b8aff] rounded-[10px] text-primary border w-fit px-3 py-1 absolute left-5 text-[16px] cursor-pointer hover:border-none hover:bg-[#a2ccff]"
+      <div className="relative flex items-center mt-12 justify-between">
+        {/* <Box
+          className="border-[#2b8aff] rounded-xl text-primary border w-fit px-5 py-1 absolute left-5 text-[16px] cursor-pointer hover:border-[#a2ccff] hover:bg-[#a2ccff]"
           onClick={handleBack}
         >
           <IoIcons.IoArrowBack />
-        </Box>
-        <Button
+        </Box> */}
+        <BackButton className="w-fit left-5" onClick={handleBack} />
+        <LoadingButton
+          className="px-10"
           variant="contained"
-          style={{
-            background: '#1A4CFF',
-            color: 'white',
-            textTransform: 'capitalize'
-          }}
           onClick={handleNext}
-          className={`bg-[#1A4CFF] capitalize text-white`}
         >
           Continue
-        </Button>
-        <div className="border-[#2b8aff] rounded-[10px] border w-fit px-3 absolute right-5 text-[16px]">
+        </LoadingButton>
+        <div className="border-[#2b8aff] rounded-[10px] border w-fit px-3 py-1 right-5 text-[16px]">
           2/5
         </div>
       </div>

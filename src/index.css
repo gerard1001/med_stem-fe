@@ -28,32 +28,24 @@ img {
 input:focus {
   box-shadow: none !important;
 }
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--secondary) var(--primary);
-}
 
 *::-webkit-scrollbar {
-  width: 15px;
+  width: 10px;
 }
 
 *::-webkit-scrollbar-track {
   background: transparent;
-  border-radius: 5px;
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: var(--secondary);
-  border-radius: 14px;
-  border: 3px solid var(--primary);
+  background-color: #91c4f2;
+  border-radius: 15px;
+  border: 2px solid #fff;
 }
 
 @media (max-width: 784px) {
   html {
     font-size: 14px;
-  }
-  html::-webkit-scrollbar {
-    display: none;
   }
 }
 

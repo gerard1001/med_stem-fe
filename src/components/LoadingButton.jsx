@@ -1,10 +1,27 @@
 import { Button, Typography } from '@mui/material';
+import clsx from 'clsx';
 import React from 'react';
 import Loader from './Loader/Loader';
 
-function LoadingButton({ children, loading, disabled, ...rest }) {
+function LoadingButton({
+  children,
+  variant = 'contained',
+  className,
+  loading,
+  disabled,
+  ...rest
+}) {
   return (
-    <Button disabled={loading || disabled} {...rest}>
+    <Button
+      variant={variant}
+      disabled={loading || disabled}
+      className={clsx(
+        'rounded-lg font-medium text-[20px] leading-none',
+        className
+      )}
+      disableElevation
+      {...rest}
+    >
       {!loading ? (
         <Typography color="white">{children}</Typography>
       ) : (

@@ -102,15 +102,11 @@ const StepForm = ({ getStatus }) => {
   return (
     <FormProvider {...methods}>
       <Box>
-        <Box style={{ margin: '30px 0 10px' }}>
+        <Box style={{ padding: '10px' }}>
           <Typography variant="h4" align="center" className="font-bold">
             Welcome to Medstem
           </Typography>
-          <Typography
-            variant="subtitle2"
-            align="center"
-            style={{ margin: '10px 0' }}
-          >
+          <Typography variant="subtitle2" align="center" style={{}}>
             Already have an account?{' '}
             <span
               className="text-primary font-bold cursor-pointer"

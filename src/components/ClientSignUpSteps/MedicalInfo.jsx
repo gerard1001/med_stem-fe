@@ -12,6 +12,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getInfoList } from '../../redux/reducers/info.reducer';
 import { Controller, useFormContext } from 'react-hook-form';
 import Loader from '../Loader/Loader';
+import BackButton from '../BackButton';
+import LoadingButton from '../LoadingButton';
 
 const MedicalInfo = ({}) => {
   const [clickedIdx, setClickedIdx] = React.useState(0);
@@ -63,13 +65,13 @@ const MedicalInfo = ({}) => {
         Medical Information
       </div>
       {med_info?.loading && (
-        <Box className="w-[80px] h-[80px] mx-auto mt-[220px] md:mt-[120px]">
+        <Box className="w-[80px] h-[80px] mx-auto ">
           <Loader />
         </Box>
       )}
       {!med_info?.loading && (
         <form>
-          <Box className="h-[55vh] overflow-auto pr-4">
+          <Box className="pr-4">
             {gen_med_info?.map((values, idx) => (
               <div key={values.info_id}>
                 <Box className="flex flex-row items-center h-[50px] lg:h-min">
@@ -249,8 +251,8 @@ const MedicalInfo = ({}) => {
               </div>
             ))}
           </Box>
-          <div className="relative flex items-center mt-12 justify-center">
-            <Box
+          <div className="relative flex items-center mt-12 justify-between">
+            {/* <Box
               className="border-[#2b8aff] rounded-[10px] text-primary border w-fit px-3 py-1 absolute left-5 text-[16px] cursor-pointer hover:border-none hover:bg-[#a2ccff]"
               onClick={handleBack}
             >
@@ -268,8 +270,16 @@ const MedicalInfo = ({}) => {
               onClick={handleNext}
             >
               Continue
-            </Button>
-            <div className="border-[#2b8aff] rounded-[10px] border w-fit px-3 absolute right-5 text-[16px]">
+            </Button> */}
+            <BackButton className="w-fit left-5" onClick={handleBack} />
+            <LoadingButton
+              className="px-10"
+              variant="contained"
+              onClick={handleNext}
+            >
+              Continue
+            </LoadingButton>
+            <div className="border-[#2b8aff] rounded-[10px] border w-fit px-3 py-1 right-5 text-[16px]">
               3/5
             </div>
           </div>

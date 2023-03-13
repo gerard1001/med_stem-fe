@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -196,24 +197,26 @@ const HomeNavBar = (props) => {
           width: '100%'
         }}
       >
-        <CssBaseline />
+        {/* <CssBaseline /> */}
         <AppBar
           position="static"
           component="nav"
           sx={{ backgroundColor: '#fff', width: '100%', zIndex: 1200 }}
-          elevation={2}
+          elevation={0}
         >
           <Toolbar
-            sx={{
+            sx={({ palette }) => ({
               display: 'flex',
               justifyContent: 'space-between',
-              width: '100%'
-            }}
+              width: '100%',
+              border: `1px solid ${palette.primary.light}`
+            })}
           >
             <Typography
               variant="h6"
               component="div"
               color="primary"
+              fontWeight={700}
               sx={{
                 display: { sm: 'block' },
                 cursor: 'pointer'
@@ -362,7 +365,7 @@ const HomeNavBar = (props) => {
                     color="primary"
                     sx={{
                       fontSize: { md: '17px', xs: '14px' },
-                      mx: 2,
+                      ml: 2,
                       ...(idx === 1 && {
                         border: '1px solid #1A4CFF'
                       })
@@ -422,7 +425,7 @@ const HomeNavBar = (props) => {
       </Box> */}
       </Box>
       {props.children && (
-        <Box className="w-full grow overflow-y-auto pt-4">{props.children}</Box>
+        <Box className="w-full grow overflow-y-auto">{props.children}</Box>
       )}
     </Box>
   );

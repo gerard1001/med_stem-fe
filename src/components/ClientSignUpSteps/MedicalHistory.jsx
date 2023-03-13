@@ -11,6 +11,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getInfoList } from '../../redux/reducers/info.reducer';
 import { Controller, useFormContext } from 'react-hook-form';
 import Loader from '../Loader/Loader';
+import BackButton from '../BackButton';
+import LoadingButton from '../LoadingButton';
 
 const MedicalHistory = ({}) => {
   const [showDetails, setShowDetails] = React.useState(false);
@@ -120,27 +122,16 @@ const MedicalHistory = ({}) => {
           ))}
         </Box>
       )}
-      <Box className="relative flex items-center mt-12 justify-center">
-        <Box
-          className="border-[#2b8aff] rounded-[10px] text-primary border w-fit px-3 py-1 absolute left-5 text-[16px] cursor-pointer hover:border-none hover:bg-[#a2ccff]"
-          onClick={handleBack}
-        >
-          <IoIcons.IoArrowBack />
-        </Box>
-        <Button
-          onClick={handleNext}
+      <Box className="relative flex items-center mt-12 justify-between">
+        <BackButton className="w-fit left-5" onClick={handleBack} />
+        <LoadingButton
+          className="px-10"
           variant="contained"
-          style={{
-            background: '#1A4CFF',
-            color: 'white',
-            textTransform: 'capitalize'
-          }}
-          type="submit"
-          className={`bg-[#1A4CFF] capitalize text-white`}
+          onClick={handleNext}
         >
           Continue
-        </Button>
-        <Box className="border-[#2b8aff] rounded-[10px] border w-fit px-3 absolute right-5 text-[16px]">
+        </LoadingButton>
+        <Box className="border-[#2b8aff] rounded-[10px] border w-fit px-3 py-1 right-5 text-[16px]">
           4/5
         </Box>
       </Box>

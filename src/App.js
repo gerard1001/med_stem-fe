@@ -12,23 +12,22 @@ import routes from './configs/routes';
 import theme from './configs/theme';
 import store from './redux/store';
 
-const cache = createCache({
-  key: 'css',
-  prepend: true
-});
+// const cache = createCache({
+//   key: 'css'
+// });
 
 function App() {
   return (
-    <CacheProvider value={cache}>
-      <ThemeProvider theme={theme}>
-        <Provider store={store}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <RouterProvider router={routes} />
-            <ToastContainer theme="colored" />
-          </LocalizationProvider>
-        </Provider>
-      </ThemeProvider>
-    </CacheProvider>
+    // <CacheProvider value={cache}>
+    <ThemeProvider theme={theme}>
+      <Provider store={store}>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <RouterProvider router={routes} />
+          <ToastContainer theme="colored" />
+        </LocalizationProvider>
+      </Provider>
+    </ThemeProvider>
+    // </CacheProvider>
   );
 }
 

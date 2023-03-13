@@ -13,6 +13,9 @@ import svg5 from '../../public/assets/Vector-4.svg';
 import svg6 from '../../public/assets/Vector-5.svg';
 import svg7 from '../../public/assets/Vector-6.svg';
 import svg8 from '../../public/assets/Vector-7.svg';
+import svg9 from '../../public/assets/Vector-8.svg';
+import svg10 from '../../public/assets/Vector-9.svg';
+import svg11 from '../../public/assets/Vector-10.svg';
 import svg1 from '../../public/assets/Vector.svg';
 import Footer from '../components/Footer';
 import HomeNavBar from '../components/HomeNavBar';
@@ -21,14 +24,13 @@ const LandingPage = () => {
   const nav = useNavigate();
   return (
     <HomeNavBar>
-      <div className="w-[82%] xl:w-[100%] mx-auto bg-white px-8">
+      <div className="w-full max-w-[1920px] mx-auto bg-white px-16">
         <section className="flex items-center lg:flex-col lg:gap-16 justify-between pt-12 md:pt-5">
-          <div className="w-[45%] xl:w-full flex flex-col items-baseline lg:items-center">
+          <div className="w-[45%] xl:w-full flex flex-col gap-1 items-baseline lg:items-center">
             <div
               className="text-secondary font-bold text-6xl md:text-4xl leading-[1.1]"
               style={{
-                textShadow:
-                  '0 0 10px #214add25, 0 0 20px #214add25, 0 0 30px #214add25, 0 0 40px #214add25,0 0 50px #214add25'
+                textShadow: '0px 5px 80px #6284FF'
               }}
             >
               We help patients <br /> live a healthy,
@@ -41,7 +43,7 @@ const LandingPage = () => {
             <div className="w-fit max-w-[300px] mb-10 hidden md:inline-block">
               <img src={img1} alt="" />
             </div>
-            <div className="flex items-center  xl:flex-col xl:justify-center gap-3 w-[100%]">
+            <div className="flex items-center  lg:flex-col lg:justify-center gap-3 w-[100%]">
               <button
                 type="button"
                 className="text-white bg-[#214ADD] hover:bg-[#456dff] w-[50%] xl:w-[90%] rounded-2xl text-[18px] min-w-[178px] max-w-[280px]  py-3"
@@ -59,11 +61,11 @@ const LandingPage = () => {
               </button>
             </div>
           </div>
-          <div className="w-[40%] lg:max-w-md xl:w-full md:hidden">
+          <div className="w-[40%] lg:max-w-sm xl:w-full md:hidden">
             <img src={img1} alt="" />
           </div>
         </section>
-        <section className="mt-[100px]">
+        <section className="mt-[100px] lg:mt-[50px]">
           <h1 className="text-primary text-center text-2xl font-medium mb-3 uppercase">
             Services
           </h1>
@@ -135,7 +137,7 @@ const LandingPage = () => {
             </div>
           </div>
         </section>
-        <section className="mt-[100px] flex items-start justify-between">
+        <section className="mt-[100px] lg:mt-[50px] flex items-start justify-between">
           <div className="flex flex-col items-start w-[50%] md:w-full">
             <h1 className="text-primary text-center text-2xl font-medium mb-3 uppercase">
               consultation
@@ -164,7 +166,7 @@ const LandingPage = () => {
             />
           </div>
         </section>
-        <section className="mt-[100px]">
+        <section className="mt-[100px] lg:mt-[50px]">
           <h1 className="text-primary text-center text-2xl font-medium mb-3 uppercase">
             our doctors
           </h1>
@@ -213,26 +215,36 @@ const LandingPage = () => {
             </div>
           </div>
         </section>
-        <section className="mt-[100px]">
+        <section className="mt-[100px] lg:mt-[50px]">
           <h1 className="text-primary text-center text-2xl font-medium mb-3 uppercase">
             why choose us
           </h1>
           <h1 className="text-secondary text-center text-4xl mb-10 font-semibold">
             why you should choose us{' '}
           </h1>
-          <div className="grid grid-cols-3 mb-10 gap-4">
+          <div className="grid grid-cols-3 mb-10 gap-4 text-center">
             <div>
-              <h1 className="text-secondary font-bold mb-5">Safety</h1>
-              <p>
+              <img src={svg9} alt="" className="w-[65px] mx-auto" />
+              <h1 className="text-secondary font-bold mb-3 mt-1">Experty</h1>
+              <p className="max-w-[200px] mx-auto">
                 All medical services in our clinic are performed by experienced
                 staff using modern medical equipment
               </p>
             </div>
             <div>
-              <h1 className="text-secondary font-bold mb-5">Comfort</h1>
-              <p>
+              <img src={svg10} alt="" className="w-[65px] mx-auto" />
+              <h1 className="text-secondary font-bold mb-3 mt-1">Comfort</h1>
+              <p className="max-w-[200px] mx-auto">
                 Attentive and polite staff, large parking area, spacious waiting
                 and receiving areas.
+              </p>
+            </div>
+            <div>
+              <img src={svg11} alt="" className="w-[65px] mx-auto" />
+              <h1 className="text-secondary font-bold mb-3 mt-1">Safety</h1>
+              <p className="max-w-[200px] mx-auto">
+                We take every precaution to ensure that your personal
+                information is kept secure and confidential.
               </p>
             </div>
           </div>

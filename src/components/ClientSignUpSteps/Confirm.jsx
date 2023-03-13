@@ -133,7 +133,7 @@ const Confirm = ({ data }) => {
         >
           Complete
         </Button>
-        <div className="border-[#2b8aff] rounded-[10px] border w-fit px-3 absolute right-5 text-[16px]">
+        <div className="border-[#2b8aff] rounded-[10px] border w-fit px-3 py-1 absolute right-5 text-[16px]">
           5/5
         </div>
       </div>
