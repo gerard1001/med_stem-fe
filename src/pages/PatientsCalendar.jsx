@@ -86,7 +86,7 @@ function PatientsCalendar() {
   useEffect(() => {
     setLoading(true);
     dispatch(getOneDoctor(doctorId));
-    dispatch(getDoctorWorkDays(doctorId)).then(({ error }) => {
+    dispatch(getDoctorWorkDays({ id: doctorId })).then(({ error }) => {
       if (error) {
         toast.error(error.message);
       }
