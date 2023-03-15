@@ -1,5 +1,8 @@
 import React from 'react';
-import { getDepartmentList } from '../redux/reducers/department.reducer';
+import {
+  getDepartmentList,
+  makeDepartment
+} from '../redux/reducers/department.reducer';
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -73,58 +76,39 @@ const AddSpecialityForm = () => {
   doctorInfo.department_id = department_id?.join(', ');
   delete doctorInfo.departmentName;
 
-  const onSubmit = ({
-    department_name,
-    speciality_name,
-    id_number,
-    email,
-    birth_date,
-    gender,
-    salary,
-    department_id,
-    experience_years,
-    category,
-    cost_per_appointment,
-    about,
-    education,
-    picture
-  }) => {
+  const onSubmit = ({ department_name, speciality_name, picture }) => {
     const formData = new FormData();
     formData.append('department_name', department_name);
     formData.append('speciality_name', speciality_name);
     formData.append('picture', picture);
 
-    dispatch(registerDoctor(formData));
-    reset({
-      department_name: '',
-      speciality_name: '',
-      picture: ''
-    });
+    dispatch(makeDepartment(formData));
+    // reset({
+    //   department_name: '',
+    //   speciality_name: '',
+    //   picture: ''
+    // });
   };
 
   return (
-    <Box>
-      <Box className="pt-20 w-[90%] max-w-[900px] mx-auto lg:pl-0 relative pb-10 min-h-[70vh]">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Typography
-            variant="h6"
-            sx={{ mb: '20px' }}
-            className="lg:text-center"
-          >
-            Add Doctor
+    <Box className="flex items-start justify-start">
+      <Box className="pt-20 w-[100%] max-w-[900px] mx-auto relative pb-10 min-h-[70vh]">
+        <form onSubmit={handleSubmit(onSubmit)} className="px-20 sm:px-5">
+          <Typography variant="h6" className="md:text-center">
+            Add Speciality
           </Typography>
-          <Typography
+          {/* <Typography
             variant="subtitle1"
             fontWeight="600"
             className="lg:text-center"
           >
             Personal Information
-          </Typography>
+          </Typography> */}
           <Box
             spacing={2}
             className="flex flex-row items-center justify-evenly md:flex-col w-[100%]"
           >
-            <Box className="flex flex-col gap-4 w-[70%] md:w-full md:max-w-[400px] p-2 border-box">
+            <Box className="flex flex-col gap-4 w-[70%] md:w-full md:max-w-[400px] border-box">
               <Box className="w-[100%] min-w-[220px]">
                 <Controller
                   name="department_name"
@@ -208,24 +192,25 @@ const AddSpecialityForm = () => {
                   </Button>
                 </Box>
               </Box>
-              <Box>
-                <Button
-                  type="submit"
-                  sx={{
-                    color: '#fff',
-                    width: { md: '120px', xs: '80px' },
-                    color: '#1A4CFF',
-                    border: '1px solid #1A4CFF',
-                    borderRadius: '20px',
-                    marginTop: '30px',
-                    marginX: 'auto',
-                    ':hover': { backgroundColor: '#a2ccff', border: 'none' }
-                  }}
-                >
-                  Save
-                </Button>
-              </Box>
             </Box>{' '}
+          </Box>
+          <Box className="md:flex md:items-center md:justify-center">
+            <Button
+              type="submit"
+              sx={{
+                color: '#fff',
+                width: { md: '120px', xs: '80px' },
+                color: '#1A4CFF',
+                border: '1px solid #1A4CFF',
+                borderRadius: '20px',
+                marginTop: '30px',
+                marginX: 'auto',
+                ':hover': { backgroundColor: '#a2ccff', border: 'none' }
+              }}
+              className="mx-auto"
+            >
+              Save
+            </Button>
           </Box>
         </form>
       </Box>

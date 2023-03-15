@@ -3,9 +3,26 @@ import {
   createEntityAdapter,
   createSlice
 } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 import axiosInstance from '../../axios/axios.instance';
 
 const appointmentAdapter = createEntityAdapter();
+
+export const makeAppointment = createAsyncThunk(
+  'appointments/add',
+  async (data) => {
+    console.log(data);
+    const response = await axiosInstance
+      .post(`${process.env.BACKEND_URL}/appointments`, data)
+      .then((res) => {
+        toast.success('successfully added appointment');
+        res.data;
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message);
+      });
+  }
+);
 
 export const {
   selectAll: selectAppointments,

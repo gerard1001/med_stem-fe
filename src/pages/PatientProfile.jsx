@@ -6,12 +6,21 @@ import ContactInfo from '../components/PatientProfileSteps/AccountInfo';
 import MedicalHistory from '../components/PatientProfileSteps/MedicalHistory';
 import PersonaInfo from '../components/PatientProfileSteps/PersonalInfo';
 import { getOnePatient } from '../redux/reducers/patient.reducer';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 const PatientProfile = () => {
   const step = useSelector((state) => state.step.profile_step);
   const patient = useSelector((state) => state.patient);
 
   const dispatch = useDispatch();
+
+  const isClient =
+    JSON.parse(localStorage.getItem('userLoginData'))?.user?.Role.role ===
+    'client';
+
+  if (!isClient) {
+    <Navigate to="/dashboard/schedule" replace />;
+  }
 
   React.useEffect(() => {
     dispatch(getOnePatient());

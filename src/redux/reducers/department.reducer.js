@@ -1,11 +1,32 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axiosInstance from '../../axios/axios.instance';
+import { toast } from 'react-toastify';
 
 const initialState = {
   loading: false,
   data: [],
   error: ''
 };
+
+export const makeDepartment = createAsyncThunk(
+  'department/add',
+  async (data) => {
+    console.log(data);
+    const response = await axiosInstance
+      .post(`${process.env.BACKEND_URL}/department`, data)
+      .then((res) => {
+        console.log(res);
+        toast.success('successfully added department');
+        res.data;
+      })
+      .catch((error) => {
+        console.log({ error });
+        toast.error(error.response.data.message);
+      });
+
+    console.log(response, 'RES');
+  }
+);
 
 export const getDepartmentList = createAsyncThunk(
   'departments/fetchDepartments',

@@ -21,6 +21,11 @@ import { DashboardContext } from '../context/DashboardContext';
 import { getDoctorList } from '../redux/reducers/doctor.reducer';
 import { getPatientList } from '../redux/reducers/patient.reducer';
 import { getDoctorWorkDays } from '../redux/reducers/workDays.reducer';
+import {
+  setSelectedDoctorDataRedux,
+  setSelectedPatientDataRedux,
+  setSelectedWorkDay
+} from '../redux/reducers/user.reducer';
 
 const SchedulePage = () => {
   const calendarRef = useRef();
@@ -29,10 +34,14 @@ const SchedulePage = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [selectedPatient, setSelectedPatient] = useState(null);
+  const [selectedDay, setSelectedDay] = useState(null);
+  const [doctorId, setDoctorId] = useState(null);
+  const [workdays, setWorkdays] = useState(null);
   const [loading, setLoading] = useState(false);
   const doctors = useSelector((state) => state.doctor?.data?.data);
   const patients = useSelector((state) => state.patient?.data?.data);
-  const { id: doctorId } = useParams();
+  const days = useSelector((state) => state.workDays);
+  // const { id: doctorId } = useParams();
 
   const { setRightSideBarContent } = useContext(DashboardContext);
 
@@ -41,12 +50,27 @@ const SchedulePage = () => {
   };
 
   useEffect(() => {
-    setRightSideBarContent(<CalendarRightSideBar loading={loading} />);
+    setDoctorId(selectedDoctor?.doctor_id);
+  }, [selectedDoctor]);
+
+  useEffect(() => {
+    setWorkdays(days?.entities[doctorId]?.workDays);
+  }, [days, doctorId]);
+
+  const dates = workdays?.map((values) => values.date);
+
+  const selectedWorkDay = workdays?.filter((values) => {
+    return values.date === selectedDate;
+  });
+
+  useEffect(() => {
+    setRightSideBarContent(
+      <CalendarRightSideBar loading={loading} doc={selectedDoctor} />
+    );
     dispatch(getDoctorList()).then(({ payload }) => {
       setSelectedDoctor(payload?.data[0]);
     });
     dispatch(getPatientList()).then(({ payload }) => {
-      console.log(payload?.data[0], 'payload');
       setSelectedPatient(payload?.data[0]);
     });
 
@@ -56,11 +80,17 @@ const SchedulePage = () => {
   }, []);
 
   useEffect(() => {
+    dispatch(setSelectedDoctorDataRedux(selectedDoctor));
+    dispatch(setSelectedPatientDataRedux(selectedPatient));
+    dispatch(setSelectedWorkDay(selectedWorkDay && selectedWorkDay[0]));
+  }, [selectedDoctor, selectedPatient, selectedWorkDay]);
+
+  useEffect(() => {
     setLoading(true);
     dispatch(
       getDoctorWorkDays({
         id: doctorId,
-        month: getMonth(viewDate),
+        month: getMonth(viewDate) + 1,
         year: getYear(viewDate)
       })
     ).then(() => {
@@ -100,7 +130,7 @@ const SchedulePage = () => {
       {/* <SelectPatient /> */}
       <DoctorAppointmentsCalendar
         ref={calendarRef}
-        {...{ loading, selectedDate, handleDayClick, viewDate }}
+        {...{ loading, selectedDate, handleDayClick, viewDate, workdays }}
       />
     </Box>
   );
@@ -116,6 +146,14 @@ const CalendarRightSideBar = ({ loading }) => {
   const [selectedTime, setSelectedTime] = useState(appointmentHours[0]);
   const [openModal, setOpenModal] = useState(false);
   const doctor = useSelector((state) => state.doctor.single_data.data);
+
+  const selectedDoctordata = useSelector((state) => state.user.selectedDoctor);
+  const selectedPatientData = useSelector(
+    (state) => state.user.selectedPatient
+  );
+  const selectedWorkDayData = useSelector(
+    (state) => state.user.selectedWorkDay
+  );
 
   return (
     <>
@@ -137,6 +175,12 @@ const CalendarRightSideBar = ({ loading }) => {
         ))}
         <Stack direction="row" alignItems="center" justifyContent="center">
           <Button
+            disabled={
+              !selectedWorkDayData ||
+              !selectedPatientData ||
+              !selectedDoctordata ||
+              !selectedTime
+            }
             variant="contained"
             color="primary"
             className="bg-primary m-4"
@@ -151,11 +195,25 @@ const CalendarRightSideBar = ({ loading }) => {
       <CreateAppointmentModal
         open={openModal || false}
         {...{
-          doctorName: {
-            firstName: doctor?.first_name,
-            lastName: doctor?.last_name
+          doctorData: {
+            doctorId: selectedDoctordata?.doctor_id,
+            firstName: selectedDoctordata?.first_name,
+            lastName: selectedDoctordata?.last_name
           },
-          specialities: doctor?.departments.map((dep) => dep.speciality_name),
+          specialities: selectedDoctordata?.departments.map(
+            (dep) => dep.speciality_name
+          ),
+          patientData: {
+            patientId: selectedPatientData?.client_id,
+            firstName: selectedPatientData?.first_name,
+            lastName: selectedPatientData?.last_name
+          },
+          workDayData: {
+            workDayId: selectedWorkDayData?._id
+          },
+          scheduleData: {
+            scheduleId: selectedWorkDayData?.schedule_id
+          },
           onClose: () => {
             setOpenModal(false);
           },
