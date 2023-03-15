@@ -1,7 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  loginData: null
+  loginData: null,
+  selectedDoctor: null,
+  selectedPatient: null,
+  selectedWorkDay: null
 };
 
 const userSlice = createSlice({
@@ -10,11 +13,25 @@ const userSlice = createSlice({
   reducers: {
     setLoginData: (state, { payload }) => {
       state.loginData = payload;
+    },
+    setSelectedDoctorDataRedux: (state, { payload }) => {
+      state.selectedDoctor = payload;
+    },
+    setSelectedPatientDataRedux: (state, { payload }) => {
+      state.selectedPatient = payload;
+    },
+    setSelectedWorkDay: (state, { payload }) => {
+      state.selectedWorkDay = payload;
     }
   },
   extraReducers: {}
 });
 
-export const { setLoginData } = userSlice.actions;
+export const {
+  setLoginData,
+  setSelectedDoctorDataRedux,
+  setSelectedPatientDataRedux,
+  setSelectedWorkDay
+} = userSlice.actions;
 
 export default userSlice.reducer;

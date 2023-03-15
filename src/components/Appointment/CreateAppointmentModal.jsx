@@ -1,7 +1,9 @@
 import { Box, Grid, Modal, Stack, Typography } from '@mui/material';
 import { format } from 'date-fns';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import axiosInstance from '../../axios/axios.instance';
+import { makeAppointment } from '../../redux/reducers/appointment.reducer';
 import CloseXButton from '../CloseXButton';
 import LoadingButton from '../LoadingButton';
 
@@ -23,10 +25,27 @@ const CreateAppointmentModal = ({
   open,
   onClose,
   selectedTime,
-  doctorName: { firstName, lastName },
+  doctorData: { doctorId, firstName, lastName },
+  patientData: { patientId },
+  workDayData: { workDayId },
+  scheduleData: { scheduleId },
   specialities
 }) => {
+  console.log(
+    {
+      open,
+      onClose,
+      selectedTime,
+      doctorData: { doctorId, firstName, lastName },
+      patientData: { patientId },
+      workDayData: { workDayId },
+      scheduleData: { scheduleId },
+      specialities
+    },
+    '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&'
+  );
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
   const appointmentData = [
     {
       name: 'Appointment date',
@@ -46,8 +65,16 @@ const CreateAppointmentModal = ({
     }
   ];
 
+  const form = {
+    appointment_period: selectedTime,
+    _id: workDayId,
+    schedule_id: scheduleId,
+    doctor_id: doctorId,
+    client_id: patientId
+  };
+
   const handleSubmit = () => {
-    // const data = axiosInstance.post('/appointments', {});
+    dispatch(makeAppointment(form));
   };
 
   return (
@@ -61,7 +88,7 @@ const CreateAppointmentModal = ({
         <Typography className="w-full font-semibold text-lg text-center">
           Appointment Confirmation
         </Typography>
-        <Stack direction="row" gap={6} width="100%">
+        <Stack direction="row" gap={6} width="100%" overflow="hidden">
           <Stack>
             {appointmentData.map(({ name }) => (
               <Typography key={name} className="truncate">

@@ -273,7 +273,7 @@ const AccountInfo = () => {
               <FiUser className="text-[60px]" />
               <img
                 className="w-full h-full absolute top-0 left-0 z-10"
-                src={picUrl || patientData.picture}
+                src={picUrl || patientData?.picture}
                 alt="selected"
               />
               {!loadingUpload && (
