@@ -18,8 +18,6 @@ const PatientAppointmentNavigation = () => {
   const clientId = JSON.parse(localStorage.getItem('userLoginData'))?.user
     ?.client_id;
 
-  console.log({ isClient });
-
   const [hideSearch, setHideSearch] = React.useState(false);
 
   const dispatch = useDispatch();

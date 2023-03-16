@@ -4,7 +4,8 @@ const initialState = {
   loginData: null,
   selectedDoctor: null,
   selectedPatient: null,
-  selectedWorkDay: null
+  selectedWorkDay: null,
+  searchQueryRedux: null
 };
 
 const userSlice = createSlice({
@@ -22,6 +23,9 @@ const userSlice = createSlice({
     },
     setSelectedWorkDay: (state, { payload }) => {
       state.selectedWorkDay = payload;
+    },
+    setSearchQueryRedux: (state, { payload }) => {
+      state.searchQueryRedux = payload;
     }
   },
   extraReducers: {}
@@ -31,7 +35,8 @@ export const {
   setLoginData,
   setSelectedDoctorDataRedux,
   setSelectedPatientDataRedux,
-  setSelectedWorkDay
+  setSelectedWorkDay,
+  setSearchQueryRedux
 } = userSlice.actions;
 
 export default userSlice.reducer;

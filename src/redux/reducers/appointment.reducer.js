@@ -11,7 +11,6 @@ const appointmentAdapter = createEntityAdapter();
 export const makeAppointment = createAsyncThunk(
   'appointments/add',
   async (data) => {
-    console.log(data);
     const response = await axiosInstance
       .post(`${process.env.BACKEND_URL}/appointments`, data)
       .then((res) => {

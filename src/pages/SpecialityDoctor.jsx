@@ -54,7 +54,6 @@ const SpecialityDoctor = () => {
   });
 
   const dataFiltered = filterData(searchQuery, filteredData);
-  console.log({ departmentId });
 
   const dispatch = useDispatch();
 

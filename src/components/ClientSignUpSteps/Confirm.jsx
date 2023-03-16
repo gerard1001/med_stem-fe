@@ -23,8 +23,6 @@ const Confirm = ({ data }) => {
     handleNext();
   };
 
-  console.log({ data });
-
   return (
     <>
       <List disablePadding className="h-[45vh] overflow-auto">

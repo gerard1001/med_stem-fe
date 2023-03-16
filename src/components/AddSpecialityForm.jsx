@@ -53,9 +53,6 @@ const AddSpecialityForm = () => {
     ?.filter((item) => departmentName.includes(item.department_name))
     .map((item) => item.department_id);
 
-  console.log(department_id, 'department_id');
-  console.log(departmentName, 'departmentName');
-
   React.useEffect(() => {
     dispatch(getDepartmentList());
   }, []);

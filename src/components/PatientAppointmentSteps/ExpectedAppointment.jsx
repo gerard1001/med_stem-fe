@@ -32,7 +32,6 @@ const ExpectedAppointment = () => {
   const expectedapps = appoints?.data?.data?.filter((values) => {
     return new Date(values?.work_day?.date) > new Date() && !values.is_canceled;
   });
-  console.log(appoints?.data?.data, 'appoints?.data?.data?');
   const dispatch = useDispatch();
 
   const handleCancelAppointment = () => {

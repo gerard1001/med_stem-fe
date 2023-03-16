@@ -26,6 +26,7 @@ import {
   setSelectedPatientDataRedux,
   setSelectedWorkDay
 } from '../redux/reducers/user.reducer';
+import getTimePeriods from '../utils/generateTimePeriods';
 
 const SchedulePage = () => {
   const calendarRef = useRef();
@@ -98,6 +99,8 @@ const SchedulePage = () => {
     });
   }, [doctorId]);
 
+  console.log({ selectedDoctor });
+
   return (
     <Box className="p-8">
       <Stack
@@ -143,8 +146,11 @@ const CalendarRightSideBar = ({ loading }) => {
     '09:00 - 09:32',
     '09:00 - 09:33'
   ];
-  const [selectedTime, setSelectedTime] = useState(appointmentHours[0]);
+  const [selectedTime, setSelectedTime] = useState('');
   const [openModal, setOpenModal] = useState(false);
+  const [startingHour, setStartingHour] = useState('08:00:00');
+  const [endingHour, setEndingHour] = useState('18:00:00');
+  const [duration, setDuration] = useState(30);
   const doctor = useSelector((state) => state.doctor.single_data.data);
 
   const selectedDoctordata = useSelector((state) => state.user.selectedDoctor);
@@ -155,24 +161,46 @@ const CalendarRightSideBar = ({ loading }) => {
     (state) => state.user.selectedWorkDay
   );
 
+  useEffect(() => {
+    setStartingHour(selectedWorkDayData?.from);
+    setEndingHour(selectedWorkDayData?.to);
+    setDuration(selectedWorkDayData?.schedule?.appointment_duration);
+  }, [selectedWorkDayData]);
+
+  console.log({ selectedWorkDayData });
+  console.log({ startingHour, endingHour, duration });
+
+  const duramc =
+    selectedWorkDayData && startingHour && endingHour && duration
+      ? getTimePeriods(startingHour, endingHour, duration)
+      : [];
+
+  console.log({ duramc, selectedTime });
   return (
     <>
       <List disablePadding className="border-l border-primary w-full h-full">
-        {appointmentHours.map((hour, index) => (
-          <>
-            <ListItemButton
-              key={hour}
-              onClick={() => {
-                !loading && setSelectedTime(hour);
-              }}
-              className="border-b border-primary p-3 text-center"
-              selected={hour === selectedTime}
-            >
-              <ListItemText primary={hour} />
-            </ListItemButton>
-            <Divider key={hour + index} sx={{ borderColor: 'primary.main' }} />
-          </>
-        ))}
+        {duramc ? (
+          duramc?.map((hour, index) => (
+            <>
+              <ListItemButton
+                key={hour}
+                onClick={() => {
+                  !loading && setSelectedTime(hour);
+                }}
+                className="border-b border-primary p-3 text-center"
+                selected={hour === selectedTime}
+              >
+                <ListItemText primary={hour} />
+              </ListItemButton>
+              <Divider
+                key={hour + index}
+                sx={{ borderColor: 'primary.main' }}
+              />
+            </>
+          ))
+        ) : (
+          <Typography>No work day has been selected</Typography>
+        )}
         <Stack direction="row" alignItems="center" justifyContent="center">
           <Button
             disabled={

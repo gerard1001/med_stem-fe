@@ -31,19 +31,6 @@ const CreateAppointmentModal = ({
   scheduleData: { scheduleId },
   specialities
 }) => {
-  console.log(
-    {
-      open,
-      onClose,
-      selectedTime,
-      doctorData: { doctorId, firstName, lastName },
-      patientData: { patientId },
-      workDayData: { workDayId },
-      scheduleData: { scheduleId },
-      specialities
-    },
-    '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&'
-  );
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const appointmentData = [

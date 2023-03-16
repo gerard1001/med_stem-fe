@@ -34,38 +34,25 @@ import {
   getDoctorWorkDays,
   selectWorkDaysDoctors
 } from '../redux/reducers/workDays.reducer';
-
-// const formatData = (workDays, appointments, date, doctor) => {
-//   const totalDays = getDaysInMonth(getMonth(date));
-//   const currentDay = 0;
-//   let data = {};
-
-//   workDays.forEach((workDay) => {
-//     const itsAppointment = _.filter(appointments, (o) => o._id === workDay._id);
-//     if (itsAppointment.length > 0) {
-//       const slots = itsAppointment.map(
-//         (appointment) => appointment.appointment_period
-//       );
-//       data = {
-//         ...data,
-//         [workDay._id]: { slots, from: workDay.from, to: workDay.to }
-//       };
-//     }
-//   });
-
-//   let finalData = {};
-
-//   Object.keys(data).forEach(() => {});
-// };
+import {
+  setSelectedDoctorDataRedux,
+  setSelectedPatientDataRedux,
+  setSelectedWorkDay
+} from '../redux/reducers/user.reducer';
+import { getOnePatient } from '../redux/reducers/patient.reducer';
 
 function PatientsCalendar() {
   const dispatch = useDispatch();
   const { id: doctorId } = useParams();
+  const clientId = JSON.parse(localStorage.getItem('userLoginData'))?.user
+    ?.client_id;
   const calendarRef = useRef(null);
   const [viewDate, setViewDate] = useState(new Date());
   const [openRightSideBar, setOpenRightSideBar] = useState(null);
+  const [workdays, setWorkdays] = useState(null);
   const [loading, setLoading] = useState(false);
-  const selectedDate = useSelector((state) => state.calendar.selectedDate);
+  const [selectedDate, setSelectedDate] = useState(null);
+  // const selectedDate = useSelector((state) => state.calendar.selectedDate);
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down('md'));
   const workDays = useSelector((state) =>
     selectWorkDaysDoctors(state, doctorId)
@@ -73,8 +60,12 @@ function PatientsCalendar() {
   const appointments = useSelector((state) =>
     selectAppointmentsById(state, doctorId)
   );
+  const doctor = useSelector((state) => state.doctor);
+  const patient = useSelector((state) => state.patient);
+  const days = useSelector((state) => state.workDays);
 
-  console.log(calendarRef, 'calendarRef');
+  const doctorData = doctor?.single_data?.data;
+  const patientData = patient?.single_data?.data;
 
   const toggleRightSideBar = () => {
     setOpenRightSideBar((open) => !open);
@@ -86,6 +77,7 @@ function PatientsCalendar() {
   useEffect(() => {
     setLoading(true);
     dispatch(getOneDoctor(doctorId));
+    dispatch(getOnePatient(clientId));
     dispatch(getDoctorWorkDays({ id: doctorId })).then(({ error }) => {
       if (error) {
         toast.error(error.message);
@@ -99,6 +91,22 @@ function PatientsCalendar() {
     });
   }, [doctorId]);
   useEffect(() => {}, [doctorId]);
+
+  useEffect(() => {
+    setWorkdays(days?.entities[doctorId]?.workDays);
+  }, [days, doctorId]);
+
+  const dates = workdays?.map((values) => values.date);
+
+  const selectedWorkDay = workdays?.filter((values) => {
+    return values.date === selectedDate;
+  });
+
+  useEffect(() => {
+    dispatch(setSelectedDoctorDataRedux(doctorData));
+    dispatch(setSelectedPatientDataRedux(patientData));
+    dispatch(setSelectedWorkDay(selectedWorkDay && selectedWorkDay[0]));
+  }, [doctorData, patientData, selectedWorkDay]);
 
   return (
     <Box className="flex flex-row w-full h-full">
@@ -147,7 +155,7 @@ function PatientsCalendar() {
         <Box className="sm:px-0 px-20">
           <DoctorAppointmentsCalendar
             ref={calendarRef}
-            {...{ handleDayClick, selectedDate, loading, viewDate }}
+            {...{ handleDayClick, selectedDate, loading, viewDate, workdays }}
           />
         </Box>
       </Box>
@@ -189,6 +197,13 @@ const CalendarRightSideBar = ({ loading }) => {
   const [openModal, setOpenModal] = useState(false);
   const doctor = useSelector((state) => state.doctor.single_data.data);
 
+  const selectedPatientData = useSelector(
+    (state) => state.user.selectedPatient
+  );
+  const selectedWorkDayData = useSelector(
+    (state) => state.user.selectedWorkDay
+  );
+
   return (
     <>
       <List disablePadding className="border-l border-primary w-full h-full">
@@ -223,9 +238,21 @@ const CalendarRightSideBar = ({ loading }) => {
       <CreateAppointmentModal
         open={openModal || false}
         {...{
-          doctorName: {
+          doctorData: {
+            doctorId: doctor?.doctor_id,
             firstName: doctor?.first_name,
             lastName: doctor?.last_name
+          },
+          patientData: {
+            patientId: selectedPatientData?.client_id,
+            firstName: selectedPatientData?.first_name,
+            lastName: selectedPatientData?.last_name
+          },
+          workDayData: {
+            workDayId: selectedWorkDayData?._id
+          },
+          scheduleData: {
+            scheduleId: selectedWorkDayData?.schedule_id
           },
           specialities: doctor?.departments.map((dep) => dep.speciality_name),
           onClose: () => {

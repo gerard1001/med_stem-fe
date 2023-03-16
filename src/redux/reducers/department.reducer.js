@@ -11,27 +11,24 @@ const initialState = {
 export const makeDepartment = createAsyncThunk(
   'department/add',
   async (data) => {
-    console.log(data);
     const response = await axiosInstance
       .post(`${process.env.BACKEND_URL}/department`, data)
       .then((res) => {
-        console.log(res);
         toast.success('successfully added department');
         res.data;
       })
       .catch((error) => {
-        console.log({ error });
         toast.error(error.response.data.message);
       });
-
-    console.log(response, 'RES');
   }
 );
 
 export const getDepartmentList = createAsyncThunk(
   'departments/fetchDepartments',
   async () =>
-    axios.get(`${process.env.BACKEND_URL}/department`).then((res) => res.data)
+    axiosInstance
+      .get(`${process.env.BACKEND_URL}/department`)
+      .then((res) => res.data)
 );
 
 const departmentSlice = createSlice({

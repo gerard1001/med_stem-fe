@@ -89,10 +89,13 @@ const DashboardLeftSideBar = ({ toggleLeftSideBar }) => {
   return (
     <>
       <Box
-        className="relative w-full h-full border-r border-[#0093df] overflow-auto flex flex-col bg-[#fff] "
+        className="relative w-full min-w-[220px] h-full border-r border-[#0093df] overflow-auto flex flex-col bg-[#fff] "
         component="div"
       >
-        <Box className="h-[64px]" sx={{ display: { md: 'none', xs: 'block' } }}>
+        <Box
+          className="h-[64px] items-center justify-center"
+          sx={{ display: { md: 'none', xs: 'flex' } }}
+        >
           <IconButton
             onClick={toggleLeftSideBar}
             sx={{
