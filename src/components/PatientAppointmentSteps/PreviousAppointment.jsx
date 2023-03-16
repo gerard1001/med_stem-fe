@@ -83,61 +83,67 @@ const PreviousAppointment = () => {
                 <TableRow
                   key={row.appointment_number}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  id="row-height"
                 >
-                  <TableCell component="th" scope="row">
+                  <TableCell className="cell-height" component="th" scope="row">
                     {row.doctor.first_name} {row.doctor.last_name}
                   </TableCell>
                   <TableCell
+                    className="cell-height"
                     align="left"
                     sx={{ color: '#797979', fontSize: '14px' }}
                   >
                     {row.doctor.departments[0].speciality_name}
                   </TableCell>
                   <TableCell
+                    className="cell-height"
                     align="left"
                     sx={{ color: '#797979', fontSize: '14px' }}
                   >
                     {row.appointment_number}
                   </TableCell>
                   <TableCell
+                    className="cell-height"
                     align="left"
                     sx={{ color: '#797979', fontSize: '14px' }}
                   >
                     {new Date(row.work_day?.date).toLocaleDateString()}
                   </TableCell>
-                  <TableCell
-                    align="left"
-                    sx={{
-                      color: '#797979',
-                      fontSize: '12px',
-                      display: 'flex',
-                      flexWrap: 'wrap',
-                      overflow: 'auto',
-                      gap: '4px'
-                    }}
-                  >
-                    <Typography
-                      style={{
-                        backgroundColor: '#fafcfd',
+                  <TableCell className="cell-height" align="left">
+                    cancel
+                    {/* <Box
+                      sx={{
                         color: '#797979',
-                        textTransform: 'capitalize',
-                        cursor: 'pointer',
-                        fontSize: '14px'
+                        fontSize: '12px',
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        overflow: 'auto',
+                        gap: '4px'
                       }}
                     >
-                      Edit
-                    </Typography>
-                    <Typography
-                      style={{
-                        backgroundColor: '#fafcfd',
-                        color: '#797979',
-                        textTransform: 'capitalize',
-                        cursor: 'pointer',
-                        fontSize: '14px'
-                      }}
-                    >
-                      cancel
-                    </Typography>
+                      <Typography
+                        style={{
+                          backgroundColor: '#fafcfd',
+                          color: '#797979',
+                          textTransform: 'capitalize',
+                          cursor: 'pointer',
+                          fontSize: '14px'
+                        }}
+                      >
+                        Edit
+                      </Typography>
+                      <Typography
+                        style={{
+                          backgroundColor: '#fafcfd',
+                          color: '#797979',
+                          textTransform: 'capitalize',
+                          cursor: 'pointer',
+                          fontSize: '14px'
+                        }}
+                      >
+                        cancel
+                      </Typography>
+                    </Box> */}
                   </TableCell>
                 </TableRow>
               ))}

@@ -43,6 +43,10 @@ const ExpectedAppointment = () => {
     dispatch(getPatientAppointments(clientId));
   }, [clientId]);
 
+  console.log(expectedapps, '&&&&&&&&&&&&&&&');
+  console.log(clientId, '**********');
+  console.log(patient, '$$$$$$$$$$$');
+
   return (
     <div>
       <Box className="w-full">
@@ -90,118 +94,122 @@ const ExpectedAppointment = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {expectedapps?.map((row, idx) => (
-                <>
-                  <TableRow
-                    key={row.appointment_number}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {row.doctor.first_name} {row.doctor.last_name}
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      sx={{ color: '#797979', fontSize: '14px' }}
+              {expectedapps ? (
+                expectedapps?.map((row, idx) => (
+                  <>
+                    <TableRow
+                      key={row.appointment_number}
+                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
-                      {row.doctor.departments[0].speciality_name}
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      sx={{ color: '#797979', fontSize: '14px' }}
-                    >
-                      {row.appointment_number}
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      sx={{ color: '#797979', fontSize: '14px' }}
-                    >
-                      {new Date(row.work_day?.date).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      sx={{
-                        color: '#797979',
-                        fontSize: '12px',
-                        display: 'flex',
-                        flexWrap: 'wrap',
-                        overflow: 'auto',
-                        gap: '4px'
-                      }}
-                    >
-                      <Typography
-                        style={{
-                          backgroundColor: '#fafcfd',
+                      <TableCell component="th" scope="row">
+                        {row.doctor.first_name} {row.doctor.last_name}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        sx={{ color: '#797979', fontSize: '14px' }}
+                      >
+                        {row.doctor.departments[0].speciality_name}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        sx={{ color: '#797979', fontSize: '14px' }}
+                      >
+                        {row.appointment_number}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        sx={{ color: '#797979', fontSize: '14px' }}
+                      >
+                        {new Date(row.work_day?.date).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        sx={{
                           color: '#797979',
-                          textTransform: 'capitalize',
-                          cursor: 'pointer',
-                          fontSize: '14px',
-                          margin: '0 5px'
+                          fontSize: '12px',
+                          display: 'flex',
+                          flexWrap: 'wrap',
+                          overflow: 'auto',
+                          gap: '4px'
                         }}
                       >
-                        Edit
-                      </Typography>
-                      <Typography
-                        style={{
-                          backgroundColor: '#fafcfd',
-                          color: '#797979',
-                          textTransform: 'capitalize',
-                          cursor: 'pointer',
-                          fontSize: '14px'
-                        }}
-                        onClick={() => {
-                          setAppointIdx(row.appointment_id);
-                          setClickedIdx(idx);
-                          handleOpen();
-                        }}
-                      >
-                        cancel
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                  {clickedIdx === idx && (
-                    <Modal
-                      open={open}
-                      onClose={handleClose}
-                      aria-labelledby="modal-modal-title"
-                      aria-describedby="modal-modal-description"
-                      className="flex flex-col items-center justify-center"
-                      sx={{
-                        '& .MuiFormControl-root': {
-                          margin: 0
-                        }
-                      }}
-                    >
-                      <Box className="flex flex-col w-[fit] justify-center items-center gap-4 bg-white border border-primary shadow-2 rounded-[20px] relative py-10 px-12 m-4 overflow-y-auto">
-                        <Typography className="w-full font-semibold text-lg text-center">
-                          Cancel appointment
+                        <Typography
+                          style={{
+                            backgroundColor: '#fafcfd',
+                            color: '#797979',
+                            textTransform: 'capitalize',
+                            cursor: 'pointer',
+                            fontSize: '14px',
+                            margin: '0 5px'
+                          }}
+                        >
+                          Edit
                         </Typography>
+                        <Typography
+                          style={{
+                            backgroundColor: '#fafcfd',
+                            color: '#797979',
+                            textTransform: 'capitalize',
+                            cursor: 'pointer',
+                            fontSize: '14px'
+                          }}
+                          onClick={() => {
+                            setAppointIdx(row.appointment_id);
+                            setClickedIdx(idx);
+                            handleOpen();
+                          }}
+                        >
+                          cancel
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+                    {clickedIdx === idx && (
+                      <Modal
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                        className="flex flex-col items-center justify-center"
+                        sx={{
+                          '& .MuiFormControl-root': {
+                            margin: 0
+                          }
+                        }}
+                      >
+                        <Box className="flex flex-col w-[fit] justify-center items-center gap-4 bg-white border border-primary shadow-2 rounded-[20px] relative py-10 px-12 m-4 overflow-y-auto">
+                          <Typography className="w-full font-semibold text-lg text-center">
+                            Cancel appointment
+                          </Typography>
 
-                        <Box className="flex flex-center justify-evenly w-full gap-2">
-                          <Box>
-                            <Button
-                              className="border border-[#1A4CFF] text-[#1A4CFF] w-[120px]"
-                              onClick={handleClose}
-                            >
-                              Back
-                            </Button>
-                          </Box>
-                          <Box>
-                            <Button
-                              className="bg-[#1A4CFF] text-white w-[120px]"
-                              onClick={() => {
-                                handleClose();
-                                handleCancelAppointment();
-                              }}
-                            >
-                              Cancel
-                            </Button>
+                          <Box className="flex flex-center justify-evenly w-full gap-2">
+                            <Box>
+                              <Button
+                                className="border border-[#1A4CFF] text-[#1A4CFF] w-[120px]"
+                                onClick={handleClose}
+                              >
+                                Back
+                              </Button>
+                            </Box>
+                            <Box>
+                              <Button
+                                className="bg-[#1A4CFF] text-white w-[120px]"
+                                onClick={() => {
+                                  handleClose();
+                                  handleCancelAppointment();
+                                }}
+                              >
+                                Cancel
+                              </Button>
+                            </Box>
                           </Box>
                         </Box>
-                      </Box>
-                    </Modal>
-                  )}
-                </>
-              ))}
+                      </Modal>
+                    )}
+                  </>
+                ))
+              ) : (
+                <Typography>No expected appointments</Typography>
+              )}
             </TableBody>
           </Table>
         </TableContainer>

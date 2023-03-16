@@ -42,6 +42,12 @@ input:focus {
   border-radius: 15px;
   border: 2px solid #fff;
 }
+#row-height {
+  height: 54px !important;
+}
+.cell-height {
+  height: 54px !important;
+}
 
 @media (max-width: 784px) {
   html {

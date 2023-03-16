@@ -183,7 +183,6 @@ const PatientInfo = () => {
                     variant="subtitle1"
                     fontWeight="500"
                     fontSize="17px"
-                    className="capitalize"
                   >
                     {patientData?.email}
                   </Typography>

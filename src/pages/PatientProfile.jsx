@@ -17,14 +17,16 @@ const PatientProfile = () => {
   const isClient =
     JSON.parse(localStorage.getItem('userLoginData'))?.user?.Role.role ===
     'client';
+  const clientId = JSON.parse(localStorage.getItem('userLoginData'))?.user
+    ?.client_id;
 
   if (!isClient) {
     <Navigate to="/dashboard/schedule" replace />;
   }
 
   React.useEffect(() => {
-    dispatch(getOnePatient());
-  }, []);
+    dispatch(getOnePatient(clientId));
+  }, [clientId]);
 
   return (
     <div>
