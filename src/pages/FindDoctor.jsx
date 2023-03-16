@@ -292,7 +292,7 @@ const FindDoctor = () => {
                           <Box
                             className={`w-full aspect-square ${
                               specialityId === data.department_id
-                                ? 'border-[2px] border-[#0093df]'
+                                ? 'border-[3px] border-[#1A4CFA]'
                                 : 'border-[1px] border-[#0093df]'
                             } bg-[#fefefefe] rounded-xl w-[140px] sm:w-[100px] p-3`}
                             sx={{
@@ -319,28 +319,28 @@ const FindDoctor = () => {
                       );
                     })}
                   </Box>
-                  <LoadingButton
+                  <Button
                     disabled={!specialityId}
                     onClick={() => {
                       nav(`/find_doctor/speciality/${specialityId}`);
                     }}
-                    // sx={{
-                    //   width: '120px',
-                    //   backgroundColor: '#D1D1D1',
-                    //   color: '#000',
-                    //   marginTop: '40px',
-                    //   ...(specialityId && {
-                    //     backgroundColor: '#1A4CFF',
-                    //     color: '#fff',
-                    //     ':hover': { backgroundColor: '#1A4CFA' }
-                    //   })
-                    // }}
-                    // className={`${
-                    //   specialityId && 'bg-[#1A4CFF]'
-                    // } capitalize text-white`}
+                    sx={{
+                      width: '120px',
+                      backgroundColor: '#D1D1D1',
+                      color: '#000',
+                      marginTop: '40px',
+                      ...(specialityId && {
+                        backgroundColor: '#1A4CFF',
+                        color: '#fff',
+                        ':hover': { backgroundColor: '#1A4CFA' }
+                      })
+                    }}
+                    className={`${
+                      specialityId && 'bg-[#1A4CFF]'
+                    } capitalize text-white`}
                   >
                     Next
-                  </LoadingButton>
+                  </Button>
                 </Box>
               </>
             )}

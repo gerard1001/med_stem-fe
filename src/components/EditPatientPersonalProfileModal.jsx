@@ -96,7 +96,6 @@ const EditPatientPersonalProfileModal = ({
       phone_number,
       email
     } = patientData;
-    // console.log('format', format(birth_date, 'yyyy-MM-dd'));
     id_number && setValue('id_number', parseInt(id_number, 10));
     birth_date && setValue('birth_date', '2023-04-10');
     birth_date &&
@@ -168,7 +167,6 @@ const EditPatientPersonalProfileModal = ({
             render={({ field }) => (
               <TextField
                 {...field}
-                // onChange={(e)=>{console.log(e)}}
                 type="date"
                 variant="outlined"
                 fullWidth

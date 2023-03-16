@@ -85,8 +85,6 @@ const MedicalHistory = () => {
       toast.error(error.response.data.message);
     }
 
-    console.log(info_id, client_id);
-
     // setIsEditing(false);
   };
 
@@ -159,7 +157,6 @@ const MedicalHistory = () => {
                           // name={value.info_id}
                           // value={field.value}
                           // onChange={(event) => {
-                          //   console.log(event.target.value);
                           //   isEditing && field.onChange(event.target.value);
                           // }}
                           sx={{

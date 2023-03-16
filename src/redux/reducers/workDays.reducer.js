@@ -13,7 +13,6 @@ export const getDoctorWorkDays = createAsyncThunk(
       const response = await axiosInstance.get(`/work_days/doctor/${id}`, {
         params
       });
-      console.log(response, 'RESPONSE');
       return {
         id,
         workDays: response.data.data

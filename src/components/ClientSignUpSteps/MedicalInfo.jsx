@@ -32,9 +32,6 @@ const MedicalInfo = ({}) => {
     dispatch(getInfoList());
   }, []);
 
-  console.log(med_info, '#########');
-  console.log(gen_med_info, '@@@@@@@@@@@@@@@@@');
-
   const {
     control,
     register,

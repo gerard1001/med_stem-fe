@@ -14,15 +14,11 @@ export const registerClient = createAsyncThunk(
     const response = await axios
       .post(`${process.env.BACKEND_URL}/users/client/register`, data)
       .then((res) => {
-        console.log(res);
         res.data;
       })
       .catch((error) => {
-        console.log({ error });
         throw Error(error.response.data.message);
       });
-
-    console.log({ response });
   }
 );
 
@@ -83,14 +79,12 @@ const patientSlice = createSlice({
     });
     builder.addCase(registerClient.fulfilled, (state, action) => {
       alert('Registration successful');
-      console.log(action);
       state.loading = false;
       state.single_data = action.payload;
       state.error = '';
     });
     builder.addCase(registerClient.rejected, (state, action) => {
       alert(action.error.message);
-      console.log(action);
       state.loading = false;
       state.single_data = {};
       state.error = action.error.message;

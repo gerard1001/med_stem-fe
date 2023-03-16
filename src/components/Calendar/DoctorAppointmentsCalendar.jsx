@@ -45,6 +45,7 @@ const Daycell = memo(
   ({ date, isOther, selectedDate, handleDayClick, loading, workdays }) => {
     const isSelected = isEqual(new Date(selectedDate), new Date(date));
     // const isGrayed = getDay(date) === 0 || getDay(date) === 6;
+    console.log(workdays, 'VVVVVVVVVSSSSSSSSS');
 
     const isDisabledDay = (date, arr) => {
       const dayOfWeek = date;

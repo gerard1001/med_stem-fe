@@ -97,8 +97,6 @@ const StepForm = ({ getStatus }) => {
 
   const nav = useNavigate();
 
-  console.log({ form });
-
   return (
     <FormProvider {...methods}>
       <Box>
