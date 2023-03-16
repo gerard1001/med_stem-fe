@@ -22,21 +22,32 @@ import CloseXButton from '../CloseXButton';
 import { useDispatch, useSelector } from 'react-redux';
 import axiosInstance from '../../axios/axios.instance';
 import { getOnePatient } from '../../redux/reducers/patient.reducer';
+import { getInfoList } from '../../redux/reducers/info.reducer';
 import { toast } from 'react-toastify';
 import Loader from '../Loader/Loader';
 
 const schema = yup.object().shape({});
 
 const MedicalHistory = () => {
-  const spec_med_info = med_info?.filter(
-    (values) => values.info_type === 'special'
-  );
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
   const [currentValue, setCurrentValue] = useState(null);
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const patientData = useSelector((state) => state.patient.single_data.data);
+  const med_info = useSelector((state) => state.info);
+
+  const spec_med_info = med_info?.data?.data?.filter(
+    (values) => values.info_type === 'special'
+  );
+
+  const gen_med_info = med_info?.data?.data?.filter(
+    (values) => values.info_type !== 'special'
+  );
+
+  React.useEffect(() => {
+    dispatch(getInfoList());
+  }, []);
 
   const { control, getValues, register, watch } = useForm({
     mode: 'all',
@@ -84,9 +95,9 @@ const MedicalHistory = () => {
     } catch (error) {
       toast.error(error.response.data.message);
     }
-
-    // setIsEditing(false);
   };
+
+  const availableInfo = patientData?.medical_info?.map((item) => item.info_id);
 
   return (
     <div>
@@ -119,7 +130,7 @@ const MedicalHistory = () => {
             )}
           </Box>
           <Box>
-            {med_info.map((value) => {
+            {gen_med_info?.map((value) => {
               return (
                 <Box
                   className="flex flex-row items-center h-[50px] lg:h-min"
@@ -147,7 +158,9 @@ const MedicalHistory = () => {
                     <Controller
                       control={control}
                       name={`${value.info_id}.value`}
-                      defaultValue="no"
+                      defaultValue={
+                        availableInfo?.includes(value.info_id) ? 'yes' : 'no'
+                      }
                       render={({ field }) => (
                         <RadioGroup
                           {...field}
@@ -208,7 +221,7 @@ const MedicalHistory = () => {
               </Typography>
             </Box>
             <Box className="flex flex-col items-start gap-8">
-              {spec_med_info.map((value) => {
+              {spec_med_info?.map((value) => {
                 return (
                   <Box
                     className="flex flex-col items-start w-[100%]"
@@ -240,7 +253,11 @@ const MedicalHistory = () => {
                           render={({ field }) => (
                             <RadioGroup
                               {...field}
-                              defaultValue="no"
+                              defaultValue={
+                                availableInfo?.includes(value.info_id)
+                                  ? 'yes'
+                                  : 'no'
+                              }
                               onChange={(value) => {
                                 isEditing && field.onChange(value);
                               }}
