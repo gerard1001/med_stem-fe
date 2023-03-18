@@ -202,7 +202,7 @@ const HomeNavBar = (props) => {
         <AppBar
           position="static"
           component="nav"
-          sx={{ backgroundColor: '#fff', width: '100%', zIndex: 1200, px: 2 }}
+          sx={{ backgroundColor: '#fff', width: '100%', zIndex: 1200 }}
           elevation={0}
         >
           <Toolbar

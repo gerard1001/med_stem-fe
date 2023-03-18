@@ -128,21 +128,38 @@ const DoctorSignupForm = () => {
     formData.append('picture', picture);
 
     dispatch(registerDoctor(formData));
-    reset({
-      first_name: '',
-      last_name: '',
-      id_number: '',
-      email: '',
-      birth_date: '',
-      gender: '',
-      salary: '',
-      department_id: '',
-      experience_years: '',
-      category: '',
-      cost_per_appointment: '',
-      about: '',
-      education: '',
-      picture: ''
+    // reset({
+    //   first_name: '',
+    //   last_name: '',
+    //   id_number: '',
+    //   email: '',
+    //   birth_date: '',
+    //   gender: '',
+    //   salary: '',
+    //   department_id: '',
+    //   experience_years: '',
+    //   category: '',
+    //   cost_per_appointment: '',
+    //   about: '',
+    //   education: '',
+    //   picture: ''
+    // });
+
+    console.log({
+      first_name,
+      last_name,
+      id_number,
+      email,
+      birth_date,
+      gender,
+      salary,
+      department_id,
+      experience_years,
+      category,
+      cost_per_appointment,
+      about,
+      education,
+      picture
     });
   };
 

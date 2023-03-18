@@ -18,7 +18,7 @@ import DoctorAppointmentsCalendar from '../components/Calendar/DoctorAppointment
 import SelectDoctor from '../components/SelectDoctor';
 import SelectPatient from '../components/SelectPatient';
 import { DashboardContext } from '../context/DashboardContext';
-import { getDoctorList } from '../redux/reducers/doctor.reducer';
+import { getDoctorList, getOneDoctor } from '../redux/reducers/doctor.reducer';
 import { getPatientList } from '../redux/reducers/patient.reducer';
 import { getDoctorWorkDays } from '../redux/reducers/workDays.reducer';
 import {
@@ -42,6 +42,7 @@ const SchedulePage = () => {
   const doctors = useSelector((state) => state.doctor?.data?.data);
   const patients = useSelector((state) => state.patient?.data?.data);
   const days = useSelector((state) => state.workDays);
+  const oneDoctor = useSelector((state) => state.doctor?.single_data?.data);
   // const { id: doctorId } = useParams();
 
   const { setRightSideBarContent } = useContext(DashboardContext);
@@ -52,6 +53,7 @@ const SchedulePage = () => {
 
   useEffect(() => {
     setDoctorId(selectedDoctor?.doctor_id);
+    dispatch(getOneDoctor(selectedDoctor?.doctor_id));
   }, [selectedDoctor]);
 
   useEffect(() => {
@@ -99,8 +101,7 @@ const SchedulePage = () => {
     });
   }, [doctorId]);
 
-  console.log({ selectedDoctor });
-
+  console.log({ selectedWorkDay });
   return (
     <Box className="p-8">
       <Stack
@@ -146,11 +147,13 @@ const CalendarRightSideBar = ({ loading }) => {
     '09:00 - 09:32',
     '09:00 - 09:33'
   ];
+  const dispatch = useDispatch();
   const [selectedTime, setSelectedTime] = useState('');
   const [openModal, setOpenModal] = useState(false);
   const [startingHour, setStartingHour] = useState('08:00:00');
   const [endingHour, setEndingHour] = useState('18:00:00');
   const [duration, setDuration] = useState(30);
+  // const [remainingSlots, setRemainingSlots] = useState([]);
   const doctor = useSelector((state) => state.doctor.single_data.data);
 
   const selectedDoctordata = useSelector((state) => state.user.selectedDoctor);
@@ -161,29 +164,52 @@ const CalendarRightSideBar = ({ loading }) => {
     (state) => state.user.selectedWorkDay
   );
 
+  // alert(selectedDoctordata?.doctor_id);
+
+  useEffect(() => {
+    dispatch(getOneDoctor(selectedDoctordata?.doctor_id));
+  }, [selectedDoctordata]);
+
   useEffect(() => {
     setStartingHour(selectedWorkDayData?.from);
     setEndingHour(selectedWorkDayData?.to);
     setDuration(selectedWorkDayData?.schedule?.appointment_duration);
   }, [selectedWorkDayData]);
 
-  console.log({ selectedWorkDayData });
-  console.log({ startingHour, endingHour, duration });
+  // console.log({ selectedWorkDayData });
+  // console.log({ startingHour, endingHour, duration });
 
-  const duramc =
+  const availableSlots =
     selectedWorkDayData && startingHour && endingHour && duration
       ? getTimePeriods(startingHour, endingHour, duration)
       : [];
 
-  console.log({ duramc, selectedTime });
+  const takenAppointmentsOnWorkDay = doctor?.appointments?.filter((values) => {
+    return values._id === selectedWorkDayData?._id;
+  });
+  const takenAppointmentsOnWorkDayPeriod = takenAppointmentsOnWorkDay?.map(
+    (values) => {
+      return values.appointment_period;
+    }
+  );
+  const takenAppointments = doctor?.appointments?.map((values) => {
+    return values.appointment_period;
+  });
+
+  const remainingSlots = availableSlots?.filter(
+    (element) => !takenAppointmentsOnWorkDayPeriod.includes(element)
+  );
+
+  // console.log(doctor?.appointments, '****');
+  // console.log(remainingSlots, '^^^');
+  // console.log({ takenAppointments, availableSlots, remainingSlots });
   return (
     <>
       <List disablePadding className="border-l border-primary w-full h-full">
-        {duramc ? (
-          duramc?.map((hour, index) => (
-            <>
+        {remainingSlots ? (
+          remainingSlots?.map((hour, index) => (
+            <Box key={hour}>
               <ListItemButton
-                key={hour}
                 onClick={() => {
                   !loading && setSelectedTime(hour);
                 }}
@@ -196,7 +222,7 @@ const CalendarRightSideBar = ({ loading }) => {
                 key={hour + index}
                 sx={{ borderColor: 'primary.main' }}
               />
-            </>
+            </Box>
           ))
         ) : (
           <Typography>No work day has been selected</Typography>

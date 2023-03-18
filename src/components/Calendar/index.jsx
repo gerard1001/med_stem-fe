@@ -1,7 +1,7 @@
 import dayGridPlugin from '@fullcalendar/daygrid';
 import FullCalendar from '@fullcalendar/react';
 import { Box, styled } from '@mui/material';
-import { forwardRef } from 'react';
+import { forwardRef, useState } from 'react';
 
 const StyledBox = styled(Box)(({ theme }) => ({
   '--fc-border-color': '#EDF0F2',
@@ -44,24 +44,28 @@ const StyledBox = styled(Box)(({ theme }) => ({
   }
 }));
 
-const Calendar = forwardRef(({ ...rest }, ref) => (
-  <Box className="w-full overflow-auto">
-    <StyledBox>
-      <FullCalendar
-        firstDay={1}
-        aspectRatio={0.8}
-        plugins={[dayGridPlugin]}
-        initialView="dayGridMonth"
-        headerToolbar={false}
-        footerToolbar={false}
-        fixedWeekCount={false}
-        ref={ref}
-        eventContent={null}
-        nowIndicatorContent={null}
-        {...rest}
-      />
-    </StyledBox>
-  </Box>
-));
+const Calendar = forwardRef(({ ...rest }, ref) => {
+  console.log(ref, '+++++');
+  return (
+    <Box className="w-full overflow-auto">
+      <StyledBox>
+        <FullCalendar
+          firstDay={1}
+          aspectRatio={0.8}
+          plugins={[dayGridPlugin]}
+          initialView="dayGridMonth"
+          headerToolbar={false}
+          footerToolbar={false}
+          fixedWeekCount={false}
+          ref={ref}
+          eventContent={null}
+          events={[]}
+          nowIndicatorContent={null}
+          {...rest}
+        />
+      </StyledBox>
+    </Box>
+  );
+});
 
 export default Calendar;

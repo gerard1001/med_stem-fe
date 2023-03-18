@@ -45,7 +45,6 @@ const Daycell = memo(
   ({ date, isOther, selectedDate, handleDayClick, loading, workdays }) => {
     const isSelected = isEqual(new Date(selectedDate), new Date(date));
     // const isGrayed = getDay(date) === 0 || getDay(date) === 6;
-    console.log(workdays, 'VVVVVVVVVSSSSSSSSS');
 
     const isDisabledDay = (date, arr) => {
       const dayOfWeek = date;
@@ -100,7 +99,7 @@ const Daycell = memo(
       new Date(date).toLocaleDateString(),
       datestr
     );
-
+    // console.log(workdays?.map((values) => values.date));
     return (
       <Box
         className="text-green flex flex-col p-1 cursor-pointer"

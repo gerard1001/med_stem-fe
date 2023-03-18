@@ -97,6 +97,7 @@ function SelectDoctor({ selected, setSelected, doctors, className }) {
                   onClick={(e) => {
                     setSelected(doctor);
                   }}
+                  key={doctor.doctor_id}
                 >
                   <ListItemText
                     primary={`${formatName(doctor)}, M.D`}
