@@ -28,8 +28,8 @@ const PatientAppointmentNavigation = () => {
 
   return (
     <div>
-      <Box className="flex flex-center gap-3">
-        <Typography variant="h6">Profile</Typography>
+      <Box className="flex flex-center gap-3 font-semibold">
+        <Typography variant="h6">Appointments</Typography>
         <Typography variant="h6">-</Typography>
         <Typography variant="h6">
           {patient?.first_name} {patient?.last_name}
@@ -39,7 +39,7 @@ const PatientAppointmentNavigation = () => {
         <Typography
           variant="subtitle1"
           fontWeight="600"
-          fontSize="18px"
+          fontSize="17px"
           className={`${
             step === 0 && 'text-primary underline'
           }  cursor-pointer`}
@@ -52,7 +52,7 @@ const PatientAppointmentNavigation = () => {
         <Typography
           variant="subtitle1"
           fontWeight="600"
-          fontSize="18px"
+          fontSize="17px"
           className={`${
             step === 1 && 'text-primary underline'
           }  cursor-pointer`}

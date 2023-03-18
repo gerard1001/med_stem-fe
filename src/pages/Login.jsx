@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { ImCross } from 'react-icons/im';
+import { useDispatch, useSelector } from 'react-redux';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
@@ -17,6 +18,7 @@ import axiosInstance from '../axios/axios.instance';
 import CloseXButton from '../components/CloseXButton';
 import HomeNavBar from '../components/HomeNavBar';
 import LoadingButton from '../components/LoadingButton';
+import { toPatientLogin, toAdminLogin } from '../redux/reducers/step.reducer';
 
 const schema = yup.object().shape({
   email: yup.string().email().required(),
@@ -24,6 +26,9 @@ const schema = yup.object().shape({
 });
 
 const Login = () => {
+  const dispatch = useDispatch();
+
+  const step = useSelector((state) => state.step.login_step);
   const nav = useNavigate();
   const [loading, setLoading] = React.useState(false);
   const {
@@ -33,6 +38,8 @@ const Login = () => {
   } = useForm({
     resolver: yupResolver(schema)
   });
+
+  const url = step === 0 ? `/users/client/login` : `/users/doctor/login`;
 
   // Redirect to dashboard if already logged in
   const userData = JSON.parse(localStorage.getItem('userLoginData'));
@@ -48,7 +55,7 @@ const Login = () => {
     try {
       setLoading(true);
       const response = await axiosInstance
-        .post(`/users/login`, {
+        .post(url, {
           email,
           password
         })
@@ -100,6 +107,7 @@ const Login = () => {
                 flexDirection: 'column',
                 alignItems: 'center'
               }}
+              className="flex flex-col items-center py-10"
             >
               <Typography component="h1" variant="h6" fontWeight="700">
                 Enter MedStem
@@ -116,6 +124,28 @@ const Login = () => {
                   Register
                 </Box>
               </Typography>
+              <Box className="w-full flex flex-row items-center justify-evenly mt-2 border-b border-[#6A6F75]">
+                <Typography
+                  className={` ${
+                    step === 0 && 'bg-slate-100'
+                  } cursor-pointer text-center w-1/2 font-semibold text-[#6A6F75]`}
+                  onClick={() => {
+                    dispatch(toPatientLogin());
+                  }}
+                >
+                  Patient
+                </Typography>
+                <Typography
+                  className={` ${
+                    step === 1 && 'bg-slate-100'
+                  } cursor-pointer text-center w-1/2 font-semibold text-[#6A6F75]`}
+                  onClick={() => {
+                    dispatch(toAdminLogin());
+                  }}
+                >
+                  Admin
+                </Typography>
+              </Box>
               <Box
                 component="form"
                 sx={{ mt: 1 }}

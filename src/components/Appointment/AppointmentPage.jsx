@@ -15,6 +15,14 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { getOneAppointment } from '../../redux/reducers/appointment.reducer';
 import { dayCalendarSkeletonClasses } from '@mui/x-date-pickers';
+import PatientAppointmentNavigation from '../PatientAppointmentSteps/PatientAppoinmentNavigation';
+import HomeNavBar from '../HomeNavBar';
+import { useNavigate } from 'react-router';
+import {
+  toPreviousAppointments,
+  toExpectedAppointments
+} from '../../redux/reducers/step.reducer';
+
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: '#E7E7E7',
   ...theme.typography.body2,
@@ -25,6 +33,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const AppointmentPage = () => {
   const dispatch = useDispatch();
+  const step = useSelector((state) => state.step.appointment_step);
   const appointment = useSelector(
     (state) => state.appointment.entities.undefined
   );
@@ -53,9 +62,49 @@ const AppointmentPage = () => {
     date.getFullYear()
   ];
 
+  const nav = useNavigate();
   return (
-    <Box className="bg-[#F5F5F5] w-[100vw] h-screen">
+    <Box className="bg-[#F5F5F5] w-[100vw] min-h-[100vh]">
+      <HomeNavBar />
       <Box className="p-10 max-w-[1200px] w-[85%] sm:w-[100%] sm:p-4 flex flex-col gap-4 items-start">
+        <Box className="flex flex-center gap-3 font-semibold">
+          <Typography variant="h6">Appointments</Typography>
+          <Typography variant="h6">-</Typography>
+          <Typography variant="h6">
+            {appointment?.data?.client?.first_name}{' '}
+            {appointment?.data?.client?.last_name}
+          </Typography>
+        </Box>
+        <Box className="flex items-center gap-10 mt-8 mb-5">
+          <Typography
+            variant="subtitle1"
+            fontWeight="600"
+            fontSize="17px"
+            className={`${
+              step === 0 && 'text-primary underline'
+            }  cursor-pointer`}
+            onClick={() => {
+              nav('/dashboard/appointments');
+              dispatch(toExpectedAppointments());
+            }}
+          >
+            Expected Appointments
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            fontWeight="600"
+            fontSize="17px"
+            className={`${
+              step === 1 && 'text-primary underline'
+            }  cursor-pointer`}
+            onClick={() => {
+              nav('/dashboard/appointments');
+              dispatch(toPreviousAppointments());
+            }}
+          >
+            Previous Appointments
+          </Typography>
+        </Box>
         <Box className="flex w-fit gap-5 items-start flex-row sm:flex-col sm:gap-2">
           <Typography variant="subtitle1" fontSize="17px">
             Date: {day}.{month}.{year}

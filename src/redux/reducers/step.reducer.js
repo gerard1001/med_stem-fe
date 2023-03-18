@@ -2,7 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   profile_step: 0,
-  appointment_step: 0
+  appointment_step: 0,
+  login_step: 0
 };
 
 const stepSlice = createSlice({
@@ -23,6 +24,15 @@ const stepSlice = createSlice({
     },
     toPreviousAppointments: (state) => {
       state.appointment_step = 1;
+    },
+    toAppointmentDetails: (state) => {
+      state.appointment_step = 2;
+    },
+    toPatientLogin: (state) => {
+      state.login_step = 0;
+    },
+    toAdminLogin: (state) => {
+      state.login_step = 1;
     }
   }
 });
@@ -32,7 +42,10 @@ export const {
   toContactInfo,
   toMedicalHistory,
   toExpectedAppointments,
-  toPreviousAppointments
+  toPreviousAppointments,
+  toAppointmentDetails,
+  toPatientLogin,
+  toAdminLogin
 } = stepSlice.actions;
 
 export default stepSlice.reducer;

@@ -345,7 +345,7 @@ const MedicalHistory = () => {
                       defaultValue={
                         availableInfo?.includes(value.info_id)
                           ? availableInfo?.Client_MedicalInfo?.description
-                          : 'NOPE'
+                          : ''
                       }
                     />
                   </Box>
