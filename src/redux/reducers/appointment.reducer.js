@@ -23,6 +23,16 @@ export const makeAppointment = createAsyncThunk(
   }
 );
 
+export const getOneAppointment = createAsyncThunk(
+  'appointments/getOne',
+  async (appointmentId) => {
+    const response = await axiosInstance.get(
+      `${process.env.BACKEND_URL}/appointments/${appointmentId}`
+    );
+    return response.data;
+  }
+);
+
 export const {
   selectAll: selectAppointments,
   selectById: selectAppointmentsById
@@ -45,7 +55,8 @@ const appointmentSlice = createSlice({
   initialState: appointmentAdapter.getInitialState(),
   reducers: {},
   extraReducers: {
-    [getDoctorAppointments.fulfilled]: appointmentAdapter.upsertOne
+    [getDoctorAppointments.fulfilled]: appointmentAdapter.upsertOne,
+    [getOneAppointment.fulfilled]: appointmentAdapter.upsertOne
   }
 });
 

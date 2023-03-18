@@ -16,6 +16,7 @@ import {
 import { getOnePatient } from '../../redux/reducers/patient.reducer';
 import { getPatientAppointments } from '../../redux/reducers/patient.appointment.reducer';
 import { cancelAppointment } from '../../redux/reducers/patient.appointment.reducer';
+import { useNavigate } from 'react-router';
 
 const ExpectedAppointment = () => {
   const [clickedIdx, setClickedIdx] = React.useState(0);
@@ -43,9 +44,7 @@ const ExpectedAppointment = () => {
     dispatch(getPatientAppointments(clientId));
   }, [clientId]);
 
-  console.log(expectedapps, '&&&&&&&&&&&&&&&');
-  console.log(clientId, '**********');
-  console.log(patient, '$$$$$$$$$$$');
+  const nav = useNavigate();
 
   return (
     <div>
@@ -56,9 +55,10 @@ const ExpectedAppointment = () => {
             sx={{
               minWidth: 650,
               backgroundColor: '#fff',
-              height: '55vh',
               overflow: 'auto',
-              marginBottom: '40px'
+              marginBottom: '40px',
+              maxHeight: '55vh',
+              overflow: 'auto'
             }}
             aria-label="simple table"
           >
@@ -101,12 +101,21 @@ const ExpectedAppointment = () => {
                       key={row.appointment_number}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
-                      <TableCell component="th" scope="row">
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        onClick={() => {
+                          nav(`${row.appointment_id}`);
+                        }}
+                      >
                         {row.doctor.first_name} {row.doctor.last_name}
                       </TableCell>
                       <TableCell
                         align="left"
                         sx={{ color: '#797979', fontSize: '14px' }}
+                        onClick={() => {
+                          nav(`${row.appointment_id}`);
+                        }}
                       >
                         {row.doctor.departments[0].speciality_name}
                       </TableCell>
@@ -119,6 +128,9 @@ const ExpectedAppointment = () => {
                       <TableCell
                         align="left"
                         sx={{ color: '#797979', fontSize: '14px' }}
+                        onClick={() => {
+                          nav(`${row.appointment_id}`);
+                        }}
                       >
                         {new Date(row.work_day?.date).toLocaleDateString()}
                       </TableCell>

@@ -97,6 +97,7 @@ function SelectPatient({ selected, setSelected, patients, className }) {
                   onClick={(e) => {
                     setSelected(patient);
                   }}
+                  key={patient.client_id}
                 >
                   <ListItemText
                     primary={`${formatId(patient)}, M.D`}

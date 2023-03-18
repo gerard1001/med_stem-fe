@@ -14,6 +14,7 @@ import {
 import { getOnePatient } from '../../redux/reducers/patient.reducer';
 import { getPatientAppointments } from '../../redux/reducers/patient.appointment.reducer';
 import PatientAppointmentNavigation from './PatientAppoinmentNavigation';
+import { useNavigate } from 'react-router-dom';
 
 const PreviousAppointment = () => {
   const patient = useSelector((state) => state.patient.single_data.data);
@@ -32,6 +33,8 @@ const PreviousAppointment = () => {
     dispatch(getOnePatient(clientId));
     dispatch(getPatientAppointments(clientId));
   }, [clientId]);
+
+  const nav = useNavigate();
   return (
     <div>
       <Box className="w-full">
@@ -41,7 +44,6 @@ const PreviousAppointment = () => {
             sx={{
               minWidth: 650,
               backgroundColor: '#fff',
-              height: '55vh',
               overflow: 'auto',
               marginBottom: '40px'
             }}
@@ -85,7 +87,14 @@ const PreviousAppointment = () => {
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   id="row-height"
                 >
-                  <TableCell className="cell-height" component="th" scope="row">
+                  <TableCell
+                    className="cell-height"
+                    component="th"
+                    scope="row"
+                    onClick={() => {
+                      nav(`${row.appointment_id}`);
+                    }}
+                  >
                     {row.doctor.first_name} {row.doctor.last_name}
                   </TableCell>
                   <TableCell
@@ -110,40 +119,17 @@ const PreviousAppointment = () => {
                     {new Date(row.work_day?.date).toLocaleDateString()}
                   </TableCell>
                   <TableCell className="cell-height" align="left">
-                    cancel
-                    {/* <Box
-                      sx={{
+                    <Typography
+                      style={{
+                        backgroundColor: '#fafcfd',
                         color: '#797979',
-                        fontSize: '12px',
-                        display: 'flex',
-                        flexWrap: 'wrap',
-                        overflow: 'auto',
-                        gap: '4px'
+                        textTransform: 'capitalize',
+                        cursor: 'pointer',
+                        fontSize: '14px'
                       }}
                     >
-                      <Typography
-                        style={{
-                          backgroundColor: '#fafcfd',
-                          color: '#797979',
-                          textTransform: 'capitalize',
-                          cursor: 'pointer',
-                          fontSize: '14px'
-                        }}
-                      >
-                        Edit
-                      </Typography>
-                      <Typography
-                        style={{
-                          backgroundColor: '#fafcfd',
-                          color: '#797979',
-                          textTransform: 'capitalize',
-                          cursor: 'pointer',
-                          fontSize: '14px'
-                        }}
-                      >
-                        cancel
-                      </Typography>
-                    </Box> */}
+                      Edit
+                    </Typography>
                   </TableCell>
                 </TableRow>
               ))}

@@ -22,8 +22,6 @@ function DashboardNavBar({
     }
   }, [loggedInUser]);
 
-  console.log({ loggedInUser });
-  console.log(loggedInUser?.last_name);
   return (
     <Box
       className="flex flex-row items-center justify-between border-b border-primary min-h-[64px] pl-4"
@@ -68,8 +66,9 @@ function DashboardNavBar({
                 right: '16px',
                 display: { md: 'none', xs: 'block' }
               }}
+              onClick={toggleRightSideBar}
             >
-              <FiChevronLeft onClick={toggleRightSideBar} />
+              <FiChevronLeft />
             </IconButton>
           )}
         </Typography>

@@ -33,6 +33,7 @@ const MedicalHistory = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentValue, setCurrentValue] = useState(null);
   const [openDetailModal, setOpenDetailModal] = useState(false);
+  const [defaultData, setDefaultData] = useState('');
   const [loading, setLoading] = useState(false);
   const patientData = useSelector((state) => state.patient.single_data.data);
   const med_info = useSelector((state) => state.info);
@@ -97,8 +98,25 @@ const MedicalHistory = () => {
     }
   };
 
-  const availableInfo = patientData?.medical_info?.map((item) => item.info_id);
+  const availableInfoId = patientData?.medical_info?.map(
+    (item) => item.info_id
+  );
+  const availableInfo = patientData?.medical_info?.map((item) => item);
 
+  // function updateDescriptions(array1, array2) {
+  //   for (let i = 0; i < array1.length; i++) {
+  //     for (let j = 0; j < array2.length; j++) {
+  //       if (array1[i].info_id === array2[j].info_id) {
+  //         array2[j]?.description = array1[i].Client_MedicalInfo.description;
+  //       }
+  //     }
+  //   }
+  //   return array2;
+  // }
+  // const updatedArray2 = updateDescriptions(availableInfo, gen_med_info);
+  // console.log(updatedArray2);
+
+  console.log({ defaultData, gen_med_info });
   return (
     <div>
       <Box className="w-full">
@@ -159,7 +177,7 @@ const MedicalHistory = () => {
                       control={control}
                       name={`${value.info_id}.value`}
                       defaultValue={
-                        availableInfo?.includes(value.info_id) ? 'yes' : 'no'
+                        availableInfoId?.includes(value.info_id) ? 'yes' : 'no'
                       }
                       render={({ field }) => (
                         <RadioGroup
@@ -206,6 +224,9 @@ const MedicalHistory = () => {
                     }
                     onClick={() => {
                       handleDetailModal(value);
+                      setDefaultData(
+                        value?.patients[0]?.Client_MedicalInfo?.description
+                      );
                     }}
                   >
                     Details
@@ -254,7 +275,7 @@ const MedicalHistory = () => {
                             <RadioGroup
                               {...field}
                               defaultValue={
-                                availableInfo?.includes(value.info_id)
+                                availableInfoId?.includes(value.info_id)
                                   ? 'yes'
                                   : 'no'
                               }
@@ -299,6 +320,9 @@ const MedicalHistory = () => {
                         }
                         onClick={() => {
                           handleDetailModal(value);
+                          setDefaultData(
+                            value?.patients?.Client_MedicalInfo?.description
+                          );
                         }}
                       >
                         Details
@@ -318,7 +342,11 @@ const MedicalHistory = () => {
                         !isEditing ||
                         getValues(`${value.info_id}.value`) !== 'yes'
                       }
-                      defaultValue=""
+                      defaultValue={
+                        availableInfo?.includes(value.info_id)
+                          ? availableInfo?.Client_MedicalInfo?.description
+                          : 'NOPE'
+                      }
                     />
                   </Box>
                 );
@@ -386,7 +414,7 @@ const MedicalHistory = () => {
               </Typography>
               <Controller
                 control={control}
-                defaultValue=""
+                defaultValue={defaultData}
                 name={`${currentValue?.info_id}.details`}
                 render={({ field }) => (
                   <TextField
@@ -428,3 +456,56 @@ const MedicalHistory = () => {
 };
 
 export default MedicalHistory;
+
+// const arr = [
+//   {
+//     Client_MedicalInfo: {
+//       client_id: '64fc1233-8b59-5643-8e9a-c9a8f38bf6b6',
+//       createdAt: '2023-03-16T21:42:43236Z',
+//       description: 'DERGUIOP',
+//       info_id: 'f56b7057-fc46-425f-9e27-8029440e0bcb',
+//       updatedAt: '2023-03-16T21:42:43.236Z',
+//       _id: '0835ef03-4132-4eaa-9aaf-2852e588a135'
+//     },
+//     createdAt: '2023-03-14T23:58:00.830Z',
+//     info_id: 'f56b7057-fc46-425f-9e27-8029440e0bcb',
+//     info_name: 'Chest pain, angina, heart disease or breathlessness?',
+//     info_type: 'general',
+//     updatedAt: '2023-03-14T23:58:00.830Z'
+//   },
+//   {
+//     Client_MedicalInfo: {
+//       client_id: '64fc1233-8b59-5643-8e9a-c9a8f38bf6b6',
+//       createdAt: '2023-03-16T21:42:43236Z',
+//       description: 'QEWRTETRT',
+//       info_id: '967c59f8-074c-4d0f-bb0a-fbb341b75d9b',
+//       updatedAt: '2023-03-16T21:42:43.236Z',
+//       _id: '0835ef03-4132-4eaa-9aaf-2852e588a135'
+//     },
+//     createdAt: '2023-03-14T23:58:00.830Z',
+//     info_id: '967c59f8-074c-4d0f-bb0a-fbb341b75d9b',
+//     info_name: 'Chest pain, angina, heart disease or breathlessness?',
+//     info_type: 'general',
+//     updatedAt: '2023-03-14T23:58:00.830Z'
+//   },
+//   {
+//     Client_MedicalInfo: {
+//       client_id: '64fc1233-8b59-5643-8e9a-c9a8f38bf6b6',
+//       createdAt: '2023-03-16T21:42:43236Z',
+//       description: 'URIUTIY',
+//       info_id: 'f56b7057-fc46-425f-9e27-8029440e0bcb',
+//       updatedAt: '2023-03-16T21:42:43.236Z',
+//       _id: '0835ef03-4132-4eaa-9aaf-2852e588a135'
+//     },
+//     createdAt: '2023-03-14T23:58:00.830Z',
+//     info_id: 'f56b7057-fc46-425f-9e27-8029440e0bcb',
+//     info_name: 'Chest pain, angina, heart disease or breathlessness?',
+//     info_type: 'general',
+//     updatedAt: '2023-03-14T23:58:00.830Z'
+//   }
+// ];
+
+// const array = [
+//   { id: 'f56b7057-fc46-425f-9e27-8029440e0bcb', description: '' },
+//   { id: '64fc1233-8b59-5643-8e9a-c9a8f3hf8rfg', description: '' }
+// ];
