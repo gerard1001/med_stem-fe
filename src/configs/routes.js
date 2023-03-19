@@ -80,16 +80,10 @@ const routes = createBrowserRouter([
       {
         path: 'appointments',
         element: <PatientAppointments />
-        // children: [
-        //   {
-        //     path: ':id',
-        //     element: <AppointmentPage />
-        //   }
-        // ]
       },
       {
         path: 'patient',
-        element: <Outlet />
+        element: <DoctorPatient />
       },
       {
         path: 'analytics',

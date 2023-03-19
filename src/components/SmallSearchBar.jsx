@@ -33,7 +33,23 @@ const SmallSearchBar = ({ setSearchQuery, filteredData }) => {
             label="Search doctor"
             variant="outlined"
             placeholder="Search..."
-            sx={{ backgroundColor: '#EDF0F2', width: '100%' }}
+            sx={{
+              width: '100%',
+              '& .MuiInputBase-input': {
+                padding: '5px 10px',
+                backgroundColor: '#EDF0F2',
+                borderRadius: '5px'
+              },
+              '& .MuiFormLabel-root': {
+                top: '-10px'
+              },
+              '& .MuiInputLabel-root': {
+                top: '-1px'
+              },
+              '& .MuiInputBase-root': {
+                borderRadius: '5px'
+              }
+            }}
             size="small"
           />
         )}

@@ -54,9 +54,9 @@ const Dashboard = () => {
       case 'client':
         return <Navigate to="/dashboard/account" replace />;
       case 'doctor':
-        return <Navigate to="/dashboard/schedule" replace />;
+        return <Navigate to="/dashboard/analytics" replace />;
       default:
-        return <Navigate to="/dashboard/schedule" replace />;
+        return <Navigate to="/dashboard/analytics" replace />;
     }
   }
 
@@ -71,7 +71,7 @@ const Dashboard = () => {
           toggleLeftSideBar={toggleLeftSideBar}
         />
       )}
-      <Box className="flex flex-row w-full grow overflow-y-auto">
+      <Box className="flex flex-row w-full grow overflow-y-auto bg-[#F5F5F5]">
         {!isClient && (
           <Drawer
             open={openLeftSideBar}

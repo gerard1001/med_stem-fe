@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Table,
   TableBody,
@@ -9,88 +9,213 @@ import {
   TextField,
   Paper,
   Box,
-  IconButton,
   Typography,
-  Grid
+  IconButton,
+  Menu,
+  MenuItem,
+  Button
 } from '@mui/material';
-// import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-// import { LocalizationProvider } from '@mui/x-date-pickers';
-// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { FiFilter } from 'react-icons/fi';
 import { RiSearchLine, RiSortDesc } from 'react-icons/ri';
 import { BsThreeDots } from 'react-icons/bs';
+import { format } from 'date-fns';
+import { DatePicker } from '@mui/x-date-pickers';
+import { useDispatch, useSelector } from 'react-redux';
+import { getPatientList } from '../redux/reducers/patient.reducer';
+import formatArray from '../utils/formatArray';
 
-const initialFilterState = {
-  name: '',
-  email: '',
-  phone: ''
+const styles = {
+  container: {
+    marginTop: '16px'
+  },
+  filter: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    marginBottom: '16px'
+  },
+  tableHeader: {
+    fontWeight: 'bold'
+  }
 };
 
-const data = [
-  {
-    id: 1,
-    name: 'John Doe',
-    email: 'johndoe@example.com',
-    phone: '123-456-7890'
-  },
-  {
-    id: 2,
-    name: 'Jane Doe',
-    email: 'janedoe@example.com',
-    phone: '987-654-3210'
-  },
-  {
-    id: 3,
-    name: 'Bob Smith',
-    email: 'bobsmith@example.com',
-    phone: '555-555-5555'
-  }
-];
+const MyTable = () => {
+  const dispatch = useDispatch();
+  const patients = useSelector((state) => state.patient.data.data);
+  const [filterFirstName, setFilterFirstName] = useState('');
+  const [filterLastName, setFilterLastName] = useState('');
+  const [filterEmail, setFilterEmail] = useState('');
+  const [filterId, setFilterId] = useState('');
+  const [filterGender, setFilterGender] = useState('');
+  const [filterBirthDate, setFilterBirthDate] = useState('');
+  const [filterPrevAppointment, setFilterPrevAppointment] = useState('');
+  const [filterNextAppointment, setFilterNextAppointment] = useState('');
 
-const DoctorPatient = () => {
-  const [filter, setFilter] = useState(initialFilterState);
   const [globalFilter, setGlobalFilter] = useState('');
+
+  const [sortAnchorEl, setSortAnchorEl] = useState(null);
+  const [sortOrder, setSortOrder] = useState('asc');
+
   const [search, setSearch] = useState(false);
   const [columnFilter, setColumnFilter] = useState(false);
-  const [value, setValue] = React.useState(null);
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFilter((prevFilter) => ({ ...prevFilter, [name]: value }));
-  };
+  useEffect(() => {
+    dispatch(getPatientList());
+  }, []);
 
   const handleGlobalChange = (event) => {
     setGlobalFilter(event.target.value);
   };
 
-  const globalFilteredData = data.filter(
-    (item) =>
-      item.name.toLowerCase().includes(globalFilter.toLowerCase()) ||
-      item.email.toLowerCase().includes(globalFilter.toLowerCase()) ||
-      item.phone.toLowerCase().includes(globalFilter.toLowerCase())
+  console.log({ patients });
+
+  const chaos = formatArray(patients);
+
+  console.log({ chaos });
+
+  const filteredData = chaos?.filter(
+    ({
+      firstName,
+      lastName,
+      email,
+      id,
+      gender,
+      birthDate,
+      nextAppointments,
+      prevAppointments
+    }) => {
+      if (
+        !filterFirstName &&
+        !filterLastName &&
+        !filterId &&
+        !filterEmail &&
+        !filterGender &&
+        !filterNextAppointment &&
+        !filterPrevAppointment &&
+        !filterBirthDate
+      ) {
+        return true;
+      }
+      if (
+        filterFirstName &&
+        firstName.toLowerCase().includes(filterFirstName.toLowerCase())
+      ) {
+        return true;
+      }
+      if (
+        filterLastName &&
+        lastName.toLowerCase().includes(filterLastName.toLowerCase())
+      ) {
+        return true;
+      }
+      if (
+        filterGender &&
+        gender.toLowerCase().includes(filterGender.toLowerCase())
+      ) {
+        return true;
+      }
+      if (
+        filterEmail &&
+        email.toLowerCase().includes(filterEmail.toLowerCase())
+      ) {
+        return true;
+      }
+      if (
+        filterId &&
+        JSON.stringify(id).toLowerCase().includes(filterId.toLowerCase())
+      ) {
+        return true;
+      }
+      if (
+        filterBirthDate &&
+        JSON.stringify(birthDate)
+          .toLowerCase()
+          .includes(format(new Date(filterBirthDate), 'dd-MM-yyyy'))
+      ) {
+        return true;
+      }
+      if (
+        filterNextAppointment &&
+        JSON.stringify(nextAppointments)
+          .toLowerCase()
+          .includes(format(new Date(filterNextAppointment), 'dd-MM-yyyy'))
+      ) {
+        return true;
+      }
+      if (
+        filterPrevAppointment &&
+        JSON.stringify(prevAppointments)
+          .toLowerCase()
+          .includes(format(new Date(filterPrevAppointment), 'dd-MM-yyyy'))
+      ) {
+        return true;
+      }
+      return false;
+    }
   );
 
-  console.log({ globalFilteredData });
+  const globalFilteredData = chaos?.filter(
+    ({
+      firstName,
+      lastName,
+      id,
+      birthDate,
+      prevAppointments,
+      nextAppointments
+    }) =>
+      firstName.toLowerCase().includes(globalFilter.toLowerCase()) ||
+      lastName.toLowerCase().includes(globalFilter.toLowerCase()) ||
+      birthDate.toLowerCase().includes(globalFilter.toLowerCase()) ||
+      prevAppointments.toLowerCase().includes(globalFilter.toLowerCase()) ||
+      nextAppointments.toLowerCase().includes(globalFilter.toLowerCase()) ||
+      JSON.stringify(id).toLowerCase().includes(globalFilter.toLowerCase())
+  );
 
-  const filteredData = data.filter((row) => {
-    const nameMatch = row.name
-      .toLowerCase()
-      .includes(filter.name.toLowerCase());
-    const emailMatch = row.email
-      .toLowerCase()
-      .includes(filter.email.toLowerCase());
-    const phoneMatch = row.phone
-      .toLowerCase()
-      .includes(filter.phone.toLowerCase());
-    return nameMatch && emailMatch && phoneMatch;
+  const handleSortClick = (event) => {
+    setSortAnchorEl(event.currentTarget);
+  };
+
+  const handleSortClose = () => {
+    setSortAnchorEl(null);
+  };
+
+  const handleSortOptionClick = (option) => {
+    setSortOrder(option);
+    setSortAnchorEl(null);
+  };
+
+  const sortedData = filteredData?.sort((a, b) => {
+    if (sortOrder === 'asc') {
+      return a.firstName.localeCompare(b.firstName);
+    } else {
+      return b.firstName.localeCompare(a.firstName);
+    }
   });
 
+  const sortedGlobalData = globalFilteredData?.sort((a, b) => {
+    if (sortOrder === 'asc') {
+      return a.firstName.localeCompare(b.firstName);
+    } else {
+      return b.firstName.localeCompare(a.firstName);
+    }
+  });
+  const handleReset = () => {
+    setFilterFirstName('');
+    setFilterLastName('');
+    setFilterBirthDate('');
+    setFilterPrevAppointment('');
+    setFilterNextAppointment('');
+    setFilterEmail('');
+    setFilterGender('');
+    setFilterId('');
+  };
+
+  const finalData = search ? sortedGlobalData : sortedData;
+
   return (
-    <Box className="w-[80%] md:w-[98%] mx-auto py-10">
+    <Box className="p-10 sm:p-3">
       <Box
         className="w-[100%] border border-[#71A9F7]
-] flex flex-col justify-between py-3 px-2 my-3"
+] flex flex-col justify-between py-3 px-2 my-3 bg-white"
       >
         <Box className="flex flex-row items-center justify-between">
           <Box>
@@ -120,9 +245,22 @@ const DoctorPatient = () => {
               >
                 <RiSearchLine />
               </IconButton>
-              <IconButton>
+              <IconButton onClick={handleSortClick}>
                 <RiSortDesc />
               </IconButton>
+              <Menu
+                anchorEl={sortAnchorEl}
+                open={Boolean(sortAnchorEl)}
+                onClose={handleSortClose}
+              >
+                <MenuItem onClick={() => handleSortOptionClick('asc')}>
+                  A to Z
+                </MenuItem>
+                <MenuItem onClick={() => handleSortOptionClick('desc')}>
+                  Z to A
+                </MenuItem>
+              </Menu>
+
               <IconButton
                 onClick={() => {
                   setSearch(false);
@@ -134,190 +272,247 @@ const DoctorPatient = () => {
             </Box>
           </Box>
         </Box>
-        <Box clasName="flex flex-row flex-wrap items-center w-[100%]" />
-        <Box>
-          {!search && columnFilter && (
-            <Box className="flex items-center my-1 gap-1 py-2 min-w-[100%] overflow-x-auto">
+        {!search && columnFilter && (
+          <Box className="flex flex-col gap-2 mt-2">
+            <Box className="flex items-center justify-between">
+              <Button
+                className="bg-[#DCE0E5] border border-[#03234d] rounded-[5px] capitalize text-black"
+                disabled
+              >
+                All Filters
+              </Button>
+              <Box className="flex items-center gap-2">
+                <Button
+                  className="border border-[#1f2630] rounded-[5px] capitalize text-black"
+                  onClick={handleReset}
+                >
+                  Reset
+                </Button>
+                <Button
+                  className="bg-[#1A4CFF] capitalize text-white rounded-md"
+                  onClick={handleReset}
+                >
+                  Find
+                </Button>
+              </Box>
+            </Box>
+            <Box className="flex flex-nowrap items-center gap-1 min-w-[100%] overflow-x-auto">
               <TextField
                 size="small"
-                name="name"
-                label="Filter by Name"
+                label="ID number"
                 variant="outlined"
-                value={filter.name}
-                className="w-[150px] text-[14px]"
-                sx={{ width: '150px', minWidth: '120px' }}
-                onChange={handleChange}
+                value={filterId}
+                onChange={(e) => setFilterId(e.target.value)}
+                margin="dense"
+                className="w-[120px] min-w-[120px]"
+                sx={{
+                  '& .MuiInputBase-input': {
+                    padding: '5px 10px'
+                  },
+                  '& .MuiFormLabel-root': {
+                    top: '-4px'
+                  }
+                }}
               />
               <TextField
                 size="small"
-                name="name"
-                label="Given Name"
+                label="Family name"
                 variant="outlined"
-                value={filter.name}
-                className="w-[150px] text-[14px]"
-                sx={{ width: '150px', minWidth: '120px' }}
-                onChange={handleChange}
+                value={filterFirstName}
+                onChange={(e) => setFilterFirstName(e.target.value)}
+                margin="dense"
+                className="w-[120px] min-w-[120px]"
+                sx={{
+                  '& .MuiInputBase-input': {
+                    padding: '5px 10px'
+                  },
+                  '& .MuiFormLabel-root': {
+                    top: '-4px'
+                  }
+                }}
               />
               <TextField
                 size="small"
-                name="email"
-                label="Family Email"
+                label="Given name"
                 variant="outlined"
-                value={filter.email}
-                className="w-[150px] text-[14px]"
-                sx={{ width: '150px', minWidth: '120px' }}
-                onChange={handleChange}
+                value={filterLastName}
+                onChange={(e) => setFilterLastName(e.target.value)}
+                margin="dense"
+                className="w-[120px] min-w-[120px]"
+                sx={{
+                  '& .MuiInputBase-input': {
+                    padding: '5px 10px'
+                  },
+                  '& .MuiFormLabel-root': {
+                    top: '-4px'
+                  }
+                }}
               />
               <TextField
                 size="small"
-                name="gender"
                 label="Gender"
                 variant="outlined"
-                value={filter?.gender}
-                className="w-[150px] text-[14px]"
-                sx={{ width: '150px', minWidth: '120px' }}
-                onChange={handleChange}
+                value={filterGender}
+                onChange={(e) => setFilterGender(e.target.value)}
+                margin="dense"
+                className="w-[120px] min-w-[120px]"
+                sx={{
+                  '& .MuiInputBase-input': {
+                    padding: '5px 10px'
+                  },
+                  '& .MuiFormLabel-root': {
+                    top: '-4px'
+                  }
+                }}
               />
-              {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <Box className="pt-[3px]">
                 <DatePicker
-                  label="Birth Date"
-                  value={value}
-                  onChange={(newValue) => {
-                    setValue(newValue);
-                  }}
+                  label="Birth date"
+                  value={filterBirthDate}
+                  onChange={(newValue) => setFilterBirthDate(newValue)}
                   sx={{
-                    fontSize: '12px',
-                    width: '170px',
-                    minWidth: '140px',
-                    height: 'min-content',
+                    width: '150px',
                     '& .MuiInputBase-input': {
-                      height: '9px'
+                      padding: '5px 10px'
+                    },
+                    '& .MuiFormLabel-root': {
+                      top: '-10px'
+                    },
+                    '& .MuiButtonBase-root': {
+                      paddingY: 0
                     }
                   }}
-                  renderInput={(params) => (
-                    <TextField size="small" {...params} />
-                  )}
                 />
+              </Box>
+              <Box className="pt-[3px]">
                 <DatePicker
-                  label="Last Appointment"
-                  value={value}
-                  onChange={(newValue) => {
-                    setValue(newValue);
-                  }}
+                  label="Last appointment"
+                  value={filterPrevAppointment}
+                  onChange={(newValue) => setFilterPrevAppointment(newValue)}
                   sx={{
-                    fontSize: '12px',
-                    width: '170px',
-                    minWidth: '140px',
-                    height: 'min-content',
+                    width: '200px',
                     '& .MuiInputBase-input': {
-                      height: '9px'
+                      padding: '5px 10px'
+                    },
+                    '& .MuiFormLabel-root': {
+                      top: '-10px'
+                    },
+                    '& .MuiButtonBase-root': {
+                      paddingY: 0
                     }
                   }}
-                  renderInput={(params) => (
-                    <TextField size="small" {...params} />
-                  )}
                 />
+              </Box>
+              <Box className="pt-[3px]">
                 <DatePicker
-                  label="Next Appointment"
-                  value={value}
-                  onChange={(newValue) => {
-                    setValue(newValue);
-                  }}
+                  label="Next appointment"
+                  value={filterNextAppointment}
+                  onChange={(newValue) => setFilterNextAppointment(newValue)}
                   sx={{
-                    fontSize: '12px',
-                    width: '170px',
-                    minWidth: '140px',
-                    height: 'min-content',
+                    width: '200px',
                     '& .MuiInputBase-input': {
-                      height: '9px'
+                      padding: '5px 10px'
+                    },
+                    '& .MuiFormLabel-root': {
+                      top: '-10px'
+                    },
+                    '& .MuiButtonBase-root': {
+                      paddingY: 0
                     }
                   }}
-                  renderInput={(params) => (
-                    <TextField size="small" {...params} />
-                  )}
                 />
-              </LocalizationProvider> */}
+              </Box>
             </Box>
-          )}
-        </Box>
+          </Box>
+        )}
       </Box>
-      <Box className="w-[100%] border border-[#71A9F7] p-2 mt-4">
+      <Box className="w-[100%] border border-[#71A9F7] p-2 mt-4 bg-white">
         <TableContainer component={Paper} elevation={0}>
           <Table className="text-[30px]" aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell className="text-[17px] md:text-[14px]">
-                  {' '}
+                <TableCell
+                  align="left"
+                  className="text-[17px] md:text-[14px]"
+                  style={styles.tableHeader}
+                >
                   Name
                 </TableCell>
                 <TableCell
-                  align="center"
+                  align="left"
                   className="text-[17px] md:text-[14px]"
+                  style={styles.tableHeader}
                 >
-                  Email
+                  ID
                 </TableCell>
                 <TableCell
-                  align="center"
+                  align="left"
                   className="text-[17px] md:text-[14px]"
+                  style={styles.tableHeader}
                 >
-                  Phone
+                  Last Appointment
                 </TableCell>
                 <TableCell
-                  align="center"
+                  align="left"
                   className="text-[17px] md:text-[14px]"
+                  style={styles.tableHeader}
                 >
-                  Options
+                  Next Appointment
                 </TableCell>
               </TableRow>
             </TableHead>
-            {!search ? (
-              <TableBody>
-                {filteredData.map((row) => (
-                  <TableRow key={row.id}>
-                    <TableCell
-                      component="th"
-                      scope="row"
-                      className="text-[17px] md:text-[14px]"
-                    >
-                      {row.name}
-                    </TableCell>
+            <TableBody>
+              {finalData !== '' ? (
+                <>
+                  {finalData?.map(
+                    ({
+                      id,
+                      firstName,
+                      lastName,
+                      birthDate,
+                      nextAppointments,
+                      prevAppointments
+                    }) => (
+                      <TableRow key={id} className="">
+                        <TableCell
+                          align="left"
+                          className="text-[17px] md:text-[14px]"
+                        >{`${firstName} ${lastName}`}</TableCell>
+                        <TableCell
+                          align="left"
+                          className="text-[17px] md:text-[14px]"
+                        >
+                          {id}
+                        </TableCell>
+                        <TableCell
+                          align="left"
+                          className="text-[17px] md:text-[14px]"
+                        >
+                          {prevAppointments}
+                        </TableCell>
+                        <TableCell
+                          align="left"
+                          className="text-[17px] md:text-[14px]"
+                        >
+                          {nextAppointments}
+                        </TableCell>
+                      </TableRow>
+                    )
+                  )}
+                </>
+              ) : (
+                <>
+                  <TableRow>
                     <TableCell
                       align="center"
                       className="text-[17px] md:text-[14px]"
                     >
-                      {row.email}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      className="text-[17px] md:text-[14px]"
-                    >
-                      {row.phone}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      className="text-[17px] md:text-[14px]"
-                    >
-                      <BsThreeDots className="w-min mx-auto" />
+                      No results found
                     </TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            ) : (
-              <TableBody>
-                {globalFilteredData.map((row) => (
-                  <TableRow key={row.id}>
-                    <TableCell component="th" scope="row">
-                      {row.name}
-                    </TableCell>
-                    <TableCell align="center">{row.email}</TableCell>
-                    <TableCell align="center">{row.phone}</TableCell>
-                    <TableCell align="center">
-                      <BsThreeDots className="w-min mx-auto" />
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            )}
+                </>
+              )}
+            </TableBody>
           </Table>
         </TableContainer>
       </Box>
@@ -325,4 +520,4 @@ const DoctorPatient = () => {
   );
 };
 
-export default DoctorPatient;
+export default MyTable;
