@@ -25,6 +25,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
 import Calendar from '../components/Calendar';
 import CalendarMonthYearSelector from '../components/Calendar/CalendarMonthYearSelector';
+import { format } from 'date-fns';
+import { DatePicker } from '@mui/x-date-pickers';
 import SmallSearchBar from '../components/SmallSearchBar';
 import { getDoctorList } from '../redux/reducers/doctor.reducer';
 import { createSchedule } from '../redux/reducers/schedule.reducer';
@@ -107,16 +109,29 @@ const RightSideBar = () => {
               name="start_date"
               defaultValue=""
               render={({ field }) => (
-                <TextField
+                <DatePicker
                   {...field}
-                  type="date"
-                  variant="outlined"
-                  sx={{ width: '100%', margin: 0, maxWidth: '400px' }}
+                  label="From"
                   margin="normal"
                   size="small"
                   error={!!errors.start_date}
                   helperText={errors.start_date && errors.start_date.message}
                   required
+                  sx={{
+                    width: '110px',
+                    '& .MuiInputBase-input': {
+                      padding: '5px 10px',
+                      backgroundColor: '#E7E7E7',
+                      borderRadius: '5px 0 0 5px'
+                    },
+                    '& .MuiFormLabel-root': {
+                      top: '-10px'
+                    },
+                    '& .MuiInputBase-root': {
+                      paddingY: 0,
+                      borderRadius: '5px'
+                    }
+                  }}
                 />
               )}
             />
@@ -127,17 +142,33 @@ const RightSideBar = () => {
               name="end_date"
               defaultValue=""
               render={({ field }) => (
-                <TextField
+                <DatePicker
                   {...field}
                   type="date"
+                  label="To"
                   min={new Date()}
-                  variant="outlined"
-                  sx={{ width: '100%', margin: 0, maxWidth: '400px' }}
+                  variant="filled"
                   margin="normal"
                   size="small"
                   error={!!errors.end_date}
                   helperText={errors.end_date && errors.end_date.message}
                   required
+                  className=""
+                  sx={{
+                    width: '110px',
+                    '& .MuiInputBase-input': {
+                      padding: '5px 10px',
+                      backgroundColor: '#E7E7E7',
+                      borderRadius: '5px 0 0 5px'
+                    },
+                    '& .MuiFormLabel-root': {
+                      top: '-10px'
+                    },
+                    '& .MuiInputBase-root': {
+                      paddingY: 0,
+                      borderRadius: '5px'
+                    }
+                  }}
                 />
               )}
             />
@@ -163,11 +194,25 @@ const RightSideBar = () => {
                     labelId="demo-multiple-checkbox-label"
                     id="demo-multiple-checkbox"
                     size="small"
-                    sx={{ width: '100%', maxWidth: '350px' }}
                     multiple
                     onChange={(event) => {
                       handleChangeSelectInput(event);
                       field.onChange(event.target.value);
+                    }}
+                    className="rounded-[5px]"
+                    sx={{
+                      width: '120px',
+                      '& .MuiInputBase-input': {
+                        padding: '5px 10px',
+                        backgroundColor: '#E7E7E7',
+                        borderRadius: '5px'
+                      },
+                      '& .MuiFormLabel-root': {
+                        top: '-4px'
+                      },
+                      '& .MuiInputBase-root': {
+                        borderRadius: '5px'
+                      }
                     }}
                     input={<OutlinedInput label="Work Days" />}
                     renderValue={(selected) => selected.join(', ')}
@@ -198,7 +243,21 @@ const RightSideBar = () => {
                   {...field}
                   type="time"
                   variant="outlined"
-                  sx={{ width: '100%', margin: 0, maxWidth: '400px' }}
+                  sx={{
+                    width: '100px',
+                    '& .MuiInputBase-input': {
+                      padding: '5px 10px',
+                      backgroundColor: '#E7E7E7',
+                      borderRadius: '5px'
+                    },
+                    '& .MuiFormLabel-root': {
+                      top: '-4px'
+                    },
+                    '& .MuiInputBase-root': {
+                      paddingY: 0,
+                      borderRadius: '5px'
+                    }
+                  }}
                   margin="normal"
                   size="small"
                   error={!!errors.end_date}
@@ -218,7 +277,22 @@ const RightSideBar = () => {
                   {...field}
                   type="time"
                   variant="outlined"
-                  sx={{ width: '100%', margin: 0, maxWidth: '400px' }}
+                  sx={{
+                    width: '100px',
+                    '& .MuiInputBase-input': {
+                      padding: '5px 10px',
+
+                      backgroundColor: '#E7E7E7',
+                      borderRadius: '5px'
+                    },
+                    '& .MuiFormLabel-root': {
+                      top: '-4px'
+                    },
+                    '& .MuiInputBase-root': {
+                      paddingY: 0,
+                      borderRadius: '5px'
+                    }
+                  }}
                   margin="normal"
                   size="small"
                   error={!!errors.end_date}
@@ -253,6 +327,24 @@ const RightSideBar = () => {
                     labelId="demo-simple-select-label"
                     error={!!errors.appointment_duration}
                     size="small"
+                    className="rounded-[5px]"
+                    sx={{
+                      width: '120px',
+                      '& .MuiInputBase-input': {
+                        padding: '5px 10px',
+                        backgroundColor: '#E7E7E7',
+                        borderRadius: '5px'
+                      },
+                      '& .MuiFormLabel-root': {
+                        top: '-4px'
+                      },
+                      '& .MuiInputLabel-root': {
+                        top: '-4px'
+                      },
+                      '& .MuiInputBase-root': {
+                        borderRadius: '5px'
+                      }
+                    }}
                   >
                     <MenuItem value={15}>15 min</MenuItem>
                     <MenuItem value={30}>30 min</MenuItem>
