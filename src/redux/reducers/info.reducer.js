@@ -11,6 +11,14 @@ export const getInfoList = createAsyncThunk('info/fetchInfo', async () =>
   axios.get(`${process.env.BACKEND_URL}/medical_info`).then((res) => res.data)
 );
 
+export const getInfoClientList = createAsyncThunk(
+  'info/client/fetchInfo',
+  async (id) =>
+    axios
+      .get(`${process.env.BACKEND_URL}/medical_info/client/${id}`)
+      .then((res) => res.data.data)
+);
+
 const infoSlice = createSlice({
   name: 'info',
   initialState,
@@ -28,6 +36,12 @@ const infoSlice = createSlice({
       state.loading = false;
       state.data = [];
       state.error = action.error.message;
+    });
+    builder.addCase(getInfoClientList.fulfilled, (state, { payload }) => {
+      return {
+        ...state,
+        client: payload
+      };
     });
   }
 });

@@ -16,7 +16,7 @@ function LoadingButton({
       variant={variant}
       disabled={loading || disabled}
       className={clsx(
-        'rounded-lg font-medium text-[20px] leading-none',
+        'rounded-lg font-medium text-[20px] leading-none cursor-pointer',
         className
       )}
       disableElevation

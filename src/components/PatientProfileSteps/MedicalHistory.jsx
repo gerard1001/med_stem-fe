@@ -14,17 +14,19 @@ import {
 } from '@mui/material';
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { med_info } from '../../utils/dummyData';
-import PatientProfileNavigation from './PatientProfileNavigation';
-import * as yup from 'yup';
-import { FiCornerLeftDown } from 'react-icons/fi';
-import CloseXButton from '../CloseXButton';
 import { useDispatch, useSelector } from 'react-redux';
-import axiosInstance from '../../axios/axios.instance';
-import { getOnePatient } from '../../redux/reducers/patient.reducer';
-import { getInfoList } from '../../redux/reducers/info.reducer';
 import { toast } from 'react-toastify';
+import * as yup from 'yup';
+import axiosInstance from '../../axios/axios.instance';
+import {
+  getInfoClientList,
+  getInfoList
+} from '../../redux/reducers/info.reducer';
+import { getOnePatient } from '../../redux/reducers/patient.reducer';
+import CloseXButton from '../CloseXButton';
 import Loader from '../Loader/Loader';
+import LoadingButton from '../LoadingButton';
+import PatientProfileNavigation from './PatientProfileNavigation';
 
 const schema = yup.object().shape({});
 
@@ -33,29 +35,43 @@ const MedicalHistory = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentValue, setCurrentValue] = useState(null);
   const [openDetailModal, setOpenDetailModal] = useState(false);
-  const [defaultData, setDefaultData] = useState('');
   const [loading, setLoading] = useState(false);
   const patientData = useSelector((state) => state.patient.single_data.data);
-  const med_info = useSelector((state) => state.info);
+  const { client: med_info } = useSelector((state) => state.info);
+  const { loginData } = useSelector((state) => state.user);
 
-  const spec_med_info = med_info?.data?.data?.filter(
+  const spec_med_info = med_info?.filter(
     (values) => values.info_type === 'special'
   );
 
-  const gen_med_info = med_info?.data?.data?.filter(
+  const gen_med_info = med_info?.filter(
     (values) => values.info_type !== 'special'
   );
 
   React.useEffect(() => {
-    dispatch(getInfoList());
+    dispatch(getInfoClientList(loginData?.client_id));
   }, []);
 
-  const { control, getValues, register, watch } = useForm({
+  const { control, getValues, register, setValue, watch, reset } = useForm({
     mode: 'all',
     resolver: yupResolver(schema)
   });
   const form = watch();
 
+  const handleDefaultValues = (value, detail) => {
+    if (!form[value.info_id] || form[value.info_id].details === undefined) {
+      setValue(`${value?.info_id}.details`, detail || '');
+    }
+    if (
+      (!form[value.info_id] || form[value.info_id].value === undefined) &&
+      value
+    ) {
+      setValue(
+        `${value.info_id}.value`,
+        value.patients?.length > 0 ? 'yes' : 'no'
+      );
+    }
+  };
   const handleDetailModal = (value) => {
     if (!value) {
       setOpenDetailModal(null);
@@ -78,7 +94,7 @@ const MedicalHistory = () => {
       return `${key}#%#%${valueObject.details || ''}`;
     });
     const info_id = resultArray.join('#&#&');
-    const client_id = patientData.client_id;
+    const { client_id } = patientData;
 
     try {
       setLoading(true);
@@ -88,272 +104,29 @@ const MedicalHistory = () => {
           client_id
         })
         .then(() => {
-          dispatch(getOnePatient(patientData.client_id));
-        })
-        .finally(() => {
-          setLoading(false);
+          dispatch(getInfoClientList(patientData.client_id)).then(() => {
+            setLoading(false);
+            reset();
+            setIsEditing(false);
+          });
         });
     } catch (error) {
+      setLoading(false);
       toast.error(error.response.data.message);
     }
   };
 
-  const availableInfoId = patientData?.medical_info?.map(
-    (item) => item.info_id
-  );
-  const availableInfo = patientData?.medical_info?.map((item) => item);
-
-  // function updateDescriptions(array1, array2) {
-  //   for (let i = 0; i < array1.length; i++) {
-  //     for (let j = 0; j < array2.length; j++) {
-  //       if (array1[i].info_id === array2[j].info_id) {
-  //         array2[j]?.description = array1[i].Client_MedicalInfo.description;
-  //       }
-  //     }
-  //   }
-  //   return array2;
-  // }
-  // const updatedArray2 = updateDescriptions(availableInfo, gen_med_info);
-  // console.log(updatedArray2);
-
-  console.log({ defaultData, gen_med_info });
   return (
     <div>
       <Box className="w-full">
         <PatientProfileNavigation />
-        <Box className="pb-8 mb-24">
-          <Box className="mt-8 mb-5 flex flex-row items-center justify-between">
-            <Typography variant="subtitle1" fontWeight="600" fontSize="18px">
-              Have you ever had any of the following?
-            </Typography>
-            {!isEditing && (
-              <Button
-                sx={{
-                  width: '80px',
-                  height: '30px',
-                  color: '#1A4CFF',
-                  border: '1px solid #1A4CFF',
-                  borderRadius: '20px',
-                  ':hover': {
-                    backgroundColor: 'primary.dark',
-                    color: '#fff'
-                  }
-                }}
-                onClick={() => {
-                  setIsEditing(true);
-                }}
-              >
-                Edit
-              </Button>
-            )}
-          </Box>
-          <Box>
-            {gen_med_info?.map((value) => {
-              return (
-                <Box
-                  className="flex flex-row items-center h-[50px] lg:h-min"
-                  key={value.info_id}
-                >
-                  <FormControl
-                    id="form-control"
-                    sx={{
-                      my: 3,
-                      display: { md: 'flex', xs: 'block' },
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      width: '100%'
-                    }}
-                    variant="standard"
-                    disabled={!isEditing}
-                  >
-                    <Typography
-                      id="demo-error-radios"
-                      sx={{ width: '100%' }}
-                      className="line-clamp-4"
-                    >
-                      {value.info_name}
-                    </Typography>
-                    <Controller
-                      control={control}
-                      name={`${value.info_id}.value`}
-                      defaultValue={
-                        availableInfoId?.includes(value.info_id) ? 'yes' : 'no'
-                      }
-                      render={({ field }) => (
-                        <RadioGroup
-                          {...field}
-                          aria-labelledby="demo-error-radios"
-                          id="demo-radios"
-                          row
-                          // name={value.info_id}
-                          // value={field.value}
-                          // onChange={(event) => {
-                          //   isEditing && field.onChange(event.target.value);
-                          // }}
-                          sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            flexDirection: 'row'
-                          }}
-                        >
-                          <FormControlLabel
-                            value="yes"
-                            control={<Radio />}
-                            type="submit"
-                            label="yes"
-                          />
-                          <FormControlLabel
-                            value="no"
-                            control={<Radio />}
-                            label="no"
-                          />
-                        </RadioGroup>
-                      )}
-                    />
-                  </FormControl>
-                  <Button
-                    style={{
-                      backgroundColor: '#fafcfd',
-                      color: '#000',
-                      textTransform: 'capitalize'
-                    }}
-                    className="capitalize"
-                    disabled={
-                      !isEditing ||
-                      getValues(`${value.info_id}.value`) !== 'yes'
-                    }
-                    onClick={() => {
-                      handleDetailModal(value);
-                      setDefaultData(
-                        value?.patients[0]?.Client_MedicalInfo?.description
-                      );
-                    }}
-                  >
-                    Details
-                  </Button>
-                </Box>
-              );
-            })}
-          </Box>
-          <Box>
+        {med_info ? (
+          <Box className="pb-8 mb-24">
             <Box className="mt-8 mb-5 flex flex-row items-center justify-between">
               <Typography variant="subtitle1" fontWeight="600" fontSize="18px">
-                Other Medical History
+                Have you ever had any of the following?
               </Typography>
-            </Box>
-            <Box className="flex flex-col items-start gap-8">
-              {spec_med_info?.map((value) => {
-                return (
-                  <Box
-                    className="flex flex-col items-start w-[100%]"
-                    key={value.info_id}
-                  >
-                    <Box className="flex flex-row items-center w-[100%] h-[50px] lg:h-min">
-                      <FormControl
-                        id="form-control"
-                        sx={{
-                          marginY: 3,
-                          display: { md: 'flex', xs: 'block' },
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          width: '100%'
-                        }}
-                        variant="standard"
-                        disabled={!isEditing}
-                      >
-                        <Typography
-                          id="demo-error-radios"
-                          sx={{ width: '100%' }}
-                          className="line-clamp-4"
-                        >
-                          {value.info_name}
-                        </Typography>
-                        <Controller
-                          control={control}
-                          name={`${value.info_id}.value`}
-                          render={({ field }) => (
-                            <RadioGroup
-                              {...field}
-                              defaultValue={
-                                availableInfoId?.includes(value.info_id)
-                                  ? 'yes'
-                                  : 'no'
-                              }
-                              onChange={(value) => {
-                                isEditing && field.onChange(value);
-                              }}
-                              aria-labelledby="demo-error-radios"
-                              id="demo-radios"
-                              row
-                              sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                flexDirection: 'row'
-                              }}
-                              className=""
-                            >
-                              <FormControlLabel
-                                value="yes"
-                                control={<Radio />}
-                                type="submit"
-                                label="yes"
-                              />
-                              <FormControlLabel
-                                value="no"
-                                control={<Radio />}
-                                label="no"
-                              />
-                            </RadioGroup>
-                          )}
-                        />
-                      </FormControl>
-                      <Button
-                        style={{
-                          backgroundColor: '#fafcfd',
-                          color: '#000',
-                          textTransform: 'capitalize'
-                        }}
-                        className="capitalize"
-                        disabled={
-                          !isEditing ||
-                          getValues(`${value.info_id}.value`) !== 'yes'
-                        }
-                        onClick={() => {
-                          handleDetailModal(value);
-                          setDefaultData(
-                            value?.patients?.Client_MedicalInfo?.description
-                          );
-                        }}
-                      >
-                        Details
-                      </Button>
-                    </Box>
-                    <Typography
-                      id="demo-error-radios"
-                      sx={{ width: '100%' }}
-                      className="line-clamp-4"
-                    >
-                      If Yes please provide details:
-                    </Typography>
-                    <TextField
-                      {...register(`${value?.info_id}.details`)}
-                      className="bg-[#E7E7E7] w-[80%]"
-                      disabled={
-                        !isEditing ||
-                        getValues(`${value.info_id}.value`) !== 'yes'
-                      }
-                      defaultValue={
-                        availableInfo?.includes(value.info_id)
-                          ? availableInfo?.Client_MedicalInfo?.description
-                          : ''
-                      }
-                    />
-                  </Box>
-                );
-              })}
-            </Box>
-            <Stack direction="row-reverse" className="w-full" pt={3}>
-              {isEditing && (
+              {!isEditing && (
                 <Button
                   sx={{
                     width: '80px',
@@ -367,16 +140,240 @@ const MedicalHistory = () => {
                     }
                   }}
                   onClick={() => {
-                    handleSubmit();
+                    setIsEditing(true);
                   }}
                 >
-                  {!loading ? 'Save' : <Loader />}
+                  Edit
                 </Button>
               )}
-            </Stack>
+            </Box>
+            <Box>
+              {gen_med_info?.map((value) => {
+                const detail =
+                  value.patients &&
+                  value.patients[0]?.Client_MedicalInfo?.description;
+
+                handleDefaultValues(value, detail);
+
+                return (
+                  <Box
+                    className="flex flex-row items-center h-[50px] lg:h-min"
+                    key={value.info_id}
+                  >
+                    <FormControl
+                      id="form-control"
+                      sx={{
+                        my: 3,
+                        display: { md: 'flex', xs: 'block' },
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        width: '100%'
+                      }}
+                      variant="standard"
+                      disabled={!isEditing}
+                    >
+                      <Typography
+                        id="demo-error-radios"
+                        sx={{ width: '100%' }}
+                        className="line-clamp-4"
+                      >
+                        {value.info_name}
+                      </Typography>
+                      <Controller
+                        control={control}
+                        name={`${value.info_id}.value`}
+                        render={({ field }) => (
+                          <RadioGroup
+                            {...field}
+                            aria-labelledby="demo-error-radios"
+                            id="demo-radios"
+                            row
+                            sx={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              flexDirection: 'row'
+                            }}
+                          >
+                            <FormControlLabel
+                              value="yes"
+                              control={<Radio />}
+                              type="submit"
+                              label="yes"
+                            />
+                            <FormControlLabel
+                              value="no"
+                              control={<Radio />}
+                              label="no"
+                            />
+                          </RadioGroup>
+                        )}
+                      />
+                    </FormControl>
+                    <LoadingButton
+                      className="capitalize"
+                      variant="text"
+                      disabled={
+                        !form[value.info_id] ||
+                        form[value.info_id].value !== 'yes'
+                      }
+                      onClick={() => {
+                        handleDetailModal(value);
+                      }}
+                    >
+                      Details
+                    </LoadingButton>
+                  </Box>
+                );
+              })}
+            </Box>
+            <Box>
+              <Box className="mt-8 mb-5 flex flex-row items-center justify-between">
+                <Typography
+                  variant="subtitle1"
+                  fontWeight="600"
+                  fontSize="18px"
+                >
+                  Other Medical History
+                </Typography>
+              </Box>
+              <Box className="flex flex-col items-start gap-8">
+                {spec_med_info?.map((value) => {
+                  const detail =
+                    value.patients &&
+                    value.patients[0]?.Client_MedicalInfo?.description;
+
+                  handleDefaultValues(value, detail);
+
+                  return (
+                    <Box
+                      className="flex flex-col items-start w-[100%]"
+                      key={value.info_id}
+                    >
+                      <Box className="flex flex-row items-center w-[100%] h-[50px] lg:h-min">
+                        <FormControl
+                          id="form-control"
+                          sx={{
+                            marginY: 3,
+                            display: { md: 'flex', xs: 'block' },
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            width: '100%'
+                          }}
+                          variant="standard"
+                          disabled={!isEditing}
+                        >
+                          <Typography
+                            id="demo-error-radios"
+                            sx={{ width: '100%' }}
+                            className="line-clamp-4"
+                          >
+                            {value.info_name}
+                          </Typography>
+                          <Controller
+                            control={control}
+                            name={`${value.info_id}.value`}
+                            defaultValue={
+                              value.patients?.length > 0 ? 'yes' : 'no'
+                            }
+                            render={({ field }) => (
+                              <RadioGroup
+                                {...field}
+                                onChange={(value) => {
+                                  isEditing && field.onChange(value);
+                                }}
+                                aria-labelledby="demo-error-radios"
+                                id="demo-radios"
+                                row
+                                sx={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  flexDirection: 'row'
+                                }}
+                                className=""
+                              >
+                                <FormControlLabel
+                                  value="yes"
+                                  control={<Radio />}
+                                  type="submit"
+                                  label="yes"
+                                />
+                                <FormControlLabel
+                                  value="no"
+                                  control={<Radio />}
+                                  label="no"
+                                />
+                              </RadioGroup>
+                            )}
+                          />
+                        </FormControl>
+                        <LoadingButton
+                          className="capitalize"
+                          disabled={
+                            !form[value.info_id] ||
+                            form[value.info_id].value !== 'yes'
+                          }
+                          onClick={() => {
+                            handleDetailModal(value);
+                          }}
+                          variant="text"
+                        >
+                          Details
+                        </LoadingButton>
+                      </Box>
+                      <Typography
+                        id="demo-error-radios"
+                        sx={{ width: '100%' }}
+                        className="line-clamp-4"
+                      >
+                        If Yes please provide details:
+                      </Typography>
+                      <TextField
+                        {...register(`${value?.info_id}.details`)}
+                        className="bg-[#E7E7E7] w-[80%]"
+                        disabled={
+                          !isEditing ||
+                          !form[value.info_id] ||
+                          form[value.info_id].value !== 'yes'
+                        }
+                      />
+                    </Box>
+                  );
+                })}
+              </Box>
+              <Stack direction="row-reverse" className="w-full" pt={3}>
+                {isEditing && (
+                  <Button
+                    sx={{
+                      width: '80px',
+                      height: '30px',
+                      color: '#1A4CFF',
+                      border: '1px solid #1A4CFF',
+                      borderRadius: '20px',
+                      ':hover': {
+                        backgroundColor: 'primary.dark',
+                        color: '#fff'
+                      }
+                    }}
+                    onClick={() => {
+                      handleSubmit();
+                    }}
+                    disabled={loading}
+                  >
+                    {!loading ? 'Save' : <Loader />}
+                  </Button>
+                )}
+              </Stack>
+            </Box>
           </Box>
-        </Box>
+        ) : (
+          <Box className="flex flex-row justify-center">
+            <Box className="w-[70px] h-[70px]">
+              <Loader />
+            </Box>
+          </Box>
+        )}
       </Box>
+
       <Modal
         open={openDetailModal}
         onClose={() => {
@@ -386,69 +383,68 @@ const MedicalHistory = () => {
         aria-describedby="parent-modal-description"
       >
         <Box className="absolute w-[90%] max-w-lg top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
-          <main className="">
-            <Paper
-              sx={{
-                padding: {
-                  xs: '40px 10% 2px',
-                  md: '40px 40px 2px'
-                },
-                maxWidth: '480px',
-                position: 'relative'
+          <Paper
+            sx={{
+              padding: {
+                xs: '40px 10% 2px',
+                md: '40px 40px 2px'
+              },
+              maxWidth: '480px',
+              position: 'relative'
+            }}
+          >
+            <CloseXButton
+              onClick={() => {
+                setOpenDetailModal(false);
               }}
+            />
+            <Typography
+              variant="h6"
+              align="justify"
+              sx={{ textAlign: 'center' }}
             >
-              <CloseXButton
-                onClick={() => {
-                  setOpenDetailModal(false);
-                }}
-              />
-              <Typography
-                variant="h6"
-                align="justify"
-                sx={{ textAlign: 'center' }}
-              >
-                Medical History
-              </Typography>
-              <Typography align="justify" sx={{ textAlign: 'center' }}>
-                {currentValue?.info_name}
-              </Typography>
-              <Controller
-                control={control}
-                defaultValue={defaultData}
-                name={`${currentValue?.info_id}.details`}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    variant="outlined"
-                    fullWidth
-                    label="Description"
-                    placeholder="Description"
-                    margin="normal"
-                    size="small"
-                  />
-                )}
-              />
+              Medical History
+            </Typography>
+            <Typography align="justify" sx={{ textAlign: 'center', mb: 3 }}>
+              {currentValue?.info_name}
+            </Typography>
+            <Controller
+              control={control}
+              name={`${currentValue?.info_id}.details`}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  variant="outlined"
+                  label="Description"
+                  placeholder="Description"
+                  size="small"
+                  disabled={!isEditing}
+                  fullWidth
+                  multiline
+                  rows={2}
+                  maxRows={4}
+                />
+              )}
+            />
 
-              <Button
-                onClick={() => {
-                  setOpenDetailModal(false);
-                }}
-                color="primary"
-                style={{
-                  backgroundColor: '#0093df',
-                  color: '#fff',
-                  textTransform: 'capitalize',
-                  fontWeight: 'bold',
-                  display: 'block',
-                  margin: '20px auto',
-                  padding: '5px 20px'
-                }}
-                className="hover:bg-black mx-auto"
-              >
-                Submit
-              </Button>
-            </Paper>
-          </main>
+            <LoadingButton
+              onClick={() => {
+                setOpenDetailModal(false);
+              }}
+              color="primary"
+              style={{
+                textTransform: 'capitalize',
+                fontWeight: 'bold',
+                display: 'block',
+                margin: '20px auto'
+              }}
+              className="mx-auto max-w-[150px] w-full"
+              variant="contained"
+              disabled={!isEditing}
+            >
+              Submit
+            </LoadingButton>
+          </Paper>
         </Box>
       </Modal>
     </div>
@@ -456,56 +452,3 @@ const MedicalHistory = () => {
 };
 
 export default MedicalHistory;
-
-// const arr = [
-//   {
-//     Client_MedicalInfo: {
-//       client_id: '64fc1233-8b59-5643-8e9a-c9a8f38bf6b6',
-//       createdAt: '2023-03-16T21:42:43236Z',
-//       description: 'DERGUIOP',
-//       info_id: 'f56b7057-fc46-425f-9e27-8029440e0bcb',
-//       updatedAt: '2023-03-16T21:42:43.236Z',
-//       _id: '0835ef03-4132-4eaa-9aaf-2852e588a135'
-//     },
-//     createdAt: '2023-03-14T23:58:00.830Z',
-//     info_id: 'f56b7057-fc46-425f-9e27-8029440e0bcb',
-//     info_name: 'Chest pain, angina, heart disease or breathlessness?',
-//     info_type: 'general',
-//     updatedAt: '2023-03-14T23:58:00.830Z'
-//   },
-//   {
-//     Client_MedicalInfo: {
-//       client_id: '64fc1233-8b59-5643-8e9a-c9a8f38bf6b6',
-//       createdAt: '2023-03-16T21:42:43236Z',
-//       description: 'QEWRTETRT',
-//       info_id: '967c59f8-074c-4d0f-bb0a-fbb341b75d9b',
-//       updatedAt: '2023-03-16T21:42:43.236Z',
-//       _id: '0835ef03-4132-4eaa-9aaf-2852e588a135'
-//     },
-//     createdAt: '2023-03-14T23:58:00.830Z',
-//     info_id: '967c59f8-074c-4d0f-bb0a-fbb341b75d9b',
-//     info_name: 'Chest pain, angina, heart disease or breathlessness?',
-//     info_type: 'general',
-//     updatedAt: '2023-03-14T23:58:00.830Z'
-//   },
-//   {
-//     Client_MedicalInfo: {
-//       client_id: '64fc1233-8b59-5643-8e9a-c9a8f38bf6b6',
-//       createdAt: '2023-03-16T21:42:43236Z',
-//       description: 'URIUTIY',
-//       info_id: 'f56b7057-fc46-425f-9e27-8029440e0bcb',
-//       updatedAt: '2023-03-16T21:42:43.236Z',
-//       _id: '0835ef03-4132-4eaa-9aaf-2852e588a135'
-//     },
-//     createdAt: '2023-03-14T23:58:00.830Z',
-//     info_id: 'f56b7057-fc46-425f-9e27-8029440e0bcb',
-//     info_name: 'Chest pain, angina, heart disease or breathlessness?',
-//     info_type: 'general',
-//     updatedAt: '2023-03-14T23:58:00.830Z'
-//   }
-// ];
-
-// const array = [
-//   { id: 'f56b7057-fc46-425f-9e27-8029440e0bcb', description: '' },
-//   { id: '64fc1233-8b59-5643-8e9a-c9a8f3hf8rfg', description: '' }
-// ];

@@ -102,7 +102,9 @@ const FindDoctor = () => {
               : 'inline-block'
           } h-min w-full mx-auto flex flex-col items-start justify-start gap-7`}
         >
-          <Typography variant="h6">Find a Doctor</Typography>
+          <Typography variant="h6">
+            {!allSpecialities ? 'Find a Doctor' : "Select Doctor's speciality"}
+          </Typography>
 
           <Box className=" border w-full border-sky-500 rounded-2xl min-h-[100px] p-5">
             <SearchBar

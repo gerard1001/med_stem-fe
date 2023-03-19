@@ -1,15 +1,13 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { yupResolver } from '@hookform/resolvers/yup';
-import { IconButton } from '@mui/material';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { ImCross } from 'react-icons/im';
 import { useDispatch, useSelector } from 'react-redux';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -18,7 +16,7 @@ import axiosInstance from '../axios/axios.instance';
 import CloseXButton from '../components/CloseXButton';
 import HomeNavBar from '../components/HomeNavBar';
 import LoadingButton from '../components/LoadingButton';
-import { toPatientLogin, toAdminLogin } from '../redux/reducers/step.reducer';
+import { toAdminLogin, toPatientLogin } from '../redux/reducers/step.reducer';
 
 const schema = yup.object().shape({
   email: yup.string().email().required(),
@@ -27,6 +25,7 @@ const schema = yup.object().shape({
 
 const Login = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const step = useSelector((state) => state.step.login_step);
   const nav = useNavigate();
@@ -92,15 +91,7 @@ const Login = () => {
             }}
             className="max-w-[380px] p-6"
           >
-            {/* <CssBaseline /> */}
             <CloseXButton onClick={handleBack} />
-            {/* <Box
-            component="div"
-            className="absolute right-5 top-5  bg-[#bfbfbf] text-[#7b7b7b] text-[14px] rounded-md p-1 cursor-pointer"
-            onClick={handleBack}
-          >
-            <ImCross />
-          </Box> */}
             <Box
               sx={{
                 display: 'flex',
@@ -112,18 +103,22 @@ const Login = () => {
               <Typography component="h1" variant="h6" fontWeight="700">
                 Enter MedStem
               </Typography>
-              <Typography variant="subtitle1">
-                You don&apos;t have an account?{' '}
-                <Box
-                  component="span"
-                  className="text-primary font-bold cursor-pointer"
-                  onClick={() => {
-                    nav('/signup');
-                  }}
-                >
-                  Register
-                </Box>
-              </Typography>
+              {step === 0 ? (
+                <Typography variant="subtitle1">
+                  You don&apos;t have an account?{' '}
+                  <Box
+                    component="span"
+                    className="text-primary font-bold cursor-pointer"
+                    onClick={() => {
+                      nav('/signup');
+                    }}
+                  >
+                    Register
+                  </Box>
+                </Typography>
+              ) : (
+                <Box className="w-full h-[28px]" />
+              )}
               <Box className="w-full flex flex-row items-center justify-evenly mt-2 border-b border-[#6A6F75]">
                 <Typography
                   className={` ${
@@ -196,7 +191,14 @@ const Login = () => {
                 />
                 <Grid container>
                   <Grid item xs>
-                    <Link href="#" variant="body2">
+                    <Link
+                      onClick={() => {
+                        navigate('/forgot-password');
+                      }}
+                      sx={{
+                        cursor: 'pointer'
+                      }}
+                    >
                       Forgot password?
                     </Link>
                   </Grid>

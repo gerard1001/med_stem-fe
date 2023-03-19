@@ -2,8 +2,9 @@ const path = require('path');
 const webpack = require('webpack');
 const dotenv = require('dotenv');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+// const CopyWebpackPlugin = require('copy-webpack-plugin');
+// const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 dotenv.config();
 
@@ -21,16 +22,18 @@ const envKeys = {
   )
 };
 
+const isDevelopment = process.env.NODE_ENV === 'development';
+
 module.exports = {
   entry: path.join(__dirname, './src/index.js'),
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: '[name].bundle.js',
-    publicPath: '/',
-    environment: {
-      module: true,
-      dynamicImport: true
-    }
+    publicPath: '/'
+    // environment: {
+    //   module: true,
+    //   dynamicImport: true
+    // }
   },
   devtool: process.env.NODE_ENV === 'production' ? false : 'inline-source-map',
   mode: process.env.NODE_ENV || 'development',
@@ -47,7 +50,12 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
-        options: { presets: ['@babel/preset-env', '@babel/preset-react'] }
+        options: {
+          presets: ['@babel/preset-env', '@babel/preset-react'],
+          plugins: [isDevelopment && require('react-refresh/babel')].filter(
+            Boolean
+          )
+        }
       },
       {
         test: /\.css$/,
@@ -60,14 +68,15 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
+    // new webpack.HotModuleReplacementPlugin(),
     new HtmlWebPackPlugin({ template: 'public/index.html' }),
-    new CopyWebpackPlugin({
-      patterns: [{ from: './public/assets', to: 'assets' }]
-    }),
+    // new CopyWebpackPlugin({
+    //   patterns: [{ from: './public/assets', to: 'assets' }]
+    // }),
     new webpack.DefinePlugin(envKeys),
-    new CleanWebpackPlugin()
-  ],
+    // new CleanWebpackPlugin(),
+    isDevelopment && new ReactRefreshWebpackPlugin()
+  ].filter(Boolean),
   optimization: {
     splitChunks: {
       chunks: 'all'

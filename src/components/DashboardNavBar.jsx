@@ -24,7 +24,7 @@ function DashboardNavBar({
 
   return (
     <Box
-      className="flex flex-row items-center justify-between border-b border-primary min-h-[64px] pl-4"
+      className="flex flex-row items-center justify-between border-b border-primary min-h-[64px] pl-6"
       sx={{
         width: '100%',
         height: '64px'
@@ -41,7 +41,7 @@ function DashboardNavBar({
           variant="subtitle1"
           color="primary"
           fontWeight="bold"
-          fontSize="16px"
+          fontSize={{ xs: '17.5px', md: '20px' }}
         >
           MedStem
         </Typography>
@@ -63,7 +63,7 @@ function DashboardNavBar({
                 backgroundColor: '#9b9b9b2d',
                 color: '#000',
                 top: '64px',
-                right: '16px',
+                right: '24px',
                 display: { md: 'none', xs: 'block' }
               }}
               onClick={toggleRightSideBar}

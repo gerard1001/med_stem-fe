@@ -28,9 +28,13 @@ img {
 input:focus {
   box-shadow: none !important;
 }
+textarea:focus {
+  box-shadow: none !important;
+}
 
 *::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
+  height: 8px;
 }
 
 *::-webkit-scrollbar-track {

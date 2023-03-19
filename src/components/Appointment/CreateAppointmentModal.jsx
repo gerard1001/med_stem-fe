@@ -29,7 +29,8 @@ const CreateAppointmentModal = ({
   patientData: { patientId },
   workDayData: { workDayId },
   scheduleData: { scheduleId },
-  specialities
+  specialities,
+  handleAfterSubmit
 }) => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
@@ -61,7 +62,11 @@ const CreateAppointmentModal = ({
   };
 
   const handleSubmit = () => {
-    dispatch(makeAppointment(form));
+    setLoading(true);
+    dispatch(makeAppointment(form)).then(async (props) => {
+      handleAfterSubmit && (await handleAfterSubmit(props));
+      setLoading(false);
+    });
   };
 
   return (

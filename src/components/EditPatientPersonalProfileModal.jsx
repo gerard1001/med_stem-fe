@@ -12,17 +12,13 @@ import {
 } from '@mui/material';
 import { format } from 'date-fns';
 import _ from 'lodash';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import axiosInstance from '../axios/axios.instance';
-import {
-  getOnePatient,
-  updatePatientData
-} from '../redux/reducers/patient.reducer';
+import { getOnePatient } from '../redux/reducers/patient.reducer';
 import CloseXButton from './CloseXButton';
 import LoadingButton from './LoadingButton';
 
@@ -364,10 +360,10 @@ const EditPatientPersonalProfileModal = ({
           variant="contained"
           loading={loading}
           disabled={_.isEmpty(dirtyFields) || !isValid}
-          className="bg-[#1A4CFF] text-white w-[180px]"
+          className="w-[180px]"
           onClick={handleSubmit(handleOnSubmit)}
         >
-          Make Appointment
+          Save
         </LoadingButton>
       </Box>
     </Modal>

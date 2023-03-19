@@ -1,3 +1,5 @@
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable no-nested-ternary */
 /* eslint-disable no-underscore-dangle */
 import {
   Box,
@@ -12,34 +14,38 @@ import {
   Typography,
   useMediaQuery
 } from '@mui/material';
-import { getDay, getDaysInMonth, getMonth, isEqual } from 'date-fns';
-import _ from 'lodash';
-import React, { memo, useEffect, useRef, useState } from 'react';
+import {
+  addMinutes,
+  format,
+  getHours,
+  getMonth,
+  getYear,
+  isFuture,
+  isPast,
+  isToday,
+  subMinutes
+} from 'date-fns';
+import React, { useEffect, useRef, useState } from 'react';
 import { FiChevronLeft } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import CreateAppointmentModal from '../components/Appointment/CreateAppointmentModal';
 import BackButton from '../components/BackButton';
-import Calendar from '../components/Calendar';
 import CalendarMonthYearSelector from '../components/Calendar/CalendarMonthYearSelector';
 import DoctorAppointmentsCalendar from '../components/Calendar/DoctorAppointmentsCalendar';
-import {
-  getDoctorAppointments,
-  selectAppointmentsById
-} from '../redux/reducers/appointment.reducer';
-import { setSelectedDate } from '../redux/reducers/calendar.reducer';
+import HomeNavBar from '../components/HomeNavBar';
 import { getOneDoctor } from '../redux/reducers/doctor.reducer';
-import {
-  getDoctorWorkDays,
-  selectWorkDaysDoctors
-} from '../redux/reducers/workDays.reducer';
+import { getOnePatient } from '../redux/reducers/patient.reducer';
 import {
   setSelectedDoctorDataRedux,
   setSelectedPatientDataRedux,
   setSelectedWorkDay
 } from '../redux/reducers/user.reducer';
-import { getOnePatient } from '../redux/reducers/patient.reducer';
+import {
+  getDoctorWorkDays,
+  selectWorkDaysDoctors
+} from '../redux/reducers/workDays.reducer';
 
 function PatientsCalendar() {
   const dispatch = useDispatch();
@@ -49,20 +55,16 @@ function PatientsCalendar() {
   const calendarRef = useRef(null);
   const [viewDate, setViewDate] = useState(new Date());
   const [openRightSideBar, setOpenRightSideBar] = useState(null);
-  const [workdays, setWorkdays] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [slots, setSlots] = useState(null);
   // const selectedDate = useSelector((state) => state.calendar.selectedDate);
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down('md'));
-  const workDays = useSelector((state) =>
-    selectWorkDaysDoctors(state, doctorId)
-  );
-  const appointments = useSelector((state) =>
-    selectAppointmentsById(state, doctorId)
+  const workDays = useSelector(
+    (state) => selectWorkDaysDoctors(state, doctorId)?.workDays
   );
   const doctor = useSelector((state) => state.doctor);
   const patient = useSelector((state) => state.patient);
-  const days = useSelector((state) => state.workDays);
 
   const doctorData = doctor?.single_data?.data;
   const patientData = patient?.single_data?.data;
@@ -74,34 +76,107 @@ function PatientsCalendar() {
     setSelectedDate(date);
   };
 
+  const selectedWorkDay = workDays?.filter((values) => {
+    return values.date === selectedDate;
+  });
+
+  function addSubstractTime(hour, minute, minutesToAdd, operation) {
+    hour = parseInt(hour, 10);
+    minute = parseInt(minute, 10);
+    minutesToAdd = parseInt(minutesToAdd, 10);
+
+    const date = new Date();
+    date.setHours(hour);
+    date.setMinutes(minute);
+    const newDate =
+      operation === 's'
+        ? subMinutes(date, minutesToAdd)
+        : addMinutes(date, minutesToAdd);
+    return format(newDate, 'HH:mm');
+  }
+
   useEffect(() => {
-    setLoading(true);
-    dispatch(getOneDoctor(doctorId));
-    dispatch(getOnePatient(clientId));
-    dispatch(getDoctorWorkDays({ id: doctorId })).then(({ error }) => {
-      if (error) {
-        toast.error(error.message);
+    const workDaysSlots = {};
+    workDays?.forEach((workDay) => {
+      const slots = [];
+      const { from, to, date } = workDay;
+      if (isToday(new Date(date)) || isFuture(new Date(date))) {
+        const duration = workDay.schedule.appointment_duration;
+        const { appointments } = workDay.schedule;
+        let taken = [];
+        appointments.forEach((appointment) => {
+          if (appointment.is_canceled) return;
+          taken.push(appointment.appointment_period);
+        });
+        taken = taken.sort((a, b) => (a < b ? -1 : 1));
+        const [fromHour, fromMinute] = from.trim().split(':');
+        const [toHour, toMinute] = to.trim().split(':');
+
+        const lastSlot = `${addSubstractTime(
+          toHour,
+          toMinute,
+          duration,
+          's'
+        )} - ${toHour}:${toMinute}`;
+        let currentSlot = `${fromHour}:${fromMinute} - ${addSubstractTime(
+          fromHour,
+          fromMinute,
+          duration
+        )}`;
+        if (isToday(new Date(date))) {
+          const Hour = getHours(new Date());
+          currentSlot = `${Hour + 1}:00 - ${addSubstractTime(
+            Hour + 1,
+            '00',
+            duration
+          )}`;
+        }
+
+        while (true) {
+          if (currentSlot >= lastSlot) {
+            break;
+          }
+          if (currentSlot === taken[0]) {
+            taken.shift();
+          } else {
+            slots.push(currentSlot);
+          }
+          if (currentSlot === '17:00') {
+            currentSlot = `17:00 - ${addSubstractTime(17, 0, duration)}`;
+          } else {
+            const slotLastPart = currentSlot.split('-')[1].trim();
+            const splitLastSlotPart = slotLastPart.split(':');
+            currentSlot = `${slotLastPart} - ${addSubstractTime(
+              splitLastSlotPart[0],
+              splitLastSlotPart[1],
+              duration
+            )}`;
+          }
+        }
+        workDaysSlots[format(new Date(date), 'yyyy-MM-dd')] = slots;
       }
     });
-    dispatch(getDoctorAppointments(doctorId)).then(({ error }) => {
+    setSlots(workDaysSlots);
+  }, [workDays]);
+  useEffect(() => {
+    dispatch(getOneDoctor(doctorId));
+    dispatch(getOnePatient(clientId));
+  }, [doctorId]);
+  useEffect(() => {
+    setLoading(true);
+    dispatch(
+      getDoctorWorkDays({
+        id: doctorId,
+        month: getMonth(viewDate) + 1,
+        year: getYear(viewDate)
+      })
+    ).then(({ error }) => {
       if (error) {
         toast.error(error.message);
       }
       setLoading(false);
     });
-  }, [doctorId]);
-  useEffect(() => {}, [doctorId]);
-
-  useEffect(() => {
-    setWorkdays(days?.entities[doctorId]?.workDays);
-  }, [days, doctorId]);
-
-  const dates = workdays?.map((values) => values.date);
-
-  const selectedWorkDay = workdays?.filter((values) => {
-    return values.date === selectedDate;
-  });
-
+  }, [doctorId, viewDate]);
   useEffect(() => {
     dispatch(setSelectedDoctorDataRedux(doctorData));
     dispatch(setSelectedPatientDataRedux(patientData));
@@ -109,93 +184,99 @@ function PatientsCalendar() {
   }, [doctorData, patientData, selectedWorkDay]);
 
   return (
-    <Box className="flex flex-row w-full h-full">
-      <Box className="sm:p-4 p-8 flex flex-col grow sm:gap-0 gap-3 overflow-y-auto">
-        <IconButton
-          onClick={toggleRightSideBar}
-          sx={{
-            position: 'absolute',
-            backgroundColor: '#9b9b9b2d',
-            color: '#000',
-            top: '60px',
-            right: '16px',
-            display: { md: 'none', xs: 'block' }
-          }}
-        >
-          <FiChevronLeft />
-        </IconButton>
-        <Stack
-          direction="row"
-          gap={{ xs: 1, sm: 3 }}
-          justifyContent="space-between"
-          alignItems="center"
-          flexWrap="wrap"
-          mb={{ xs: 2, sm: 5 }}
-        >
+    <HomeNavBar>
+      <Box className="flex flex-row w-full h-full">
+        <Box className="sm:p-4 p-8 flex flex-col grow sm:gap-0 gap-3 overflow-y-auto">
+          <IconButton
+            onClick={toggleRightSideBar}
+            sx={{
+              position: 'absolute',
+              backgroundColor: '#9b9b9b2d',
+              color: '#000',
+              top: '60px',
+              right: '16px',
+              display: { md: 'none', xs: 'block' }
+            }}
+          >
+            <FiChevronLeft />
+          </IconButton>
           <Stack
             direction="row"
-            className="gap-3 items-center sm:w-full overflow-hidden"
+            gap={{ xs: 1, sm: 3 }}
+            justifyContent="space-between"
+            alignItems="center"
+            flexWrap="wrap"
+            mb={{ xs: 2, sm: 5 }}
           >
-            <BackButton />
-            <Typography
-              fontSize={{ xs: 16, sm: 32 }}
-              className="leading-none"
-              noWrap
+            <Stack
+              direction="row"
+              className="gap-3 items-center sm:w-full overflow-hidden"
             >
-              Select date and time
-            </Typography>
+              <BackButton />
+              <Typography
+                fontSize={{ xs: 16, sm: 32 }}
+                className="leading-none"
+                noWrap
+              >
+                Select date and time
+              </Typography>
+            </Stack>
+            <Stack direction="row" justifyContent="end" className="sm:w-full">
+              <CalendarMonthYearSelector
+                viewDate={viewDate}
+                setViewDate={setViewDate}
+              />
+            </Stack>
           </Stack>
-          <Stack direction="row" justifyContent="end" className="sm:w-full">
-            <CalendarMonthYearSelector
-              viewDate={viewDate}
-              setViewDate={setViewDate}
+          <Box className="sm:px-0 px-20">
+            <DoctorAppointmentsCalendar
+              ref={calendarRef}
+              {...{
+                handleDayClick,
+                selectedDate,
+                loading,
+                viewDate,
+                slots
+              }}
             />
-          </Stack>
-        </Stack>
-        <Box className="sm:px-0 px-20">
-          <DoctorAppointmentsCalendar
-            ref={calendarRef}
-            {...{ handleDayClick, selectedDate, loading, viewDate, workdays }}
-          />
+          </Box>
         </Box>
+        {selectedDate && slots && (
+          <Drawer
+            open={openRightSideBar}
+            anchor="right"
+            variant={isMobile ? 'temporary' : 'permanent'}
+            onClose={() => {
+              setOpenRightSideBar(false);
+            }}
+            sx={{
+              '& .MuiDrawer-paper': {
+                maxWidth: '250px',
+                width: '100%'
+              }
+            }}
+            classes={{
+              paper: isMobile ? 'absolute' : 'relative'
+            }}
+            ModalProps={{
+              keepMounted: false
+            }}
+            className="transition duration-150 ease-in-out"
+          >
+            <CalendarRightSideBar {...{ loading, slots, viewDate }} />
+          </Drawer>
+        )}
       </Box>
-      <Drawer
-        open={openRightSideBar}
-        anchor="right"
-        variant={isMobile ? 'temporary' : 'permanent'}
-        onClose={() => {
-          setOpenRightSideBar(false);
-        }}
-        sx={{
-          '& .MuiDrawer-paper': {
-            maxWidth: '250px',
-            width: '100%'
-          }
-        }}
-        classes={{
-          paper: isMobile ? 'absolute' : 'relative'
-        }}
-        ModalProps={{
-          keepMounted: false
-        }}
-        className="transition duration-150 ease-in-out"
-      >
-        <CalendarRightSideBar {...{ loading }} />
-      </Drawer>
-    </Box>
+    </HomeNavBar>
   );
 }
 
-const CalendarRightSideBar = ({ loading }) => {
-  const appointmentHours = [
-    '09:00 - 09:30',
-    '09:00 - 09:31',
-    '09:00 - 09:32',
-    '09:00 - 09:33'
-  ];
-  const [selectedTime, setSelectedTime] = useState(appointmentHours[0]);
+const CalendarRightSideBar = ({ loading, slots, viewDate }) => {
+  const dispatch = useDispatch();
+  const [selectedTime, setSelectedTime] = useState();
   const [openModal, setOpenModal] = useState(false);
   const doctor = useSelector((state) => state.doctor.single_data.data);
+  console.log(selectedTime, 'selectedTime');
 
   const selectedPatientData = useSelector(
     (state) => state.user.selectedPatient
@@ -203,11 +284,29 @@ const CalendarRightSideBar = ({ loading }) => {
   const selectedWorkDayData = useSelector(
     (state) => state.user.selectedWorkDay
   );
+  const handleAfterSubmit = async () => {
+    return new Promise((res, rej) => {
+      dispatch(
+        getDoctorWorkDays({
+          id: doctor.doctor_id,
+          month: getMonth(viewDate) + 1,
+          year: getYear(viewDate)
+        })
+      ).then(() => {
+        res();
+      });
+    });
+  };
+
+  const appointmentHours =
+    slots && selectedWorkDayData
+      ? slots[format(new Date(selectedWorkDayData.date), 'yyyy-MM-dd')]
+      : [];
 
   return (
     <>
       <List disablePadding className="border-l border-primary w-full h-full">
-        {appointmentHours.map((hour, index) => (
+        {appointmentHours?.map((hour) => (
           <>
             <ListItemButton
               key={hour}
@@ -219,7 +318,10 @@ const CalendarRightSideBar = ({ loading }) => {
             >
               <ListItemText primary={hour} />
             </ListItemButton>
-            <Divider key={hour + index} sx={{ borderColor: 'primary.main' }} />
+            <Divider
+              key={`${hour} divider `}
+              sx={{ borderColor: 'primary.main' }}
+            />
           </>
         ))}
         <Stack direction="row" alignItems="center" justifyContent="center">
@@ -258,7 +360,8 @@ const CalendarRightSideBar = ({ loading }) => {
           onClose: () => {
             setOpenModal(false);
           },
-          selectedTime
+          selectedTime,
+          handleAfterSubmit
         }}
       />
     </>

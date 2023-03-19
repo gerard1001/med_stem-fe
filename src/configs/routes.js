@@ -19,6 +19,8 @@ import PatientsCalendar from '../pages/PatientsCalendar';
 import SchedulePage from '../pages/SchedulePage';
 import SpecialityDoctor from '../pages/SpecialityDoctor';
 import AppointmentPage from '../components/Appointment/AppointmentPage';
+import ForgotPassword from '../pages/ForgotPassword';
+import ResetPassword from '../pages/ResetPassword';
 
 const routes = createBrowserRouter([
   {
@@ -36,6 +38,14 @@ const routes = createBrowserRouter([
   {
     path: '/login',
     element: <Login />
+  },
+  {
+    path: '/forgot-password',
+    element: <ForgotPassword />
+  },
+  {
+    path: '/reset',
+    element: <ResetPassword />
   },
   {
     path: '/find_doctor',

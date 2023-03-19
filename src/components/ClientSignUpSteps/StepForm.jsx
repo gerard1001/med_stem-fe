@@ -5,21 +5,11 @@ import React from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import * as yup from 'yup';
-import Confirm from './Confirm';
 import ContactInfo from './ContactInfo';
 import MedicalHistory from './MedicalHistory';
 import MedicalInfo from './MedicalInfo';
 import Password from './Password';
 import PersonalInfo from './PersonalInfo';
-
-const labels = [
-  'First Step',
-  'Second Step',
-  'Third Step',
-  'Fourth Step',
-  'Password',
-  'Confirm'
-];
 
 const defaultValues = {
   activeStep: 0,
@@ -34,7 +24,7 @@ const defaultValues = {
   address_1: '',
   address_2: '',
   city: '',
-  phone: '',
+  phone_number: '',
   password: '',
   info: {}
 };
@@ -72,7 +62,7 @@ const schema = yup
     address_1: yup.string().required(),
     address_2: yup.string().required(),
     city: yup.string().required(),
-    phone: yup.string().min(4).max(12).required()
+    phone_number: yup.string().min(4).max(12).required()
   })
   .required();
 
@@ -83,8 +73,7 @@ const StepForm = ({ getStatus }) => {
     resolver: yupResolver(schema)
   });
 
-  const { watch, control } = methods;
-  const form = watch();
+  const { control } = methods;
 
   const activeStep = useWatch({
     name: 'activeStep',
@@ -99,29 +88,30 @@ const StepForm = ({ getStatus }) => {
 
   return (
     <FormProvider {...methods}>
-      <Box>
+      <Box className="h-full w-full">
         <Box style={{ padding: '10px' }}>
           <Typography variant="h4" align="center" className="font-bold">
             Welcome to Medstem
           </Typography>
           <Typography variant="subtitle2" align="center" style={{}}>
             Already have an account?{' '}
-            <span
+            <Box
+              component="span"
               className="text-primary font-bold cursor-pointer"
               onClick={() => {
                 nav('/login');
               }}
             >
               Log in
-            </span>
+            </Box>
           </Typography>
         </Box>
         {activeStep === 0 && <PersonalInfo />}
         {activeStep === 1 && <ContactInfo />}
         {activeStep === 2 && <MedicalInfo />}
         {activeStep === 3 && <MedicalHistory />}
-        {activeStep === 4 && <Password data={form} />}
-        {activeStep === 5 && <Confirm data={form} />}
+        {activeStep === 4 && <Password />}
+        {/* {activeStep === 5 && <Confirm data={form} />} */}
       </Box>
     </FormProvider>
   );

@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable no-nested-ternary */
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -198,7 +199,6 @@ const HomeNavBar = (props) => {
           width: '100%'
         }}
       >
-        {/* <CssBaseline /> */}
         <AppBar
           position="static"
           component="nav"
@@ -213,26 +213,30 @@ const HomeNavBar = (props) => {
               border: `1px solid ${palette.primary.light}`
             })}
           >
-            <Typography
-              variant="h6"
-              component="div"
-              color="primary"
-              fontWeight={700}
-              sx={{
-                display: { sm: 'block' },
-                cursor: 'pointer'
-              }}
-              onClick={() => {
-                nav('/');
-              }}
-            >
-              MedStem
-            </Typography>
+            <Box className="w-full flex flex-row justify-start items-center">
+              <Typography
+                variant="h6"
+                component="div"
+                color="primary"
+                fontWeight={700}
+                sx={{
+                  display: { sm: 'block' },
+                  cursor: 'pointer'
+                }}
+                onClick={() => {
+                  nav('/');
+                }}
+              >
+                MedStem
+              </Typography>
+            </Box>
+
             <Box
               sx={{
                 display: { xs: 'none', sm: 'flex' },
                 gap: { sm: 0, md: 2 },
-                fontSize: { md: '17px', xs: '14px' }
+                fontSize: { md: '17px', xs: '14px' },
+                width: 'max-content'
               }}
             >
               {navItems.map((item, idx) => (
@@ -268,142 +272,144 @@ const HomeNavBar = (props) => {
                         borderBottom: '2px solid #1A4CFF'
                       })
                   }}
+                  noWrap
                 >
                   {item}
                 </Typography>
               ))}
             </Box>
 
-            {isLoggedIn && !isClient && (
-              <Box
-                sx={{
-                  display: { xs: 'none', sm: 'block' },
-                  fontSize: { md: '17px', xs: '14px' },
-                  mx: 2
-                }}
-              >
-                <Button
-                  color="primary"
+            <Box className="w-full flex flex-row justify-end items-center">
+              {isLoggedIn && !isClient && (
+                <Box
                   sx={{
-                    color: '#1A4CFF',
+                    display: { xs: 'none', sm: 'block' },
                     fontSize: { md: '17px', xs: '14px' },
-                    mx: { md: '5px', xs: '4px' }
+                    mx: 2
                   }}
                 >
-                  <FiIcons.FiSearch />
-                </Button>
-                <Button
-                  color="primary"
-                  sx={{
-                    color: '#1A4CFF',
-                    fontSize: { md: '17px', xs: '14px' },
-                    mx: { md: '5px', xs: '4px' }
-                  }}
-                  onClick={() => {
-                    nav('/dashboard');
-                  }}
-                >
-                  Dashboard
-                </Button>
-              </Box>
-            )}
-            {isLoggedIn && isClient && (
-              <Box
-                sx={{
-                  display: { xs: 'none', sm: 'flex' },
-                  fontSize: { md: '17px', xs: '14px' }
-                  // mx: 2
-                }}
-                className="flex-row flex-nowrap md:gap-1 gap-5 items-center pl-2"
-              >
-                <IconButton
-                  color="primary"
-                  sx={{
-                    color: '#1A4CFF',
-                    fontSize: { md: '17px', xs: '14px' },
-                    px: 0
-                    // mx: { md: '5px', xs: '4px' }
-                  }}
-                >
-                  <FiIcons.FiSearch />
-                </IconButton>
-                <Button
-                  color="primary"
-                  sx={{
-                    color: '#1A4CFF',
-                    fontSize: { md: '17px', xs: '14px' },
-                    px: 0
-                    // mx: { md: '5px', xs: '4px' }
-                  }}
-                  onClick={() => {
-                    nav('/dashboard/appointments');
-                  }}
-                >
-                  Appointment
-                </Button>
-                <Button
-                  color="primary"
-                  sx={{
-                    color: '#1A4CFF',
-                    fontSize: { md: '17px', xs: '14px' },
-                    px: 0
-                    // mx: { md: '5px', xs: '4px' }
-                  }}
-                  onClick={() => {
-                    nav('/dashboard/account');
-                  }}
-                >
-                  Account
-                </Button>
-                <LoadingButton
-                  variant="outlined"
-                  onClick={() => {
-                    localStorage.removeItem('userLoginData');
-                    nav('/');
-                  }}
-                >
-                  Logout
-                </LoadingButton>
-              </Box>
-            )}
-            {!isLoggedIn && (
-              <Box
-                sx={{
-                  display: { xs: 'none', sm: 'block' },
-                  fontSize: { md: '17px', xs: '14px' }
-                }}
-              >
-                {userItems.map((item, idx) => (
                   <Button
-                    key={item}
                     color="primary"
                     sx={{
+                      color: '#1A4CFF',
                       fontSize: { md: '17px', xs: '14px' },
-                      ml: 2,
-                      ...(idx === 1 && {
-                        border: '1px solid #1A4CFF'
-                      })
-                    }}
-                    onClick={() => {
-                      idx === 0
-                        ? nav('/login')
-                        : idx === 1
-                        ? nav('/signup')
-                        : nav('/');
+                      mx: { md: '5px', xs: '4px' }
                     }}
                   >
-                    {item}
+                    <FiIcons.FiSearch />
                   </Button>
-                ))}
-              </Box>
-            )}
+                  <Button
+                    color="primary"
+                    sx={{
+                      color: '#1A4CFF',
+                      fontSize: { md: '17px', xs: '14px' },
+                      mx: { md: '5px', xs: '4px' }
+                    }}
+                    onClick={() => {
+                      nav('/dashboard');
+                    }}
+                  >
+                    Dashboard
+                  </Button>
+                </Box>
+              )}
+              {isLoggedIn && isClient && (
+                <Box
+                  sx={{
+                    display: { xs: 'none', sm: 'flex' },
+                    fontSize: { md: '17px', xs: '14px' }
+                    // mx: 2
+                  }}
+                  className="flex-row flex-nowrap md:gap-1 gap-5 items-center pl-2"
+                >
+                  <IconButton
+                    color="primary"
+                    sx={{
+                      color: '#1A4CFF',
+                      fontSize: { md: '17px', xs: '14px' },
+                      px: 0
+                      // mx: { md: '5px', xs: '4px' }
+                    }}
+                  >
+                    <FiIcons.FiSearch />
+                  </IconButton>
+                  <Button
+                    color="primary"
+                    sx={{
+                      color: '#1A4CFF',
+                      fontSize: { md: '17px', xs: '14px' },
+                      px: 0
+                      // mx: { md: '5px', xs: '4px' }
+                    }}
+                    onClick={() => {
+                      nav('/dashboard/appointments');
+                    }}
+                  >
+                    Appointment
+                  </Button>
+                  <Button
+                    color="primary"
+                    sx={{
+                      color: '#1A4CFF',
+                      fontSize: { md: '17px', xs: '14px' },
+                      px: 0
+                      // mx: { md: '5px', xs: '4px' }
+                    }}
+                    onClick={() => {
+                      nav('/dashboard/account');
+                    }}
+                  >
+                    Account
+                  </Button>
+                  <LoadingButton
+                    variant="outlined"
+                    onClick={() => {
+                      localStorage.removeItem('userLoginData');
+                      nav('/');
+                    }}
+                  >
+                    Logout
+                  </LoadingButton>
+                </Box>
+              )}
+              {!isLoggedIn && (
+                <Box
+                  sx={{
+                    display: { xs: 'none', sm: 'block' },
+                    fontSize: { md: '17px', xs: '14px' }
+                  }}
+                >
+                  {userItems.map((item, idx) => (
+                    <Button
+                      key={item}
+                      color="primary"
+                      sx={{
+                        fontSize: { md: '17px', xs: '14px' },
+                        ml: 2,
+                        ...(idx === 1 && {
+                          border: '1px solid #1A4CFF'
+                        })
+                      }}
+                      onClick={() => {
+                        idx === 0
+                          ? nav('/login')
+                          : idx === 1
+                          ? nav('/signup')
+                          : nav('/');
+                      }}
+                    >
+                      {item}
+                    </Button>
+                  ))}
+                </Box>
+              )}
+            </Box>
 
             <IconButton
               color="primary"
               aria-label="open drawer"
-              edge="end"
               onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { sm: 'none' } }}
+              sx={{ display: { sm: 'none' } }}
             >
               <FaIcons.FaBars />
             </IconButton>

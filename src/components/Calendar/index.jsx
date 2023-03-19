@@ -45,7 +45,6 @@ const StyledBox = styled(Box)(({ theme }) => ({
 }));
 
 const Calendar = forwardRef(({ ...rest }, ref) => {
-  console.log(ref, '+++++');
   return (
     <Box className="w-full overflow-auto">
       <StyledBox>

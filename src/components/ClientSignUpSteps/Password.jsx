@@ -1,57 +1,59 @@
-import { Box, Button, TextField } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
-import React, { Fragment } from 'react';
+import React, { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import * as IoIcons from 'react-icons/io5';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import axiosInstance from '../../axios/axios.instance';
 import BackButton from '../BackButton';
 import LoadingButton from '../LoadingButton';
 
-const Password = ({ data }) => {
+const Password = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const {
     control,
     setValue,
-    formState: { errors, isDirty, isValid },
-    trigger
+    getValues,
+    formState: { errors, isValid },
+    trigger,
+    reset
   } = useFormContext();
-
-  const dispatch = useDispatch();
 
   const handleBack = () => {
     setValue('activeStep', 3);
   };
 
-  const info = data.info;
-
-  const yesValues = Object.keys(info).filter(
-    (key) => info[key].value === 'yes'
-  );
-
-  const resultArray = yesValues.map((key) => {
-    const valueObject = info[key];
-    return `${key}#%#%${valueObject.details || ''}`;
-  });
-  const med_info = resultArray.join('#&#&');
-
-  const finalData = data;
-
-  finalData.arr = med_info;
-  finalData.id_number = parseInt(finalData.id_number, 10);
-  delete finalData.info;
-  delete finalData.activeStep;
-
   const handleSubmit = (event) => {
     event.preventDefault();
-    trigger(['password', 'confirm']).then(async (value) => {
+
+    const data = getValues();
+    const { info } = data;
+    const yesValues = Object.keys(info).filter(
+      (key) => info[key].value === 'yes'
+    );
+    const resultArray = yesValues.map((key) => {
+      const valueObject = info[key];
+      return `${key}#%#%${valueObject.details || ''}`;
+    });
+    const med_info = resultArray.join('#&#&');
+    const finalData = data;
+
+    finalData.arr = med_info;
+    finalData.id_number = parseInt(finalData.id_number, 10);
+    delete finalData.info;
+    delete finalData.activeStep;
+
+    trigger(['password', 'confirm']).then(async () => {
       try {
-        const response = await axiosInstance.post(
-          `${process.env.BACKEND_URL}/users/client/register`,
-          finalData
-        );
+        setLoading(true);
+        const response = await axiosInstance
+          .post(`${process.env.BACKEND_URL}/users/client/register`, finalData)
+          .finally(() => {
+            setLoading(false);
+          });
+
+        reset();
 
         toast.success(response.data.message, {
           onClose: () => {
@@ -69,7 +71,10 @@ const Password = ({ data }) => {
       <div className="font-bold ml-[3%] md:text-center">Password</div>
       <FormControl sx={{ margin: 'auto', display: 'block' }} variant="standard">
         <Box spacing={2} className="block w-[100%] mx-auto">
-          <Box className="w-[80%] mx-auto" style={{ margin: 'auto' }}>
+          <Box
+            className="w-[80%] mx-auto flex flex-col items-center"
+            style={{ margin: 'auto' }}
+          >
             <Controller
               control={control}
               name="password"
@@ -78,7 +83,6 @@ const Password = ({ data }) => {
                   {...field}
                   type="password"
                   variant="outlined"
-                  fullWidth
                   label="Password"
                   placeholder="Password"
                   margin="normal"
@@ -86,6 +90,7 @@ const Password = ({ data }) => {
                   helperText={!!errors.password && errors.password.message}
                   required
                   size="small"
+                  className="max-w-[300px] w-full"
                 />
               )}
             />
@@ -97,7 +102,6 @@ const Password = ({ data }) => {
                   {...field}
                   type="password"
                   variant="outlined"
-                  fullWidth
                   label="Confirm password"
                   placeholder="Confirm password"
                   margin="normal"
@@ -105,6 +109,7 @@ const Password = ({ data }) => {
                   helperText={!!errors.confirm && errors.confirm.message}
                   required
                   size="small"
+                  className="max-w-[300px] w-full"
                 />
               )}
             />
@@ -114,6 +119,7 @@ const Password = ({ data }) => {
       <div className="relative flex items-center mt-12 justify-between">
         <BackButton className="w-fit left-5" onClick={handleBack} />
         <LoadingButton
+          loading={loading}
           disabled={!isValid}
           className="px-10"
           variant="contained"
@@ -121,27 +127,6 @@ const Password = ({ data }) => {
         >
           Complete
         </LoadingButton>
-        {/* <Box
-          component="div"
-          className="border-[#2b8aff] rounded-[10px] text-primary border w-fit px-3 py-1 absolute left-5 text-[16px] cursor-pointer hover:border-none hover:bg-[#a2ccff]"
-          onClick={handleBack}
-        >
-          <IoIcons.IoArrowBack />
-        </Box>
-        <Button
-          disabled={!isDirty && !isValid}
-          onClick={handleSubmit}
-          variant="contained"
-          style={{
-            background: '#1A4CFF',
-            color: 'white',
-            textTransform: 'capitalize'
-          }}
-          type="submit"
-          className="bg-[#1A4CFF] capitalize text-white"
-        >
-          Complete
-        </Button> */}
         <div className="border-[#2b8aff] rounded-[10px] border w-fit px-3 py-1 right-5 text-[16px]">
           5/5
         </div>
