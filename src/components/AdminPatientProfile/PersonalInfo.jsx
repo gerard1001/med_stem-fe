@@ -7,9 +7,8 @@ import Loader from '../Loader/Loader';
 import PatientProfileNavigation from './PatientProfileNavigation';
 
 const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: '#f5f5f5',
+  backgroundColor: '#fff',
   ...theme.typography.body2,
-  backgroundColor: 'transparent',
   padding: theme.spacing(1),
   boxShadow: 'none',
   borderRadius: 'none'

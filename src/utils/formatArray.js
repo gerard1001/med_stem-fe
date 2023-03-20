@@ -67,20 +67,12 @@ const formatArray = (donne) => {
         lastName: last_name,
         gender,
         birthDate: formattedDate(new Date(birth_date)),
-        prevAppointments: prevTodo ? (
-          format(new Date(prevTodo.work_day.date), 'dd/MM/yyyy')
-        ) : (
-          <Box className="w-full pl-[20%]">
-            <BsThreeDots />
-          </Box>
-        ),
-        nextAppointments: nextTodo ? (
-          format(new Date(nextTodo.work_day.date), 'dd/MM/yyyy')
-        ) : (
-          <Box className="w-full pl-[20%]">
-            <BsThreeDots />
-          </Box>
-        )
+        prevAppointments: prevTodo
+          ? format(new Date(prevTodo.work_day.date), 'dd/MM/yyyy')
+          : '...',
+        nextAppointments: nextTodo
+          ? format(new Date(nextTodo.work_day.date), 'dd/MM/yyyy')
+          : '...'
       };
     }
   );

@@ -126,6 +126,10 @@ const routes = createBrowserRouter([
     path: '/dashboard/appointments/:id',
     element: <AppointmentPage />
   },
+  {
+    path: '/dashboard/patient/profile/:id',
+    element: <AppointmentPage />
+  },
 
   // removed
 
