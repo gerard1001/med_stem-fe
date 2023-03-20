@@ -6,7 +6,7 @@ import axiosInstance from '../axios/axios.instance';
 import AdminDoctorAccountPage from '../components/AdminDoctorAccountPage';
 import { getOneDoctor } from '../redux/reducers/doctor.reducer';
 
-const DoctorProfile = () => {
+const AdminProfile = () => {
   const dispatch = useDispatch();
   const [loadingUpload, setLoadingUpload] = useState(false);
   const [loadingReset, setLoadingReset] = useState(false);
@@ -101,4 +101,4 @@ const DoctorProfile = () => {
   );
 };
 
-export default DoctorProfile;
+export default AdminProfile;

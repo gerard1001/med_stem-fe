@@ -13,14 +13,16 @@ const initialState = {
 export const registerDoctor = createAsyncThunk(
   'users/registerDoctor',
   async (data) => {
-    const response = await axios
-      .post(`${process.env.BACKEND_URL}/users/doctor/register`, data)
-      .then((res) => {
-        res.data;
-      })
-      .catch((error) => {
-        throw Error(error.response.data.message);
-      });
+    try {
+      const response = await axiosInstance.post(
+        `${process.env.BACKEND_URL}/users/doctor/register`,
+        data
+      );
+      toast.success(response.data.message);
+    } catch (error) {
+      toast.error(error.response.data.message);
+      throw new Error(error.response.data.message);
+    }
   }
 );
 
@@ -65,22 +67,6 @@ const doctorSlice = createSlice({
       state.error = '';
     });
     builder.addCase(getOneDoctor.rejected, (state, action) => {
-      state.loading = false;
-      state.single_data = {};
-      state.error = action.error.message;
-    });
-    builder.addCase(registerDoctor.pending, (state, action) => {
-      state.loading = true;
-      state.single_data = {};
-    });
-    builder.addCase(registerDoctor.fulfilled, (state, action) => {
-      toast.success('Registration successful');
-      state.loading = false;
-      state.single_data = action.payload;
-      state.error = '';
-    });
-    builder.addCase(registerDoctor.rejected, (state, action) => {
-      toast.error(action.error.message);
       state.loading = false;
       state.single_data = {};
       state.error = action.error.message;

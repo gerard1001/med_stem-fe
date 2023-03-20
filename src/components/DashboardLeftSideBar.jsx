@@ -23,15 +23,15 @@ import { useNavigate } from 'react-router-dom';
 
 const listItems = (role) => {
   const common = [
+    // {
+    //   listIcon: <RiCalendarTodoLine className="text-[20px]" />,
+    //   listText: 'Schedule',
+    //   url: '/dashboard/schedule'
+    // },
     {
       listIcon: <FiUsers className="text-[20px]" />,
       listText: 'Patients',
       url: '/dashboard/patient'
-    },
-    {
-      listIcon: <RiCalendarTodoLine className="text-[20px]" />,
-      listText: 'Schedule',
-      url: '/dashboard/schedule'
     },
     {
       listIcon: <VscGraphLine className="text-[20px]" />,
@@ -42,11 +42,11 @@ const listItems = (role) => {
   if (role === 'admin') {
     return [
       ...common,
-      {
-        listIcon: <IoCalculatorOutline className="text-[20px]" />,
-        listText: 'Calculator',
-        url: '/dashboard/calculator'
-      },
+      // {
+      //   listIcon: <IoCalculatorOutline className="text-[20px]" />,
+      //   listText: 'Calculator',
+      //   url: '/dashboard/calculator'
+      // },
       {
         listIcon: <BsPlusCircle className="text-[20px]" />,
         listText: 'Add'
@@ -55,12 +55,12 @@ const listItems = (role) => {
   }
   if (role === 'doctor') {
     return [
-      ...common,
-      {
-        listIcon: <RiBillLine className="text-[20px]" />,
-        listText: 'Bill',
-        url: '/dashboard/bill'
-      }
+      ...common
+      // {
+      //   listIcon: <RiBillLine className="text-[20px]" />,
+      //   listText: 'Bill',
+      //   url: '/dashboard/bill'
+      // }
     ];
   }
 
@@ -114,12 +114,18 @@ const DashboardLeftSideBar = ({ toggleLeftSideBar }) => {
                   role="button"
                   id="demo-positioned-button"
                   aria-controls={
-                    openMenu && index === 4 ? 'demo-positioned-menu' : undefined
+                    openMenu && listItem.listText === 'Add'
+                      ? 'demo-positioned-menu'
+                      : undefined
                   }
                   className="cursor-pointer hover:bg-[#caedff] hover:text-primary"
                   aria-haspopup="true"
                   aria-expanded={openMenu && index === 4 ? 'true' : undefined}
-                  onClick={index === 4 ? handleClick : () => nav(listItem.url)}
+                  onClick={
+                    listItem.listText === 'Add'
+                      ? handleClick
+                      : () => nav(listItem.url)
+                  }
                   key={listItem.listText}
                 >
                   <ListItemIcon>{listItem.listIcon}</ListItemIcon>
@@ -133,6 +139,7 @@ const DashboardLeftSideBar = ({ toggleLeftSideBar }) => {
             <List>
               {accItems.map((listItem) => (
                 <ListItem
+                  key={listItem.listText}
                   onClick={() => nav(listItem.url)}
                   className="cursor-pointer hover:bg-[#caedff] hover:text-primary"
                 >
@@ -194,7 +201,7 @@ const DashboardLeftSideBar = ({ toggleLeftSideBar }) => {
         <MenuItem
           onClick={() => {
             handleClose();
-            nav('/dashboard/patient');
+            nav('/dashboard/add/patient');
           }}
           className="text-[16px] text-slate-500"
         >

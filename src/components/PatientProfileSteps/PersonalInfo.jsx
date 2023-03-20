@@ -9,6 +9,7 @@ import PatientProfileNavigation from './PatientProfileNavigation';
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: '#f5f5f5',
   ...theme.typography.body2,
+  backgroundColor: 'transparent',
   padding: theme.spacing(1),
   boxShadow: 'none',
   borderRadius: 'none'
