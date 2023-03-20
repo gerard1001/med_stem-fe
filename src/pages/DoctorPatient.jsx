@@ -137,7 +137,7 @@ const MyTable = () => {
         filterNextAppointment &&
         JSON.stringify(nextAppointments)
           .toLowerCase()
-          .includes(format(new Date(filterNextAppointment), 'dd-MM-yyyy'))
+          .includes(format(new Date(filterNextAppointment), 'dd/MM/yyyy'))
       ) {
         return true;
       }
@@ -145,7 +145,7 @@ const MyTable = () => {
         filterPrevAppointment &&
         JSON.stringify(prevAppointments)
           .toLowerCase()
-          .includes(format(new Date(filterPrevAppointment), 'dd-MM-yyyy'))
+          .includes(format(new Date(filterPrevAppointment), 'dd/MM/yyyy'))
       ) {
         return true;
       }
@@ -210,6 +210,9 @@ const MyTable = () => {
   };
 
   const finalData = search ? sortedGlobalData : sortedData;
+  const patientCount = patients?.length || 0;
+
+  console.log({ globalFilteredData });
 
   return (
     <Box className="p-10 sm:p-3">
@@ -219,7 +222,9 @@ const MyTable = () => {
       >
         <Box className="flex flex-row items-center justify-between">
           <Box>
-            <Typography className="">Total Patients (102)</Typography>
+            <Typography className="">
+              Total Patients ({patientCount})
+            </Typography>
           </Box>
           <Box className="flex items-center">
             {search && (
@@ -230,6 +235,8 @@ const MyTable = () => {
                   label="Search..."
                   variant="outlined"
                   value={globalFilter}
+                  autoFocus
+                  type="search"
                   onChange={handleGlobalChange}
                 />
               </Box>
@@ -466,6 +473,7 @@ const MyTable = () => {
                 <>
                   {finalData?.map(
                     ({
+                      client_id,
                       id,
                       firstName,
                       lastName,
@@ -473,7 +481,7 @@ const MyTable = () => {
                       nextAppointments,
                       prevAppointments
                     }) => (
-                      <TableRow key={id} className="">
+                      <TableRow key={client_id} className="">
                         <TableCell
                           align="left"
                           className="text-[17px] md:text-[14px]"
