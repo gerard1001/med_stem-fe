@@ -11,7 +11,7 @@ const Account = () => {
   const role = loginData?.Role?.role;
 
   return (
-    <Box className="w-full h-full max-w-[2000px] mx-auto p-16 md:p-8">
+    <Box className="w-full h-full max-w-[2000px] mx-auto p-8 md:p-4">
       {role === 'client' && <PatientProfile />}
       {role === 'admin' && <AdminProfile />}
       {role === 'doctor' && <DoctorProfile />}

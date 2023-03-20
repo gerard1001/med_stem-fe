@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
@@ -12,7 +13,7 @@ import {
   TextField,
   Typography
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -28,8 +29,6 @@ import Loader from '../Loader/Loader';
 import LoadingButton from '../LoadingButton';
 import PatientProfileNavigation from './PatientProfileNavigation';
 
-const schema = yup.object().shape({});
-
 const MedicalHistory = () => {
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
@@ -39,6 +38,11 @@ const MedicalHistory = () => {
   const patientData = useSelector((state) => state.patient.single_data.data);
   const { client: med_info } = useSelector((state) => state.info);
   const { loginData } = useSelector((state) => state.user);
+
+  const { control, getValues, register, setValue, watch, reset } = useForm({
+    mode: 'all'
+  });
+  const form = watch();
 
   const spec_med_info = med_info?.filter(
     (values) => values.info_type === 'special'
@@ -52,26 +56,6 @@ const MedicalHistory = () => {
     dispatch(getInfoClientList(loginData?.client_id));
   }, []);
 
-  const { control, getValues, register, setValue, watch, reset } = useForm({
-    mode: 'all',
-    resolver: yupResolver(schema)
-  });
-  const form = watch();
-
-  const handleDefaultValues = (value, detail) => {
-    if (!form[value.info_id] || form[value.info_id].details === undefined) {
-      setValue(`${value?.info_id}.details`, detail || '');
-    }
-    if (
-      (!form[value.info_id] || form[value.info_id].value === undefined) &&
-      value
-    ) {
-      setValue(
-        `${value.info_id}.value`,
-        value.patients?.length > 0 ? 'yes' : 'no'
-      );
-    }
-  };
   const handleDetailModal = (value) => {
     if (!value) {
       setOpenDetailModal(null);
@@ -106,7 +90,7 @@ const MedicalHistory = () => {
         .then(() => {
           dispatch(getInfoClientList(patientData.client_id)).then(() => {
             setLoading(false);
-            reset();
+            // reset();
             setIsEditing(false);
           });
         });
@@ -115,6 +99,23 @@ const MedicalHistory = () => {
       toast.error(error.response.data.message);
     }
   };
+
+  useEffect(() => {
+    med_info?.map((value) => {
+      const detail =
+        value.patients && value.patients[0]?.Client_MedicalInfo?.description;
+
+      setValue(`${value.info_id}.details`, detail || '', {
+        shouldValidate: true
+      });
+      setValue(
+        `${value.info_id}.value`,
+        value.patients?.length > 0 ? 'yes' : 'no',
+        { shouldValidate: true }
+      );
+      console.log(detail, 'detail ................................');
+    });
+  }, [med_info]);
 
   return (
     <div>
@@ -149,12 +150,6 @@ const MedicalHistory = () => {
             </Box>
             <Box>
               {gen_med_info?.map((value) => {
-                const detail =
-                  value.patients &&
-                  value.patients[0]?.Client_MedicalInfo?.description;
-
-                handleDefaultValues(value, detail);
-
                 return (
                   <Box
                     className="flex flex-row items-center h-[50px] lg:h-min"
@@ -182,6 +177,7 @@ const MedicalHistory = () => {
                       <Controller
                         control={control}
                         name={`${value.info_id}.value`}
+                        defaultValue={value.patients?.length > 0 ? 'yes' : 'no'}
                         render={({ field }) => (
                           <RadioGroup
                             {...field}
@@ -238,12 +234,6 @@ const MedicalHistory = () => {
               </Box>
               <Box className="flex flex-col items-start gap-8">
                 {spec_med_info?.map((value) => {
-                  const detail =
-                    value.patients &&
-                    value.patients[0]?.Client_MedicalInfo?.description;
-
-                  handleDefaultValues(value, detail);
-
                   return (
                     <Box
                       className="flex flex-col items-start w-[100%]"

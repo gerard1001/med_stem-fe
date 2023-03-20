@@ -112,8 +112,8 @@ const EditAdminDoctorPersonalProfileModal = ({
                 value={field.value}
                 variant="outlined"
                 fullWidth
-                label="ID number"
-                placeholder="ID number"
+                label="Family Name"
+                placeholder="Family Name"
                 error={!!errors.family_name}
                 helperText={errors.family_name && errors.family_name.message}
                 required
@@ -130,8 +130,8 @@ const EditAdminDoctorPersonalProfileModal = ({
                 value={field.value}
                 variant="outlined"
                 fullWidth
-                label="ID number"
-                placeholder="ID number"
+                label="Given Name"
+                placeholder="Given Name"
                 error={!!errors.given_name}
                 helperText={errors.given_name && errors.given_name.message}
                 required
@@ -171,6 +171,7 @@ const EditAdminDoctorPersonalProfileModal = ({
                 type="date"
                 variant="outlined"
                 fullWidth
+                label="Birth Date"
                 // label="Birth date"
                 // placeholder="Birth date"
                 error={!!errors.birth_date}
@@ -203,7 +204,7 @@ const EditAdminDoctorPersonalProfileModal = ({
                   {...field}
                   variant="outlined"
                   fullWidth
-                  label="email"
+                  label="Email"
                   name="email"
                   placeholder="Enter your email name"
                   error={!!errors.email}

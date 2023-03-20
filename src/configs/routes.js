@@ -21,6 +21,7 @@ import SpecialityDoctor from '../pages/SpecialityDoctor';
 import AppointmentPage from '../components/Appointment/AppointmentPage';
 import ForgotPassword from '../pages/ForgotPassword';
 import ResetPassword from '../pages/ResetPassword';
+import PatientSignupForm from '../components/PatientSignupForm';
 
 const routes = createBrowserRouter([
   {
@@ -104,6 +105,10 @@ const routes = createBrowserRouter([
           {
             path: 'doctor',
             element: <DoctorSignupForm />
+          },
+          {
+            path: 'patient',
+            element: <PatientSignupForm />
           }
         ]
       }

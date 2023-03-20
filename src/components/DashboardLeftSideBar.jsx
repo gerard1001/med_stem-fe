@@ -139,6 +139,7 @@ const DashboardLeftSideBar = ({ toggleLeftSideBar }) => {
             <List>
               {accItems.map((listItem) => (
                 <ListItem
+                  key={listItem.listText}
                   onClick={() => nav(listItem.url)}
                   className="cursor-pointer hover:bg-[#caedff] hover:text-primary"
                 >
@@ -200,7 +201,7 @@ const DashboardLeftSideBar = ({ toggleLeftSideBar }) => {
         <MenuItem
           onClick={() => {
             handleClose();
-            nav('/dashboard/patient');
+            nav('/dashboard/add/patient');
           }}
           className="text-[16px] text-slate-500"
         >

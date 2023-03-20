@@ -271,7 +271,7 @@ const AccountInfo = () => {
           <Box className="w-[20%] md:mb-[80px] md:w-[100%] md:mt-10 flex flex-col items-center">
             <Box className="p-10 rounded-[50%] bg-[#a2ccff] relative overflow-hidden cursor-pointer">
               <FiUser className="text-[60px]" />
-              {(picUrl || patientData?.picture) && (
+              {(picUrl || (patientData && patientData.picture)) && (
                 <img
                   className="w-full h-full absolute top-0 left-0 z-10"
                   src={picUrl || patientData?.picture}

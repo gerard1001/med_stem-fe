@@ -89,17 +89,15 @@ const AdminProfile = () => {
   }, [loginData]);
 
   return (
-    <Box className="sm:p-4 p-8">
-      <AdminDoctorAccountPage
-        info={info}
-        image={user?.picture}
-        handleEdit={handleEdit}
-        uploadImage={handleUploadImage}
-        loadingUpload={loadingUpload}
-        changePassword={changePassword}
-        loadingReset={loadingReset}
-      />
-    </Box>
+    <AdminDoctorAccountPage
+      info={info}
+      image={user?.picture}
+      handleEdit={handleEdit}
+      uploadImage={handleUploadImage}
+      loadingUpload={loadingUpload}
+      changePassword={changePassword}
+      loadingReset={loadingReset}
+    />
   );
 };
 
