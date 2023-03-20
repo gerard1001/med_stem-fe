@@ -90,14 +90,6 @@ const routes = createBrowserRouter([
         element: <Analytics />
       },
       {
-        path: 'schedule',
-        element: <SchedulePage />
-      },
-      {
-        path: 'bill',
-        element: <Bill />
-      },
-      {
         path: 'add',
         element: <Outlet />,
         children: [
@@ -130,6 +122,16 @@ const routes = createBrowserRouter([
     element: <AppointmentPage />
   },
 
+  // removed
+
+  // {
+  //   path: 'schedule',
+  //   element: <SchedulePage />
+  // },
+  // {
+  //   path: 'bill',
+  //   element: <Bill />
+  // },
   // {
   //   path: '/test1',
   //   element: <PatientProfile />,
