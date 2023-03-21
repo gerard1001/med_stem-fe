@@ -23,6 +23,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPatientList } from '../redux/reducers/patient.reducer';
 import formatArray from '../utils/formatArray';
+import { useNavigate } from 'react-router';
 
 const styles = {
   container: {
@@ -212,7 +213,7 @@ const MyTable = () => {
   const finalData = search ? sortedGlobalData : sortedData;
   const patientCount = patients?.length || 0;
 
-  console.log({ globalFilteredData });
+  const nav = useNavigate();
 
   return (
     <Box className="p-10 sm:p-3">
@@ -481,7 +482,13 @@ const MyTable = () => {
                       nextAppointments,
                       prevAppointments
                     }) => (
-                      <TableRow key={client_id} className="">
+                      <TableRow
+                        key={client_id}
+                        className="cursor-default"
+                        onClick={() => {
+                          nav(`/dashboard/patient/profile/${client_id}`);
+                        }}
+                      >
                         <TableCell
                           align="left"
                           className="text-[17px] md:text-[14px]"

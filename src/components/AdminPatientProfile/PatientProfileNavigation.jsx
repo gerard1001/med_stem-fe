@@ -9,7 +9,7 @@ import { Box, Typography } from '@mui/material';
 
 const PatientProfileNavigation = () => {
   const step = useSelector((state) => state.step.admin_patient_step);
-  const patient = useSelector((state) => state.patient.single_data.data);
+  const patient = useSelector((state) => state.patient?.single_data?.data);
 
   const dispatch = useDispatch();
 

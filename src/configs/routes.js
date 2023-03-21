@@ -22,6 +22,7 @@ import AppointmentPage from '../components/Appointment/AppointmentPage';
 import ForgotPassword from '../pages/ForgotPassword';
 import ResetPassword from '../pages/ResetPassword';
 import PatientSignupForm from '../components/PatientSignupForm';
+import AdminPatientProfile from '../pages/AdminPatientProfile';
 
 const routes = createBrowserRouter([
   {
@@ -87,6 +88,10 @@ const routes = createBrowserRouter([
         element: <DoctorPatient />
       },
       {
+        path: 'patient/profile/:id',
+        element: <AdminPatientProfile />
+      },
+      {
         path: 'analytics',
         element: <Analytics />
       },
@@ -126,10 +131,10 @@ const routes = createBrowserRouter([
     path: '/dashboard/appointments/:id',
     element: <AppointmentPage />
   },
-  {
-    path: '/dashboard/patient/profile/:id',
-    element: <AppointmentPage />
-  },
+  // {
+  //   path: '/dashboard/patient/profile/:id',
+  //   element: <AdminPatientProfile />
+  // },
 
   // removed
 

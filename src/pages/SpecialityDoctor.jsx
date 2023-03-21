@@ -71,7 +71,7 @@ const SpecialityDoctor = () => {
       )}
       {!doctors?.loading && (
         <Box>
-          <Box className="flex flex-col items-end p-0 mx-auto pb-10 max-w-[900px] w-[100%] mx-auto ">
+          <Box className="flex flex-col items-end p-0 mx-auto pb-10 max-w-[900px] w-[100%]">
             <List
               className="w-full px-8 pb-8 overflow-auto"
               sx={{ marginX: 'auto', marginTop: 1 }}

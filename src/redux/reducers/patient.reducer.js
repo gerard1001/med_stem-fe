@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axios from '../../axios/axios.instance';
+import { toast } from 'react-toastify';
 
 const initialState = {
   loading: false,
@@ -36,6 +37,17 @@ export const getOnePatient = createAsyncThunk(
     axios
       .get(`${process.env.BACKEND_URL}/users/clients/${patientId}`)
       .then((res) => res.data)
+);
+
+export const deletePatientAccount = createAsyncThunk(
+  'users/deletePatient',
+  async (patientId) =>
+    axios
+      .delete(`${process.env.BACKEND_URL}/users/client/${patientId}`)
+      .then((res) => {
+        console.log(res.data, 'ACTION');
+        res.data;
+      })
 );
 
 const patientSlice = createSlice({
@@ -78,13 +90,30 @@ const patientSlice = createSlice({
       state.single_data = {};
     });
     builder.addCase(registerClient.fulfilled, (state, action) => {
-      alert('Registration successful');
+      toast.success('Registration successful');
       state.loading = false;
       state.single_data = action.payload;
       state.error = '';
     });
     builder.addCase(registerClient.rejected, (state, action) => {
-      alert(action.error.message);
+      toast.error(action.error.message);
+      state.loading = false;
+      state.single_data = {};
+      state.error = action.error.message;
+    });
+    builder.addCase(deletePatientAccount.pending, (state, action) => {
+      state.loading = true;
+      state.single_data = {};
+    });
+    builder.addCase(deletePatientAccount.fulfilled, (state, action) => {
+      toast.success('Successfully deleted patient');
+      state.loading = false;
+      state.single_data = action.payload;
+      state.error = '';
+    });
+    builder.addCase(deletePatientAccount.rejected, (state, action) => {
+      toast.error(action.error.message);
+      console.log(action, 'ACTION');
       state.loading = false;
       state.single_data = {};
       state.error = action.error.message;
