@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router';
 import HomeNavBar from '../components/HomeNavBar';
 import Loader from '../components/Loader/Loader';
 import { getOneDoctor } from '../redux/reducers/doctor.reducer';
+import BackButton from '../components/BackButton';
 
 const DoctorPage = () => {
   const navigate = useNavigate();
@@ -31,12 +32,7 @@ const DoctorPage = () => {
       <Box className="flex w-[100%]  max-w-[1200px] px-32 md:px-[10%] sm:px-4 pb-32 md:flex-col md:items-center mt-10 md:mt-1 mx-auto md:pt-12">
         <Box className="w-4/5 md:w-[100%] relative flex flex-row md:flex-col items-start mb-16">
           <Box className="w-[10%]">
-            <Box
-              className="border-[#2b8aff] rounded-[10px] text-primary border w-fit px-4 py-1 absolute left-5 md:left-1 text-[16px] cursor-pointer hover:border-none hover:bg-[#a2ccff]"
-              onClick={handleBack}
-            >
-              <IoIcons.IoArrowBack />
-            </Box>
+            <BackButton className="w-fit left-5" onClick={handleBack} />
           </Box>
           {doctor?.loading && (
             <Box className="w-[80px] h-[80px] mx-auto mt-[220px] md:mt-[120px]">

@@ -1,13 +1,25 @@
-import { Box, Button, Grid, Paper, styled, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import {
+  Box,
+  Button,
+  Grid,
+  Paper,
+  styled,
+  Typography,
+  Modal
+} from '@mui/material';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getOnePatient } from '../../redux/reducers/patient.reducer';
+import { useNavigate } from 'react-router';
+import {
+  getOnePatient,
+  deletePatientAccount
+} from '../../redux/reducers/patient.reducer';
 import EditPatientPersonalProfileModal from '../EditPatientPersonalProfileModal';
 import Loader from '../Loader/Loader';
 import PatientProfileNavigation from './PatientProfileNavigation';
 
 const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: '#fff',
+  backgroundColor: '#f5f5f5',
   ...theme.typography.body2,
   padding: theme.spacing(1),
   boxShadow: 'none',
@@ -15,13 +27,25 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const PatientInfo = () => {
+  const dispatch = useDispatch();
   const patient = useSelector((state) => state.patient);
-  const [openEditModal, setOpenEditModal] = useState(false);
-
   const patientData = patient?.single_data?.data;
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
+  const [patientId, setPatientId] = React.useState(patientData?.client_id);
+  const handleOpen = () => setOpenDeleteModal(true);
+  const handleClose = () => setOpenDeleteModal(false);
+
+  const nav = useNavigate();
+
+  const handleDeleteAccount = () => {
+    dispatch(deletePatientAccount(patientId));
+    nav('/dashboard/patient');
+  };
+
   return (
     <div>
-      <Box className="w-full">
+      <Box className="w-full p-20 sm:p-4">
         <Box className="pb-16">
           <PatientProfileNavigation />
           <Box sx={{ width: { md: '50%' } }}>
@@ -133,20 +157,6 @@ const PatientInfo = () => {
                   </Typography>
                 </Item>
               </Grid>
-              {/* <Grid item xs={6}>
-                  <Item>
-                    {' '}
-                    <Typography variant="body2">Address 1</Typography>
-                    <Typography
-                      variant="subtitle1"
-                      fontWeight="500"
-                      fontSize="17px"
-                      className="capitalize"
-                    >
-                      {patientData?.address_2}
-                    </Typography>
-                  </Item>
-                </Grid> */}
               <Grid item xs={6}>
                 <Item>
                   {' '}
@@ -190,23 +200,36 @@ const PatientInfo = () => {
               </Grid>
             </Grid>
           </Box>
-          <Button
-            sx={{
-              marginTop: '40px',
-              width: '120px',
-              display: 'block',
-              color: '#1A4CFF',
-              border: '1px solid #1A4CFF',
-              borderRadius: '20px',
-              marginX: 'auto',
-              ':hover': { backgroundColor: '#a2ccff' }
-            }}
-            onClick={() => {
-              setOpenEditModal(true);
-            }}
-          >
-            Edit
-          </Button>
+          <Box className="flex items-end flex-grow justify-end gap-4">
+            <Button
+              sx={{
+                marginTop: '40px',
+                width: '120px',
+                color: '#1A4CFF',
+                border: '1px solid #1A4CFF',
+                borderRadius: '10px',
+                ':hover': { backgroundColor: '#a2ccff' }
+              }}
+              onClick={() => {
+                setOpenEditModal(true);
+              }}
+            >
+              Edit
+            </Button>
+            <Button
+              sx={{
+                marginTop: '40px',
+                width: '120px',
+                color: '#1A4CFF',
+                border: '1px solid #1A4CFF',
+                borderRadius: '10px',
+                ':hover': { backgroundColor: '#a2ccff' }
+              }}
+              onClick={handleOpen}
+            >
+              Delete
+            </Button>
+          </Box>
         </Box>
       </Box>
       <EditPatientPersonalProfileModal
@@ -216,6 +239,38 @@ const PatientInfo = () => {
         }}
         patientData={patientData}
       />
+      <Modal
+        open={openDeleteModal}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box className="absolute translate-x-[-50%] translate-y-[-50%] top-[50%] left-[50%] w-80 border border-sky-400 p-4 bg-white rounded-2xl">
+          <Typography
+            id="modal-modal-title"
+            variant="h6"
+            fontWeight={600}
+            textAlign="center"
+            component="h2"
+          >
+            Delete patient?
+          </Typography>
+          <Box className="w-full flex items-center justify-evenly mt-10 gap-4">
+            <Button
+              onClick={handleClose}
+              className="bg-[#b1b1b1] text-black w-1/2 rounded-lg"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleDeleteAccount}
+              className="bg-[#1A4CFF] text-white w-1/2  rounded-lg"
+            >
+              Delete
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
     </div>
   );
 };

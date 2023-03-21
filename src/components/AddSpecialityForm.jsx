@@ -68,7 +68,7 @@ const AddSpecialityForm = () => {
   }, [picture]);
 
   return (
-    <Box className="p-8 md:p-4 pt-16 w-full max-w-[900px] mx-auto relative h-full flex flex-col">
+    <Box className="p-8 md:p-4 pt-16 w-full max-w-[900px] relative h-full flex flex-col">
       <Typography variant="h6" className="md:text-center">
         Add Speciality
       </Typography>

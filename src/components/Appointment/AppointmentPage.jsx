@@ -22,6 +22,7 @@ import {
   toPreviousAppointments,
   toExpectedAppointments
 } from '../../redux/reducers/step.reducer';
+import AppointmantPageNavigation from './AppointmantPageNavigation';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: '#E7E7E7',
@@ -52,8 +53,6 @@ const AppointmentPage = () => {
     dispatch(getOneAppointment(appointmentId));
   }, [appointmentId, urlId]);
 
-  console.log(appointment?.data, '######');
-
   const date = new Date(appointment?.data?.work_day?.date);
 
   const [month, day, year] = [
@@ -75,36 +74,7 @@ const AppointmentPage = () => {
             {appointment?.data?.client?.last_name}
           </Typography>
         </Box>
-        <Box className="flex items-center gap-10 mt-8 mb-5">
-          <Typography
-            variant="subtitle1"
-            fontWeight="600"
-            fontSize="17px"
-            className={`${
-              step === 0 && 'text-primary underline'
-            }  cursor-pointer`}
-            onClick={() => {
-              nav('/dashboard/appointments');
-              dispatch(toExpectedAppointments());
-            }}
-          >
-            Expected Appointments
-          </Typography>
-          <Typography
-            variant="subtitle1"
-            fontWeight="600"
-            fontSize="17px"
-            className={`${
-              step === 1 && 'text-primary underline'
-            }  cursor-pointer`}
-            onClick={() => {
-              nav('/dashboard/appointments');
-              dispatch(toPreviousAppointments());
-            }}
-          >
-            Previous Appointments
-          </Typography>
-        </Box>
+        <AppointmantPageNavigation appointment={appointment?.data} />
         <Box className="flex w-fit gap-5 items-start flex-row sm:flex-col sm:gap-2">
           <Typography variant="subtitle1" fontSize="17px">
             Date: {day}.{month}.{year}
@@ -120,7 +90,11 @@ const AppointmentPage = () => {
           </Typography>
           <Box className="p-4 w-full border border-[#71A9F7] bg-white rounded-[8px] leading-3">
             <Typography variant="subtitle1" className="leading-5 text-[15px]">
-              {appointment?.data?.complaints}
+              {appointment?.data?.complaints ? (
+                appointment?.data?.complaints
+              ) : (
+                <Box className="text-center">No complaints were found</Box>
+              )}
             </Typography>
           </Box>
         </Box>
@@ -131,7 +105,11 @@ const AppointmentPage = () => {
           </Typography>
           <Box className="p-4 w-full border border-[#71A9F7] bg-white rounded-[8px] leading-3">
             <Typography variant="subtitle1" className="leading-5 text-[15px]">
-              {appointment?.data?.diagnosis}
+              {appointment?.data?.diagnosis ? (
+                appointment?.data?.diagnosis
+              ) : (
+                <Box className="text-center">No diagnosis were found</Box>
+              )}
             </Typography>
           </Box>
         </Box>
@@ -141,39 +119,39 @@ const AppointmentPage = () => {
             Drugs
           </Typography>
           <Box className="p-4 w-full border border-[#71A9F7] bg-white rounded-[8px] leading-3">
-            <TableContainer component={Paper} elevation={0}>
-              <Table
-                sx={{
-                  minWidth: 650,
-                  backgroundColor: '#fff',
-                  height: 'fit',
-                  overflow: 'auto'
-                }}
-                aria-label="simple table"
-              >
-                <TableHead>
-                  <TableRow>
-                    <TableCell sx={{ fontSize: '14px' }}>Name</TableCell>
-                    <TableCell align="left" sx={{ fontSize: '14px' }}>
-                      Dosage
-                    </TableCell>
-                    <TableCell align="left" sx={{ fontSize: '14px' }}>
-                      Frequency
-                    </TableCell>
-                    <TableCell align="left" sx={{ fontSize: '14px' }}>
-                      Duration
-                    </TableCell>
-                    <TableCell align="left" sx={{ fontSize: '14px' }}>
-                      Date
-                    </TableCell>
-                    <TableCell align="left" sx={{ fontSize: '14px' }}>
-                      Explanation
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {appointment?.data ? (
-                    appointment?.data?.drugs?.map((row, idx) => (
+            {appointment?.data?.drugs !== [] ? (
+              <TableContainer component={Paper} elevation={0}>
+                <Table
+                  sx={{
+                    minWidth: 650,
+                    backgroundColor: '#fff',
+                    height: 'fit',
+                    overflow: 'auto'
+                  }}
+                  aria-label="simple table"
+                >
+                  <TableHead>
+                    <TableRow>
+                      <TableCell sx={{ fontSize: '14px' }}>Name</TableCell>
+                      <TableCell align="left" sx={{ fontSize: '14px' }}>
+                        Dosage
+                      </TableCell>
+                      <TableCell align="left" sx={{ fontSize: '14px' }}>
+                        Frequency
+                      </TableCell>
+                      <TableCell align="left" sx={{ fontSize: '14px' }}>
+                        Duration
+                      </TableCell>
+                      <TableCell align="left" sx={{ fontSize: '14px' }}>
+                        Date
+                      </TableCell>
+                      <TableCell align="left" sx={{ fontSize: '14px' }}>
+                        Explanation
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {appointment?.data?.drugs?.map((row, idx) => (
                       <>
                         <TableRow
                           key={row.appointment_number}
@@ -212,15 +190,13 @@ const AppointmentPage = () => {
                           </TableCell>
                         </TableRow>
                       </>
-                    ))
-                  ) : (
-                    <Typography className="text-center my-5">
-                      No Drugs
-                    </Typography>
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            ) : (
+              <Box className="text-center">No drugs were found</Box>
+            )}
           </Box>
         </Box>
 
@@ -229,21 +205,27 @@ const AppointmentPage = () => {
             Recommendations
           </Typography>
           <Box className="p-4 w-full border border-[#71A9F7] bg-white rounded-[8px] flex flex-row items-center flex-wrap flex-grow gap-2">
-            {appointment?.data?.recommendations?.map((item) => {
-              return (
-                <Grid item xs={4} className="w-fit">
-                  <Item>
-                    <Typography
-                      variant="subtitle1"
-                      fontWeight="500"
-                      fontSize="14px"
-                    >
-                      {item}
-                    </Typography>
-                  </Item>
-                </Grid>
-              );
-            })}
+            {appointment?.data?.recommendations !== [] ? (
+              <>
+                {appointment?.data?.recommendations?.map((item) => {
+                  return (
+                    <Grid item xs={4} className="w-fit">
+                      <Item>
+                        <Typography
+                          variant="subtitle1"
+                          fontWeight="500"
+                          fontSize="14px"
+                        >
+                          {item}
+                        </Typography>
+                      </Item>
+                    </Grid>
+                  );
+                })}
+              </>
+            ) : (
+              <Box className="text-center">No recommendations were found</Box>
+            )}
           </Box>
         </Box>
       </Box>

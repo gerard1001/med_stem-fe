@@ -144,9 +144,21 @@ const DoctorSignupForm = () => {
       </Typography>
       <Box
         spacing={2}
-        className="flex flex-row items-center justify-evenly md:flex-col w-[100%]"
+        className="flex flex-row items-center justify-evenly md:flex-col w-[100%] gap-4 max-w-[1200px]"
       >
-        <Box className="flex flex-col gap-4 w-[40%] md:w-full md:max-w-[400px] p-2 border-box">
+        <Box
+          sx={{
+            display: 'grid',
+            flexDirection: 'column',
+            width: '100%',
+            gridTemplateColumns: {
+              xs: 'auto',
+              sm: '1fr 1fr',
+              md: '1fr 1fr 1fr'
+            },
+            gap: 3
+          }}
+        >
           <Box className="w-[100%]">
             <Controller
               name="first_name"
@@ -201,8 +213,6 @@ const DoctorSignupForm = () => {
               )}
             />
           </Box>
-        </Box>
-        <Box className="flex flex-col gap-4 p-2 w-[40%] md:w-full md:max-w-[400px]">
           <Box className="w-[100%]">
             <Controller
               control={control}
@@ -326,137 +336,138 @@ const DoctorSignupForm = () => {
         fontWeight="600"
         sx={{ my: '20px', textAlign: { md: 'left', xs: 'center' } }}
       >
-        Personal Information
+        Contact Information
       </Typography>
-
       <Box
-        spacing={2}
-        className="flex flex-row items-start lg:items-center justify-evenly md:flex-col w-[100%] flex-grow gap-2"
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: {
+            xs: 'auto',
+            sm: '1fr 1fr',
+            md: '1fr 1fr 1fr'
+          },
+          gap: 3,
+          maxWidth: '1200px'
+        }}
       >
-        <Box className="flex flex-col gap-4 w-1/3 md:w-full md:max-w-[350px]">
-          <Box className="w-[100%]">
-            <Controller
-              name="departmentName"
-              control={control}
-              defaultValue={[]}
-              render={({ field }) => (
-                <FormControl size="small" className="w-full">
-                  <InputLabel id="demo-multiple-checkbox-label">
-                    Speciality
-                  </InputLabel>
-                  <Select
-                    {...field}
-                    labelId="demo-multiple-checkbox-label"
-                    id="demo-multiple-checkbox"
-                    size="small"
-                    sx={{ width: '100%', maxWidth: '350px' }}
-                    multiple
-                    onChange={(event) => {
-                      handleChangeSelectInput(event);
-                      field.onChange(event.target.value);
-                    }}
-                    input={<OutlinedInput label="Speciality" />}
-                    renderValue={(selected) => selected.join(', ')}
-                  >
-                    {departments?.data?.data?.map((name) => (
-                      <MenuItem
-                        key={name.department_id}
-                        value={name.department_name}
-                      >
-                        <Checkbox
-                          checked={
-                            departmentName.indexOf(name.department_name) > -1
-                          }
-                        />
-                        <ListItemText primary={name.department_name} />
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              )}
-            />
-          </Box>
-          <Box className="w-[100%]">
-            <Controller
-              name="category"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <TextField
+        <Box className="w-[100%]">
+          <Controller
+            name="departmentName"
+            control={control}
+            defaultValue={[]}
+            render={({ field }) => (
+              <FormControl size="small" className="w-full">
+                <InputLabel id="demo-multiple-checkbox-label">
+                  Speciality
+                </InputLabel>
+                <Select
                   {...field}
-                  label="Category"
-                  variant="outlined"
+                  labelId="demo-multiple-checkbox-label"
+                  id="demo-multiple-checkbox"
                   size="small"
-                  sx={{ width: '100%', maxWidth: '350px', mb: 1 }}
-                  error={!!errors.category}
-                  helperText={errors.category?.message}
-                />
-              )}
-            />
-          </Box>
-        </Box>
-
-        <Box className="flex flex-col gap-4 w-1/3 md:w-full md:max-w-[350px]">
-          <Box className="w-[100%]">
-            <Controller
-              name="education"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Education"
-                  variant="outlined"
-                  size="small"
-                  sx={{
-                    width: '100%',
-                    maxWidth: '350px'
+                  sx={{ width: '100%', maxWidth: '350px' }}
+                  multiple
+                  onChange={(event) => {
+                    handleChangeSelectInput(event);
+                    field.onChange(event.target.value);
                   }}
-                  error={!!errors.education}
-                  helperText={errors.education?.message}
-                />
-              )}
-            />
-          </Box>
-          <Box className="w-[100%]">
-            <Controller
-              name="experience_years"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Years Of Experience"
-                  variant="outlined"
-                  size="small"
-                  sx={{ width: '100%', maxWidth: '350px' }}
-                  error={!!errors.experience_years}
-                  helperText={errors.experience_years?.message}
-                />
-              )}
-            />
-          </Box>
+                  input={<OutlinedInput label="Speciality" />}
+                  renderValue={(selected) => selected.join(', ')}
+                >
+                  {departments?.data?.data?.map((name) => (
+                    <MenuItem
+                      key={name.department_id}
+                      value={name.department_name}
+                    >
+                      <Checkbox
+                        checked={
+                          departmentName.indexOf(name.department_name) > -1
+                        }
+                      />
+                      <ListItemText primary={name.department_name} />
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+          />
+        </Box>
+        <Box className="w-[100%]">
+          <Controller
+            name="category"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Category"
+                variant="outlined"
+                size="small"
+                sx={{ width: '100%', maxWidth: '350px', mb: 1 }}
+                error={!!errors.category}
+                helperText={errors.category?.message}
+              />
+            )}
+          />
         </Box>
 
-        <Box className="flex flex-col gap-4 w-1/3 md:w-full md:max-w-[350px]">
-          <Box className="w-[100%]">
-            <Controller
-              name="cost_per_appointment"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Cost Per Appointment"
-                  variant="outlined"
-                  size="small"
-                  sx={{ width: '100%', maxWidth: '350px' }}
-                  error={!!errors.cost_per_appointment}
-                  helperText={errors.cost_per_appointment?.message}
-                />
-              )}
-            />
-          </Box>
+        <Box className="w-[100%]">
+          <Controller
+            name="education"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Education"
+                variant="outlined"
+                size="small"
+                sx={{
+                  width: '100%',
+                  maxWidth: '350px'
+                }}
+                error={!!errors.education}
+                helperText={errors.education?.message}
+              />
+            )}
+          />
+        </Box>
+        <Box className="w-[100%]">
+          <Controller
+            name="experience_years"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Years Of Experience"
+                variant="outlined"
+                size="small"
+                sx={{ width: '100%', maxWidth: '350px' }}
+                error={!!errors.experience_years}
+                helperText={errors.experience_years?.message}
+              />
+            )}
+          />
+        </Box>
+
+        <Box className="w-[100%]">
+          <Controller
+            name="cost_per_appointment"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Cost Per Appointment"
+                variant="outlined"
+                size="small"
+                sx={{ width: '100%', maxWidth: '350px' }}
+                error={!!errors.cost_per_appointment}
+                helperText={errors.cost_per_appointment?.message}
+              />
+            )}
+          />
         </Box>
       </Box>
 

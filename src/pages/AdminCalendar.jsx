@@ -84,7 +84,7 @@ const RightSideBar = () => {
         appointment_duration
       })
     );
-    alert({ start_date, end_date, days, from, to, appointment_duration });
+    console.log({ start_date, end_date, days, from, to, appointment_duration });
     reset();
   };
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
-import PatientAppointmentNavigation from './PatientAppoinmentNavigation';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Button,
@@ -20,8 +19,10 @@ import { cancelAppointment } from '../../redux/reducers/patient.appointment.redu
 import EditAppointmentModal from '../Appointment/CancelAppointmentModal';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
+import PatientProfileNavigation from './PatientProfileNavigation';
+import { toAdminPatientExpectedAppointments } from '../../redux/reducers/step.reducer';
 
-const ExpectedAppointment = () => {
+const ExpectedAppointments = () => {
   const [clickedIdx, setClickedIdx] = React.useState(0);
   const [appointIdx, setAppointIdx] = React.useState(null);
   const [appointDoc, setDoctor] = React.useState(null);
@@ -39,8 +40,9 @@ const ExpectedAppointment = () => {
     console.log(appointDate, appointDoc, appointNum, appointSpec, appointTime);
   };
 
-  const clientId = JSON.parse(localStorage.getItem('userLoginData'))?.user
-    ?.client_id;
+  console.log({ patient });
+
+  const clientId = patient?.client_id;
 
   const expectedapps = appoints?.data?.data?.filter((values) => {
     return new Date(values?.work_day?.date) > new Date() && !values.is_canceled;
@@ -52,9 +54,9 @@ const ExpectedAppointment = () => {
   };
 
   React.useEffect(() => {
-    dispatch(getOnePatient(clientId));
+    // dispatch(getOnePatient(clientId));
     dispatch(getPatientAppointments(clientId));
-  }, [clientId]);
+  }, [clientId, patient]);
 
   const nav = useNavigate();
 
@@ -83,8 +85,8 @@ const ExpectedAppointment = () => {
 
   return (
     <div>
-      <Box className="w-full">
-        <PatientAppointmentNavigation />
+      <Box className="w-full p-20 sm:p-4">
+        <PatientProfileNavigation />
         <TableContainer component={Paper} elevation={0}>
           <Table
             sx={{
@@ -141,7 +143,8 @@ const ExpectedAppointment = () => {
                         scope="row"
                         className="cursor-pointer"
                         onClick={() => {
-                          nav(`${row.appointment_id}`);
+                          dispatch(toAdminPatientExpectedAppointments());
+                          nav(`/dashboard/appointments/${row.appointment_id}`);
                         }}
                       >
                         {row.doctor.first_name} {row.doctor.last_name}
@@ -151,7 +154,8 @@ const ExpectedAppointment = () => {
                         className="cursor-pointer"
                         sx={{ color: '#797979', fontSize: '14px' }}
                         onClick={() => {
-                          nav(`${row.appointment_id}`);
+                          nav(`/dashboard/appointments/${row.appointment_id}`);
+                          dispatch(toAdminPatientExpectedAppointments());
                         }}
                       >
                         {row.doctor.departments[0].speciality_name}
@@ -167,7 +171,8 @@ const ExpectedAppointment = () => {
                         align="left"
                         sx={{ color: '#797979', fontSize: '14px' }}
                         onClick={() => {
-                          nav(`${row.appointment_id}`);
+                          dispatch(toAdminPatientExpectedAppointments());
+                          nav(`/dashboard/appointments/${row.appointment_id}`);
                         }}
                       >
                         {new Date(row.work_day?.date).toLocaleDateString()}
@@ -296,4 +301,4 @@ const ExpectedAppointment = () => {
   );
 };
 
-export default ExpectedAppointment;
+export default ExpectedAppointments;
