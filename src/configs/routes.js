@@ -23,6 +23,7 @@ import ForgotPassword from '../pages/ForgotPassword';
 import ResetPassword from '../pages/ResetPassword';
 import PatientSignupForm from '../components/PatientSignupForm';
 import AdminPatientProfile from '../pages/AdminPatientProfile';
+import DoctorAppointmentPage from '../components/Appointment/DoctorAppointmentPage';
 
 const routes = createBrowserRouter([
   {
@@ -130,6 +131,10 @@ const routes = createBrowserRouter([
   {
     path: '/dashboard/appointments/:id',
     element: <AppointmentPage />
+  },
+  {
+    path: '/dashboard/doctor/appointments/:id',
+    element: <DoctorAppointmentPage />
   },
   // {
   //   path: '/dashboard/patient/profile/:id',

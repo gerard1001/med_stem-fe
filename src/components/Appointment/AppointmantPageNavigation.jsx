@@ -18,7 +18,6 @@ const AppointmantPageNavigation = ({ appointment }) => {
     JSON.parse(localStorage.getItem('userLoginData'))?.user?.Role.role ===
     'client';
   const nav = useNavigate();
-  console.log({ appointment });
   return (
     <div>
       {isClient && (

@@ -54,6 +54,12 @@ const AppointmentPage = () => {
   }, [appointmentId, urlId]);
 
   const date = new Date(appointment?.data?.work_day?.date);
+  const drugs = !appointment?.data?.drugs[0]
+    ? appointment?.data?.drugs
+    : JSON.parse(appointment?.data?.drugs);
+  const recommendations = !appointment?.data?.recommendations[0]
+    ? appointment?.data?.recommendations
+    : JSON.parse(appointment?.data?.recommendations);
 
   const [month, day, year] = [
     date.getMonth(),
@@ -151,7 +157,7 @@ const AppointmentPage = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {appointment?.data?.drugs?.map((row, idx) => (
+                    {drugs?.map((row, idx) => (
                       <>
                         <TableRow
                           key={row.appointment_number}
@@ -207,7 +213,7 @@ const AppointmentPage = () => {
           <Box className="p-4 w-full border border-[#71A9F7] bg-white rounded-[8px] flex flex-row items-center flex-wrap flex-grow gap-2">
             {appointment?.data?.recommendations !== [] ? (
               <>
-                {appointment?.data?.recommendations?.map((item) => {
+                {recommendations?.map((item) => {
                   return (
                     <Grid item xs={4} className="w-fit">
                       <Item>

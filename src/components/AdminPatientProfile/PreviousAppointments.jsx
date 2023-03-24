@@ -50,30 +50,47 @@ const PreviousAppointments = () => {
           >
             <TableHead>
               <TableRow>
-                <TableCell sx={{ color: '#797979', fontSize: '14px' }}>
+                <TableCell
+                  sx={{
+                    color: '#2E3033',
+                    fontSize: { md: '17px', xs: '14px' }
+                  }}
+                >
                   Doctor name
                 </TableCell>
                 <TableCell
                   align="left"
-                  sx={{ color: '#797979', fontSize: '14px' }}
+                  sx={{
+                    color: '#2E3033',
+                    fontSize: { md: '17px', xs: '14px' }
+                  }}
                 >
                   Speciality
                 </TableCell>
                 <TableCell
                   align="left"
-                  sx={{ color: '#797979', fontSize: '14px' }}
+                  sx={{
+                    color: '#2E3033',
+                    fontSize: { md: '17px', xs: '14px' }
+                  }}
                 >
                   Appointment num
                 </TableCell>
                 <TableCell
                   align="left"
-                  sx={{ color: '#797979', fontSize: '14px' }}
+                  sx={{
+                    color: '#2E3033',
+                    fontSize: { md: '17px', xs: '14px' }
+                  }}
                 >
                   Date
                 </TableCell>
                 <TableCell
                   align="left"
-                  sx={{ color: '#797979', fontSize: '14px' }}
+                  sx={{
+                    color: '#2E3033',
+                    fontSize: { md: '17px', xs: '14px' }
+                  }}
                 >
                   Options
                 </TableCell>
@@ -99,7 +116,10 @@ const PreviousAppointments = () => {
                   </TableCell>
                   <TableCell
                     align="left"
-                    sx={{ color: '#797979', fontSize: '14px' }}
+                    sx={{
+                      color: '#2E3033',
+                      fontSize: { md: '17px', xs: '14px' }
+                    }}
                     className="cursor-pointer"
                     onClick={() => {
                       dispatch(toAdminPatientPreviousAppointments());
@@ -110,7 +130,10 @@ const PreviousAppointments = () => {
                   </TableCell>
                   <TableCell
                     align="left"
-                    sx={{ color: '#797979', fontSize: '14px' }}
+                    sx={{
+                      color: '#2E3033',
+                      fontSize: { md: '17px', xs: '14px' }
+                    }}
                     className="cursor-pointer"
                     onClick={() => {
                       dispatch(toAdminPatientPreviousAppointments());
@@ -122,7 +145,10 @@ const PreviousAppointments = () => {
                   <TableCell
                     className="cell-height"
                     align="left"
-                    sx={{ color: '#797979', fontSize: '14px' }}
+                    sx={{
+                      color: '#2E3033',
+                      fontSize: { md: '17px', xs: '14px' }
+                    }}
                   >
                     {new Date(row.work_day?.date).toLocaleDateString()}
                   </TableCell>

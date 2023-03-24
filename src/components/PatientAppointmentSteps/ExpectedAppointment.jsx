@@ -99,30 +99,47 @@ const ExpectedAppointment = () => {
           >
             <TableHead>
               <TableRow>
-                <TableCell sx={{ color: '#797979', fontSize: '14px' }}>
+                <TableCell
+                  sx={{
+                    color: '#797979',
+                    fontSize: { md: '17px', xs: '14px' }
+                  }}
+                >
                   Doctor name
                 </TableCell>
                 <TableCell
-                  align="left"
-                  sx={{ color: '#797979', fontSize: '14px' }}
+                  align="center"
+                  sx={{
+                    color: '#797979',
+                    fontSize: { md: '17px', xs: '14px' }
+                  }}
                 >
                   Speciality
                 </TableCell>
                 <TableCell
-                  align="left"
-                  sx={{ color: '#797979', fontSize: '14px' }}
+                  align="center"
+                  sx={{
+                    color: '#797979',
+                    fontSize: { md: '17px', xs: '14px' }
+                  }}
                 >
                   Appointment num
                 </TableCell>
                 <TableCell
-                  align="left"
-                  sx={{ color: '#797979', fontSize: '14px' }}
+                  align="center"
+                  sx={{
+                    color: '#797979',
+                    fontSize: { md: '17px', xs: '14px' }
+                  }}
                 >
                   Date
                 </TableCell>
                 <TableCell
-                  align="left"
-                  sx={{ color: '#797979', fontSize: '14px' }}
+                  align="center"
+                  sx={{
+                    color: '#797979',
+                    fontSize: { md: '17px', xs: '14px' }
+                  }}
                 >
                   Options
                 </TableCell>
@@ -147,25 +164,34 @@ const ExpectedAppointment = () => {
                         {row.doctor.first_name} {row.doctor.last_name}
                       </TableCell>
                       <TableCell
-                        align="left"
+                        align="center"
                         className="cursor-pointer"
-                        sx={{ color: '#797979', fontSize: '14px' }}
+                        sx={{
+                          color: '#797979',
+                          fontSize: { md: '17px', xs: '14px' }
+                        }}
                         onClick={() => {
                           nav(`${row.appointment_id}`);
                         }}
                       >
-                        {row.doctor.departments[0].speciality_name}
+                        {row.doctor.departments[0]?.speciality_name || '...'}
                       </TableCell>
                       <TableCell
-                        align="left"
+                        align="center"
                         className="cursor-pointer"
-                        sx={{ color: '#797979', fontSize: '14px' }}
+                        sx={{
+                          color: '#797979',
+                          fontSize: { md: '17px', xs: '14px' }
+                        }}
                       >
                         {row.appointment_number}
                       </TableCell>
                       <TableCell
-                        align="left"
-                        sx={{ color: '#797979', fontSize: '14px' }}
+                        align="center"
+                        sx={{
+                          color: '#797979',
+                          fontSize: { md: '17px', xs: '14px' }
+                        }}
                         onClick={() => {
                           nav(`${row.appointment_id}`);
                         }}
@@ -173,7 +199,7 @@ const ExpectedAppointment = () => {
                         {new Date(row.work_day?.date).toLocaleDateString()}
                       </TableCell>
                       <TableCell
-                        align="left"
+                        align="center"
                         sx={{
                           color: '#797979',
                           fontSize: '12px',
@@ -189,7 +215,8 @@ const ExpectedAppointment = () => {
                             color: '#797979',
                             textTransform: 'capitalize',
                             cursor: 'pointer',
-                            fontSize: '14px',
+                            fontSize: { md: '14px' },
+                            xs: '14px',
                             margin: '0 5px'
                           }}
                         >
@@ -201,7 +228,7 @@ const ExpectedAppointment = () => {
                             color: '#797979',
                             textTransform: 'capitalize',
                             cursor: 'pointer',
-                            fontSize: '14px'
+                            fontSize: { md: '17px', xs: '14px' }
                           }}
                           onClick={() => {
                             console.log({ row });

@@ -1,0 +1,158 @@
+import React, { useEffect, useState } from 'react';
+import {
+  Box,
+  Typography,
+  Grid,
+  styled,
+  Paper,
+  TableRow,
+  TableHead,
+  TableContainer,
+  TableCell,
+  Table,
+  TableBody,
+  Button,
+  IconButton,
+  Modal,
+  TextField
+} from '@mui/material';
+import { useDispatch } from 'react-redux';
+import {
+  getOneAppointment,
+  updateAppointment
+} from '../../redux/reducers/appointment.reducer';
+import { BsPlusCircleFill } from 'react-icons/bs';
+import { Controller, useForm } from 'react-hook-form';
+
+const AddNewAppointmentData = () => {
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+  const [openComplaintsModal, setOpenComplaintsModal] = useState(false);
+  const [openDiagnosisModal, setOpenDiagnosisModal] = useState(false);
+
+  const urlId = window.location.href.substring(
+    window.location.href.lastIndexOf('/') + 1
+  );
+
+  let appointmentId;
+
+  urlId.includes('?')
+    ? (appointmentId = urlId.slice(0, urlId.lastIndexOf('?')))
+    : (appointmentId = urlId);
+
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+    trigger,
+    reset
+  } = useForm({});
+
+  const onSubmit = async ({ complaints }) => {
+    setLoading(true);
+    const body = { complaints: complaints };
+
+    const data = { appointmentId, body };
+    dispatch(updateAppointment(data));
+  };
+
+  const handleOpenComplaintsModal = () => setOpenComplaintsModal(true);
+  const handleCloseComplaintsModal = () => setOpenComplaintsModal(false);
+  return (
+    <>
+      <Box className="bg-emelard-400 w-full p-3 flex flex-col items-start gap-8">
+        <Box className="flex w-[100%] gap-2 p-4 items-center justify-between border border-[#797979] bg-white rounded-[8px] leading-3">
+          <Typography variant="subtitle1" className="leading-5 text-[15px]">
+            Complaints
+          </Typography>
+          <IconButton
+            className="w-fit flex items-center gap-1 text-[14px]"
+            onClick={handleOpenComplaintsModal}
+          >
+            <BsPlusCircleFill className="text-primary" /> Add
+          </IconButton>
+        </Box>
+        <Box className="flex w-[100%] gap-2 p-4 items-center justify-between border border-[#797979] bg-white rounded-[8px] leading-3">
+          <Typography variant="subtitle1" className="leading-5 text-[15px]">
+            Diagnosis
+          </Typography>
+          <IconButton className="w-fit flex items-center gap-1 text-[14px]">
+            <BsPlusCircleFill className="text-primary" /> Add
+          </IconButton>
+        </Box>
+        <Box className="flex w-[100%] gap-2 p-4 items-center justify-between border border-[#797979] bg-white rounded-[8px] leading-3">
+          <Typography variant="subtitle1" className="leading-5 text-[15px]">
+            Drugs
+          </Typography>
+          <IconButton className="w-fit flex items-center gap-1 text-[14px]">
+            <BsPlusCircleFill className="text-primary" /> Add
+          </IconButton>
+        </Box>
+        <Box className="flex w-[100%] gap-2 p-4 items-center justify-between border border-[#797979] bg-white rounded-[8px] leading-3">
+          <Typography variant="subtitle1" className="leading-5 text-[15px]">
+            Recommendations
+          </Typography>
+          <IconButton className="w-fit flex items-center gap-1 text-[14px]">
+            <BsPlusCircleFill className="text-primary" /> Add
+          </IconButton>
+        </Box>
+      </Box>
+      <Modal
+        open={openComplaintsModal}
+        onClose={handleCloseComplaintsModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box className="absolute translate-x-[-50%] translate-y-[-50%] top-[50%] left-[50%] w-[80%] max-w-[720px] border-none p-8 bg-white">
+          <Box className="flex flex-col items-center gap-8">
+            <Box className="flex w-[100%] gap-2 p-4 px-8 items-center justify-between border border-[#797979] bg-white rounded-[8px] leading-3">
+              <Typography variant="subtitle1" className="leading-5 text-[15px]">
+                Complaints
+              </Typography>
+              <Typography className="text-[14px]">Add</Typography>
+            </Box>
+            <Box className="flex flex-col w-[100%] gap-2 items-center justify-between rounded-[8px] leading-3">
+              <Box className="flex w-full gap-3 items-center justify-between flex-row">
+                <Typography
+                  fontSize={600}
+                  variant="subtitle1"
+                  className="leading-5 text-[15px]"
+                >
+                  Complaints
+                </Typography>
+                <Box className="w-fit flex items-center gap-1 text-[14px]">
+                  <Button
+                    className="text-black"
+                    onClick={handleCloseComplaintsModal}
+                  >
+                    Cancel
+                  </Button>
+                  <Button disabled={loading} onClick={handleSubmit(onSubmit)}>
+                    Add
+                  </Button>
+                </Box>
+              </Box>
+              <Controller
+                control={control}
+                name="complaints"
+                defaultValue=""
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    fullWidth
+                    multiline
+                    minRows={3}
+                    maxRows={5}
+                    className="w-full"
+                  />
+                )}
+              />
+            </Box>
+          </Box>
+        </Box>
+      </Modal>
+    </>
+  );
+};
+
+export default AddNewAppointmentData;
