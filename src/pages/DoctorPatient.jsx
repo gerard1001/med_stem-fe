@@ -51,6 +51,10 @@ const MyTable = () => {
   const [filterPrevAppointment, setFilterPrevAppointment] = useState('');
   const [filterNextAppointment, setFilterNextAppointment] = useState('');
 
+  const isDoctor =
+    JSON.parse(localStorage.getItem('userLoginData'))?.user?.Role.role ===
+    'doctor';
+
   const [globalFilter, setGlobalFilter] = useState('');
 
   const [sortAnchorEl, setSortAnchorEl] = useState(null);
@@ -67,11 +71,7 @@ const MyTable = () => {
     setGlobalFilter(event.target.value);
   };
 
-  console.log({ patients });
-
   const chaos = formatArray(patients);
-
-  console.log({ chaos });
 
   const filteredData = chaos?.filter(
     ({
@@ -219,7 +219,7 @@ const MyTable = () => {
     <Box className="p-10 sm:p-3">
       <Box
         className="w-[100%] border border-[#71A9F7]
-] flex flex-col justify-between py-3 px-2 my-3 bg-white"
+] max-w-[1200px] flex flex-col justify-between py-3 px-2 my-3 bg-white"
       >
         <Box className="flex flex-row items-center justify-between">
           <Box>
@@ -434,39 +434,40 @@ const MyTable = () => {
           </Box>
         )}
       </Box>
-      <Box className="w-[100%] border border-[#71A9F7] p-2 mt-4 bg-white">
+      <Box className="w-[100%] border border-[#71A9F7] max-w-[1200px] p-2 mt-4 bg-white">
         <TableContainer component={Paper} elevation={0}>
           <Table className="text-[30px]" aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell
-                  align="left"
-                  className="text-[17px] md:text-[14px]"
-                  style={styles.tableHeader}
-                >
+                <TableCell align="left" className="text-[17px] md:text-[14px]">
                   Name
                 </TableCell>
                 <TableCell
-                  align="left"
+                  align="center"
                   className="text-[17px] md:text-[14px]"
-                  style={styles.tableHeader}
                 >
                   ID
                 </TableCell>
                 <TableCell
-                  align="left"
+                  align="center"
                   className="text-[17px] md:text-[14px]"
-                  style={styles.tableHeader}
                 >
                   Last Appointment
                 </TableCell>
                 <TableCell
-                  align="left"
+                  align="center"
                   className="text-[17px] md:text-[14px]"
-                  style={styles.tableHeader}
                 >
                   Next Appointment
                 </TableCell>
+                {isDoctor && (
+                  <TableCell
+                    align="center"
+                    className="text-[17px] md:text-[14px]"
+                  >
+                    Options
+                  </TableCell>
+                )}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -494,23 +495,33 @@ const MyTable = () => {
                           className="text-[17px] md:text-[14px]"
                         >{`${firstName} ${lastName}`}</TableCell>
                         <TableCell
-                          align="left"
+                          align="center"
                           className="text-[17px] md:text-[14px]"
                         >
                           {id}
                         </TableCell>
                         <TableCell
-                          align="left"
+                          align="center"
                           className="text-[17px] md:text-[14px]"
                         >
                           {prevAppointments}
                         </TableCell>
                         <TableCell
-                          align="left"
+                          align="center"
                           className="text-[17px] md:text-[14px]"
                         >
                           {nextAppointments}
                         </TableCell>
+                        {isDoctor && (
+                          <TableCell
+                            align="center"
+                            className="text-[17px] md:text-[14px]"
+                          >
+                            <IconButton>
+                              <BsThreeDots />
+                            </IconButton>
+                          </TableCell>
+                        )}
                       </TableRow>
                     )
                   )}

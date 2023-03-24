@@ -43,6 +43,10 @@ const PatientInfo = () => {
     nav('/dashboard/patient');
   };
 
+  const isAdmin =
+    JSON.parse(localStorage.getItem('userLoginData'))?.user?.Role.role ===
+    'admin';
+
   return (
     <div>
       <Box className="w-full p-20 sm:p-4">
@@ -200,36 +204,38 @@ const PatientInfo = () => {
               </Grid>
             </Grid>
           </Box>
-          <Box className="flex items-end flex-grow justify-end gap-4">
-            <Button
-              sx={{
-                marginTop: '40px',
-                width: '120px',
-                color: '#1A4CFF',
-                border: '1px solid #1A4CFF',
-                borderRadius: '10px',
-                ':hover': { backgroundColor: '#a2ccff' }
-              }}
-              onClick={() => {
-                setOpenEditModal(true);
-              }}
-            >
-              Edit
-            </Button>
-            <Button
-              sx={{
-                marginTop: '40px',
-                width: '120px',
-                color: '#1A4CFF',
-                border: '1px solid #1A4CFF',
-                borderRadius: '10px',
-                ':hover': { backgroundColor: '#a2ccff' }
-              }}
-              onClick={handleOpen}
-            >
-              Delete
-            </Button>
-          </Box>
+          {isAdmin && (
+            <Box className="flex items-end flex-grow justify-end gap-4">
+              <Button
+                sx={{
+                  marginTop: '40px',
+                  width: '120px',
+                  color: '#1A4CFF',
+                  border: '1px solid #1A4CFF',
+                  borderRadius: '10px',
+                  ':hover': { backgroundColor: '#a2ccff' }
+                }}
+                onClick={() => {
+                  setOpenEditModal(true);
+                }}
+              >
+                Edit
+              </Button>
+              <Button
+                sx={{
+                  marginTop: '40px',
+                  width: '120px',
+                  color: '#1A4CFF',
+                  border: '1px solid #1A4CFF',
+                  borderRadius: '10px',
+                  ':hover': { backgroundColor: '#a2ccff' }
+                }}
+                onClick={handleOpen}
+              >
+                Delete
+              </Button>
+            </Box>
+          )}
         </Box>
       </Box>
       <EditPatientPersonalProfileModal
@@ -245,7 +251,7 @@ const PatientInfo = () => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box className="absolute translate-x-[-50%] translate-y-[-50%] top-[50%] left-[50%] w-80 border border-sky-400 p-4 bg-white rounded-2xl">
+        <Box className="absolute translate-x-[-50%] translate-y-[-50%] top-[50%] left-[50%] w-80 border border-sky-400 p-4 py-8 bg-white rounded-2xl">
           <Typography
             id="modal-modal-title"
             variant="h6"
@@ -253,20 +259,20 @@ const PatientInfo = () => {
             textAlign="center"
             component="h2"
           >
-            Delete patient?
+            Delete patient profile?
           </Typography>
           <Box className="w-full flex items-center justify-evenly mt-10 gap-4">
-            <Button
-              onClick={handleClose}
-              className="bg-[#b1b1b1] text-black w-1/2 rounded-lg"
-            >
-              Cancel
-            </Button>
             <Button
               onClick={handleDeleteAccount}
               className="bg-[#1A4CFF] text-white w-1/2  rounded-lg"
             >
-              Delete
+              Yes
+            </Button>
+            <Button
+              onClick={handleClose}
+              className="bg-[#b1b1b1] text-black w-1/2 rounded-lg"
+            >
+              No
             </Button>
           </Box>
         </Box>

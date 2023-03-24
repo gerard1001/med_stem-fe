@@ -1039,3 +1039,21 @@ export const recoms = [
   'Minimize stress',
   'Decrease alcohol consumption'
 ];
+
+export const weekfrequency = [
+  'daily',
+  'Two days per week',
+  'Three days per week'
+];
+
+export const dayfrequency = ['Once a day', 'Twice a day', 'Thrice a day'];
+
+export const cureduration = [
+  'Less than a week',
+  '1 week',
+  '2 weeks',
+  '3 weeks',
+  '1 month',
+  '2 months',
+  '3 months'
+];

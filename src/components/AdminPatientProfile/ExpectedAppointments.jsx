@@ -40,13 +40,17 @@ const ExpectedAppointments = () => {
     console.log(appointDate, appointDoc, appointNum, appointSpec, appointTime);
   };
 
-  console.log({ patient });
+  const isDoctor =
+    JSON.parse(localStorage.getItem('userLoginData'))?.user?.Role.role ===
+    'doctor';
 
   const clientId = patient?.client_id;
 
   const expectedapps = appoints?.data?.data?.filter((values) => {
     return new Date(values?.work_day?.date) > new Date() && !values.is_canceled;
   });
+
+  console.log(expectedapps, '^&^&^&^&^&');
   const dispatch = useDispatch();
 
   const handleCancelAppointment = () => {
@@ -85,7 +89,7 @@ const ExpectedAppointments = () => {
 
   return (
     <div>
-      <Box className="w-full p-20 sm:p-4">
+      <Box className="w-full p-20 sm:p-4 max-w-[1400px]">
         <PatientProfileNavigation />
         <TableContainer component={Paper} elevation={0}>
           <Table
@@ -101,30 +105,47 @@ const ExpectedAppointments = () => {
           >
             <TableHead>
               <TableRow>
-                <TableCell sx={{ color: '#797979', fontSize: '14px' }}>
+                <TableCell
+                  sx={{
+                    color: '#2E3033',
+                    fontSize: { md: '17px', xs: '14px' }
+                  }}
+                >
                   Doctor name
                 </TableCell>
                 <TableCell
-                  align="left"
-                  sx={{ color: '#797979', fontSize: '14px' }}
+                  align="center"
+                  sx={{
+                    color: '#2E3033',
+                    fontSize: { md: '17px', xs: '14px' }
+                  }}
                 >
                   Speciality
                 </TableCell>
                 <TableCell
-                  align="left"
-                  sx={{ color: '#797979', fontSize: '14px' }}
+                  align="center"
+                  sx={{
+                    color: '#2E3033',
+                    fontSize: { md: '17px', xs: '14px' }
+                  }}
                 >
                   Appointment num
                 </TableCell>
                 <TableCell
-                  align="left"
-                  sx={{ color: '#797979', fontSize: '14px' }}
+                  align="center"
+                  sx={{
+                    color: '#2E3033',
+                    fontSize: { md: '17px', xs: '14px' }
+                  }}
                 >
                   Date
                 </TableCell>
                 <TableCell
-                  align="left"
-                  sx={{ color: '#797979', fontSize: '14px' }}
+                  align="center"
+                  sx={{
+                    color: '#2E3033',
+                    fontSize: { md: '17px', xs: '14px' }
+                  }}
                 >
                   Options
                 </TableCell>
@@ -142,91 +163,114 @@ const ExpectedAppointments = () => {
                         component="th"
                         scope="row"
                         className="cursor-pointer"
+                        sx={{
+                          color: '#2E3033',
+                          fontSize: { md: '17px', xs: '14px' }
+                        }}
                         onClick={() => {
                           dispatch(toAdminPatientExpectedAppointments());
-                          nav(`/dashboard/appointments/${row.appointment_id}`);
+                          nav(
+                            `${
+                              isDoctor
+                                ? `/dashboard/doctor/appointments/${row.appointment_id}`
+                                : `/dashboard/appointments/${row.appointment_id}`
+                            }`
+                          );
                         }}
                       >
                         {row.doctor.first_name} {row.doctor.last_name}
                       </TableCell>
                       <TableCell
-                        align="left"
+                        align="center"
                         className="cursor-pointer"
-                        sx={{ color: '#797979', fontSize: '14px' }}
+                        sx={{
+                          color: '#2E3033',
+                          fontSize: { md: '17px', xs: '14px' }
+                        }}
                         onClick={() => {
-                          nav(`/dashboard/appointments/${row.appointment_id}`);
+                          nav(
+                            `${
+                              isDoctor
+                                ? `/dashboard/doctor/appointments/${row.appointment_id}`
+                                : `/dashboard/appointments/${row.appointment_id}`
+                            }`
+                          );
                           dispatch(toAdminPatientExpectedAppointments());
                         }}
                       >
-                        {row.doctor.departments[0].speciality_name}
+                        {row.doctor.departments[0]?.speciality_name || '...'}
                       </TableCell>
                       <TableCell
-                        align="left"
+                        align="center"
                         className="cursor-pointer"
-                        sx={{ color: '#797979', fontSize: '14px' }}
+                        sx={{
+                          color: '#2E3033',
+                          fontSize: { md: '17px', xs: '14px' }
+                        }}
                       >
                         {row.appointment_number}
                       </TableCell>
                       <TableCell
-                        align="left"
-                        sx={{ color: '#797979', fontSize: '14px' }}
+                        align="center"
+                        sx={{
+                          color: '#2E3033',
+                          fontSize: { md: '17px', xs: '14px' }
+                        }}
                         onClick={() => {
                           dispatch(toAdminPatientExpectedAppointments());
-                          nav(`/dashboard/appointments/${row.appointment_id}`);
+                          nav(
+                            `${
+                              isDoctor
+                                ? `/dashboard/doctor/appointments/${row.appointment_id}`
+                                : `/dashboard/appointments/${row.appointment_id}`
+                            }`
+                          );
                         }}
                       >
                         {new Date(row.work_day?.date).toLocaleDateString()}
                       </TableCell>
-                      <TableCell
-                        align="left"
-                        sx={{
-                          color: '#797979',
-                          fontSize: '12px',
-                          display: 'flex',
-                          flexWrap: 'wrap',
-                          overflow: 'auto',
-                          gap: '4px'
-                        }}
-                      >
-                        <Typography
-                          style={{
-                            backgroundColor: '#fafcfd',
-                            color: '#797979',
-                            textTransform: 'capitalize',
-                            cursor: 'pointer',
-                            fontSize: '14px',
-                            margin: '0 5px'
-                          }}
-                        >
-                          Edit
-                        </Typography>
-                        <Typography
-                          style={{
-                            backgroundColor: '#fafcfd',
-                            color: '#797979',
-                            textTransform: 'capitalize',
-                            cursor: 'pointer',
-                            fontSize: '14px'
-                          }}
-                          onClick={() => {
-                            console.log({ row });
-                            setAppointIdx(row.appointment_id);
-                            setDoctor(
-                              `${row.doctor.first_name} ${row.doctor.last_name}`
-                            );
-                            setSpeciality(row.doctor.departments[0]);
-                            setAppointDate(
-                              new Date(row.work_day.date).toLocaleDateString()
-                            );
-                            setAppointNum(row.appointment_number);
-                            setAppointTime(row.appointment_period);
-                            setClickedIdx(idx);
-                            handleOpen();
-                            handleShow();
-                          }}
-                        >
-                          cancel
-                        </Typography>
+                      <TableCell align="center">
+                        <Box className="text-[#797979] text-[12px] flex flex-wrap items-center justify-center gap-2 overflow-auto">
+                          <Typography
+                            style={{
+                              backgroundColor: '#fafcfd',
+                              color: '#2E3033',
+                              textTransform: 'capitalize',
+                              cursor: 'pointer',
+                              fontSize: { md: '17px', xs: '14px' },
+                              margin: '0 5px'
+                            }}
+                          >
+                            Edit
+                          </Typography>
+                          <Typography
+                            style={{
+                              backgroundColor: '#fafcfd',
+                              color: '#2E3033',
+                              textTransform: 'capitalize',
+                              cursor: 'pointer',
+                              fontSize: { md: '17px', xs: '14px' }
+                            }}
+                            onClick={() => {
+                              console.log({ row });
+                              setAppointIdx(row.appointment_id);
+                              setDoctor(
+                                `${row.doctor.first_name} ${row.doctor.last_name}`
+                              );
+                              setSpeciality(row.doctor.departments[0]);
+                              setAppointDate(
+                                new Date(row.work_day.date).toLocaleDateString()
+                              );
+                              setAppointNum(row.appointment_number);
+                              setAppointTime(row.appointment_period);
+                              setClickedIdx(idx);
+                              handleOpen();
+                              handleShow();
+                            }}
+                          >
+                            cancel
+                          </Typography>
+                        </Box>
                       </TableCell>
                     </TableRow>
                     {clickedIdx === idx && (
@@ -237,9 +281,7 @@ const ExpectedAppointments = () => {
                         aria-describedby="modal-modal-description"
                         className="flex flex-col items-center justify-center"
                         sx={{
-                          '& .MuiFormControl-root': {
-                            margin: 0
-                          }
+                          '& .MuiFormControl-root': {}
                         }}
                       >
                         <Box className="flex flex-col w-[500px] sm:w-[98%] justify-center items-center gap-4 bg-white border border-primary shadow-2 rounded-[20px] relative py-10 px-4 m-4 overflow-y-auto">
@@ -302,3 +344,105 @@ const ExpectedAppointments = () => {
 };
 
 export default ExpectedAppointments;
+
+// import React, { useState } from 'react';
+// import { makeStyles } from '@material-ui/core/styles';
+// import Checkbox from '@material-ui/core/Checkbox';
+// import List from '@material-ui/core/List';
+// import ListItem from '@material-ui/core/ListItem';
+// import ListItemIcon from '@material-ui/core/ListItemIcon';
+// import ListItemText from '@material-ui/core/ListItemText';
+// import CheckIcon from '@material-ui/icons/Check';
+
+// const useStyles = makeStyles((theme) => ({
+//   root: {
+//     backgroundColor: theme.palette.background.paper,
+//   },
+// }));
+
+// const DummyArray = ["String 1", "String 2", "String 3", "String 4"];
+
+// function App() {
+//   const classes = useStyles();
+//   const [checked, setChecked] = useState([]);
+
+//   const handleToggle = (value) => () => {
+//     const currentIndex = checked.indexOf(value);
+//     const newChecked = [...checked];
+
+//     if (currentIndex === -1) {
+//       newChecked.push(value);
+//     } else {
+//       newChecked.splice(currentIndex, 1);
+//     }
+
+//     setChecked(newChecked);
+//   };
+
+//   return (
+//     <div className={classes.root}>
+//       <List>
+//         {DummyArray.map((value) => {
+//           const labelId = `checkbox-list-label-${value}`;
+
+//           return (
+//             <ListItem
+
+// import React, { useState } from 'react';
+// import { makeStyles } from '@material-ui/core/styles';
+// import Checkbox from '@material-ui/core/Checkbox';
+// import List from '@material-ui/core/List';
+// import ListItem from '@material-ui/core/ListItem';
+// import ListItemIcon from '@material-ui/core/ListItemIcon';
+// import ListItemText from '@material-ui/core/ListItemText';
+
+// const useStyles = makeStyles((theme) => ({
+//   root: {
+//     width: '100%',
+//     maxWidth: 360,
+//     backgroundColor: theme.palette.background.paper,
+//   },
+// }));
+
+// const dummyArray = ['Item 1', 'Item 2', 'Item 3', 'Item 4'];
+
+// export default function CheckList() {
+//   const classes = useStyles();
+//   const [checked, setChecked] = useState([]);
+
+//   const handleToggle = (value) => () => {
+//     const currentIndex = checked.indexOf(value);
+//     const newChecked = [...checked];
+
+//     if (currentIndex === -1) {
+//       newChecked.push(value);
+//     } else {
+//       newChecked.splice(currentIndex, 1);
+//     }
+
+//     setChecked(newChecked);
+//   };
+
+//   return (
+//     <List className={classes.root}>
+//       {dummyArray.map((value) => {
+//         const labelId = `checkbox-list-label-${value}`;
+
+//         return (
+//           <ListItem key={value} role={undefined} dense button onClick={handleToggle(value)}>
+//             <ListItemIcon>
+//               <Checkbox
+//                 edge="start"
+//                 checked={checked.indexOf(value) !== -1}
+//                 tabIndex={-1}
+//                 disableRipple
+//                 inputProps={{ 'aria-labelledby': labelId }}
+//               />
+//             </ListItemIcon>
+//             <ListItemText id={labelId} primary={value} />
+//           </ListItem>
+//         );
+//       })}
+//     </List>
+//   );
+// }

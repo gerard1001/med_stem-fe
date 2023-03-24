@@ -50,13 +50,29 @@ export const getDoctorAppointments = createAsyncThunk(
   }
 );
 
+export const updateAppointment = createAsyncThunk(
+  'Appointments/update',
+  async (data) => {
+    try {
+      const response = await axiosInstance.patch(
+        `/appointments/${data.appointmentId}`,
+        data.body
+      );
+      return response;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
 const appointmentSlice = createSlice({
   name: 'appointments',
   initialState: appointmentAdapter.getInitialState(),
   reducers: {},
   extraReducers: {
     [getDoctorAppointments.fulfilled]: appointmentAdapter.upsertOne,
-    [getOneAppointment.fulfilled]: appointmentAdapter.upsertOne
+    [getOneAppointment.fulfilled]: appointmentAdapter.upsertOne,
+    [updateAppointment.fulfilled]: appointmentAdapter.upsertOne
   }
 });
 
