@@ -296,7 +296,7 @@ const DoctorSignupForm = () => {
               <img
                 className="w-full h-full absolute top-0 left-0 z-10"
                 src={picUrl}
-                alt="selected"
+                alt=""
               />
             )}
             <input

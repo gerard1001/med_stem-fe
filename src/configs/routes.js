@@ -97,6 +97,14 @@ const routes = createBrowserRouter([
         element: <DoctorAppointmentPage />
       },
       {
+        path: 'appointments/:id',
+        element: <AppointmentPage />
+      },
+      {
+        path: 'doctor/appointments/:id',
+        element: <DoctorAppointmentPage />
+      },
+      {
         path: 'analytics',
         element: <Analytics />
       },
@@ -132,14 +140,14 @@ const routes = createBrowserRouter([
     element: <DoctorPatient />,
     children: []
   },
-  {
-    path: '/dashboard/appointments/:id',
-    element: <AppointmentPage />
-  },
-  {
-    path: '/dashboard/doctor/appointments/:id',
-    element: <DoctorAppointmentPage />
-  },
+  // {
+  //   path: '/dashboard/appointments/:id',
+  //   element: <AppointmentPage />
+  // },
+  // {
+  //   path: '/dashboard/doctor/appointments/:id',
+  //   element: <DoctorAppointmentPage />
+  // },
   // {
   //   path: '/dashboard/patient/profile/:id',
   //   element: <AdminPatientProfile />

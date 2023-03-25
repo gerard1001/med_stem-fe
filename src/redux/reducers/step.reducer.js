@@ -40,6 +40,12 @@ const stepSlice = createSlice({
     toAdminPatientPreviousAppointments: (state) => {
       state.admin_patient_step = 2;
     },
+    toDoctorPatientMedicalHistory: (state) => {
+      state.admin_patient_step = 3;
+    },
+    toAdminPatientMedicalHistory: (state) => {
+      state.admin_patient_step = 4;
+    },
 
     toPatientLogin: (state) => {
       state.login_step = 0;
@@ -61,7 +67,9 @@ export const {
   toAdminLogin,
   toAdminPatientExpectedAppointments,
   toAdminPatientPersonalDetails,
-  toAdminPatientPreviousAppointments
+  toAdminPatientPreviousAppointments,
+  toAdminPatientMedicalHistory,
+  toDoctorPatientMedicalHistory
 } = stepSlice.actions;
 
 export default stepSlice.reducer;
