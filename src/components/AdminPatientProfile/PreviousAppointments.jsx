@@ -126,7 +126,7 @@ const PreviousAppointments = () => {
                       nav(`/dashboard/appointments/${row.appointment_id}`);
                     }}
                   >
-                    {row.doctor.departments[0].speciality_name}
+                    {row.doctor.departments[0]?.speciality_name}
                   </TableCell>
                   <TableCell
                     align="left"

@@ -24,7 +24,10 @@ import {
 import { BsPlusCircleFill } from 'react-icons/bs';
 import { Controller, useForm } from 'react-hook-form';
 
-const AddNewAppointmentData = () => {
+const AddNewAppointmentData = ({
+  handleOpenDrugModal,
+  handleOpenRecommendationModal
+}) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [openComplaintsModal, setOpenComplaintsModal] = useState(false);
@@ -53,11 +56,31 @@ const AddNewAppointmentData = () => {
     const body = { complaints: complaints };
 
     const data = { appointmentId, body };
-    dispatch(updateAppointment(data));
+    dispatch(updateAppointment(data)).then(() => {
+      dispatch(getOneAppointment(appointmentId)).then(() => {
+        handleCloseComplaintsModal();
+      });
+    });
+  };
+
+  const onSubmitDiagnosis = async ({ diagnosis }) => {
+    setLoading(true);
+    const body = { diagnosis: diagnosis };
+    console.log(body);
+    const data = { appointmentId, body };
+    dispatch(updateAppointment(data)).then(() => {
+      dispatch(getOneAppointment(appointmentId)).then(() => {
+        handleCloseDiagnosisModal();
+      });
+    });
   };
 
   const handleOpenComplaintsModal = () => setOpenComplaintsModal(true);
   const handleCloseComplaintsModal = () => setOpenComplaintsModal(false);
+
+  const handleOpenDiagnosisModal = () => setOpenDiagnosisModal(true);
+  const handleCloseDiagnosisModal = () => setOpenDiagnosisModal(false);
+
   return (
     <>
       <Box className="bg-emelard-400 w-full p-3 flex flex-col items-start gap-8">
@@ -76,7 +99,10 @@ const AddNewAppointmentData = () => {
           <Typography variant="subtitle1" className="leading-5 text-[15px]">
             Diagnosis
           </Typography>
-          <IconButton className="w-fit flex items-center gap-1 text-[14px]">
+          <IconButton
+            className="w-fit flex items-center gap-1 text-[14px]"
+            onClick={handleOpenDiagnosisModal}
+          >
             <BsPlusCircleFill className="text-primary" /> Add
           </IconButton>
         </Box>
@@ -84,7 +110,10 @@ const AddNewAppointmentData = () => {
           <Typography variant="subtitle1" className="leading-5 text-[15px]">
             Drugs
           </Typography>
-          <IconButton className="w-fit flex items-center gap-1 text-[14px]">
+          <IconButton
+            className="w-fit flex items-center gap-1 text-[14px]"
+            onClick={handleOpenDrugModal}
+          >
             <BsPlusCircleFill className="text-primary" /> Add
           </IconButton>
         </Box>
@@ -92,7 +121,10 @@ const AddNewAppointmentData = () => {
           <Typography variant="subtitle1" className="leading-5 text-[15px]">
             Recommendations
           </Typography>
-          <IconButton className="w-fit flex items-center gap-1 text-[14px]">
+          <IconButton
+            className="w-fit flex items-center gap-1 text-[14px]"
+            onClick={handleOpenRecommendationModal}
+          >
             <BsPlusCircleFill className="text-primary" /> Add
           </IconButton>
         </Box>
@@ -135,6 +167,63 @@ const AddNewAppointmentData = () => {
               <Controller
                 control={control}
                 name="complaints"
+                defaultValue=""
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    fullWidth
+                    multiline
+                    minRows={3}
+                    maxRows={5}
+                    className="w-full"
+                  />
+                )}
+              />
+            </Box>
+          </Box>
+        </Box>
+      </Modal>
+      <Modal
+        open={openDiagnosisModal}
+        onClose={handleCloseDiagnosisModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box className="absolute translate-x-[-50%] translate-y-[-50%] top-[50%] left-[50%] w-[80%] max-w-[720px] border-none p-8 bg-white">
+          <Box className="flex flex-col items-center gap-8">
+            <Box className="flex w-[100%] gap-2 p-4 px-8 items-center justify-between border border-[#797979] bg-white rounded-[8px] leading-3">
+              <Typography variant="subtitle1" className="leading-5 text-[15px]">
+                Diagnosis
+              </Typography>
+              <Typography className="text-[14px]">Add</Typography>
+            </Box>
+            <Box className="flex flex-col w-[100%] gap-2 items-center justify-between rounded-[8px] leading-3">
+              <Box className="flex w-full gap-3 items-center justify-between flex-row">
+                <Typography
+                  fontSize={600}
+                  variant="subtitle1"
+                  className="leading-5 text-[15px]"
+                >
+                  Diagnosis
+                </Typography>
+                <Box className="w-fit flex items-center gap-1 text-[14px]">
+                  <Button
+                    className="text-black"
+                    onClick={handleCloseDiagnosisModal}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    disabled={loading}
+                    onClick={handleSubmit(onSubmitDiagnosis)}
+                  >
+                    Add
+                  </Button>
+                </Box>
+              </Box>
+              <Controller
+                control={control}
+                name="diagnosis"
                 defaultValue=""
                 render={({ field }) => (
                   <TextField

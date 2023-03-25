@@ -68,6 +68,10 @@ const DoctorAppointmentPage = () => {
   const [openRecommendationModal, setOpenRecommendationModal] = useState(false);
   const [recName, setRecName] = useState(false);
   const [checked, setChecked] = useState([]);
+  const [defaultComplaints, setDefaultComplaints] = useState('');
+  const [defaultDiagnosis, setDefaultDiagnosis] = useState('');
+  const [isStarted, setIsStarted] = useState(false);
+  const [inputEntered, setInputEntered] = useState(false);
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -107,7 +111,6 @@ const DoctorAppointmentPage = () => {
   const appointment = useSelector(
     (state) => state.appointment.entities.undefined
   );
-  const [isStarted, setIsStarted] = useState(false);
 
   let urlId = window.location.href.substring(
     window.location.href.lastIndexOf('/') + 1
@@ -126,6 +129,14 @@ const DoctorAppointmentPage = () => {
   useEffect(() => {
     dispatch(getRecommendations());
   }, []);
+
+  useEffect(() => {
+    setDefaultComplaints(appointment?.data?.complaints);
+    setDefaultDiagnosis(appointment?.data?.diagnosis);
+    if (appointment?.data?.diagnosis || appointment?.data?.complaints) {
+      setIsStarted(false);
+    }
+  }, [appointment, appointmentId, urlId]);
 
   const date = new Date(appointment?.data?.work_day?.date);
 
@@ -151,7 +162,7 @@ const DoctorAppointmentPage = () => {
   ];
 
   const handleStartAppointment = () => {
-    setIsStarted((value) => !value);
+    setIsStarted(true);
   };
 
   const onSubmitAppointmentData = async ({ complaints, diagnosis }) => {
@@ -161,7 +172,6 @@ const DoctorAppointmentPage = () => {
       diagnosis: diagnosis
     };
     const data = { appointmentId, body };
-    console.log(data);
     dispatch(updateAppointment(data)).then(() => {
       dispatch(getOneAppointment(appointmentId));
     });
@@ -272,8 +282,6 @@ const DoctorAppointmentPage = () => {
           </Typography>
         </Box>
         {!isStarted &&
-          // !drugs &&
-          // !recommendations &&
           !appointment?.data?.complaints &&
           !appointment?.data?.diagnosis && (
             <Button
@@ -298,13 +306,17 @@ const DoctorAppointmentPage = () => {
             </Button>
           )}
 
-        {/* {isStarted && <AddNewAppointmentData />} */}
+        {isStarted && (!defaultDiagnosis || !defaultComplaints) && (
+          <AddNewAppointmentData
+            handleOpenDrugModal={handleOpenDrugModal}
+            handleOpenRecommendationModal={handleOpenRecommendationModal}
+          />
+        )}
 
-        {(isStarted ||
-          appointment?.data?.complaints ||
+        {(appointment?.data?.complaints ||
           appointment?.data?.diagnosis ||
-          (!Array.isArray(appointment?.data?.drugs) &&
-            appointment?.data?.drugs)) && (
+          (Array.isArray(appointment?.data?.drugs) &&
+            !appointment?.data?.drugs)) && (
           <Box className="w-[100%] sm:p-4 flex flex-col gap-4 items-start">
             <Box className="flex w-full gap-2 items-start flex-col">
               <Typography variant="subtitle1" fontWeight={600}>
@@ -320,14 +332,15 @@ const DoctorAppointmentPage = () => {
                 <Controller
                   control={control}
                   name="complaints"
-                  defaultValue={appointment?.data?.complaints}
                   render={({ field }) => (
                     <TextField
                       {...field}
                       fullWidth
+                      defaultValue={defaultComplaints}
                       multiline
                       minRows={!appointment?.data?.complaints && 3}
                       maxRows={!appointment?.data?.complaints && 5}
+                      onInput={setInputEntered(true)}
                       variant="standard"
                       InputProps={{
                         disableUnderline: true,
@@ -363,14 +376,15 @@ const DoctorAppointmentPage = () => {
                 <Controller
                   control={control}
                   name="diagnosis"
-                  defaultValue={appointment?.data?.diagnosis}
                   render={({ field }) => (
                     <TextField
                       {...field}
                       fullWidth
+                      defaultValue={defaultDiagnosis}
                       multiline
                       minRows={!appointment?.data?.diagnosis && 3}
                       maxRows={!appointment?.data?.diagnosis && 5}
+                      onInput={setInputEntered(true)}
                       variant="standard"
                       InputProps={{
                         disableUnderline: true,
@@ -553,28 +567,30 @@ const DoctorAppointmentPage = () => {
             </Box>
           </Box>
         )}
-        <Button
-          type="submit"
-          className="absolute bottom-2 right-2 mt-10"
-          size="small"
-          sx={{
-            color: '#fff',
-            width: '80px',
-            color: '#1A4CFF',
-            border: '1px solid #1A4CFF',
-            borderRadius: '10px',
-            marginX: 'auto',
-            ':hover': {
-              backgroundColor: '#a2ccff',
-              border: '1px solid #a2ccff'
-            },
-            '& .MuiButtonBase-root': {
-              height: 25
-            }
-          }}
-        >
-          Save
-        </Button>
+        {(inputEntered || !isStarted) && (
+          <Button
+            type="submit"
+            className="absolute bottom-2 right-2 mt-10"
+            size="small"
+            sx={{
+              color: '#fff',
+              width: '80px',
+              color: '#1A4CFF',
+              border: '1px solid #1A4CFF',
+              borderRadius: '10px',
+              marginX: 'auto',
+              ':hover': {
+                backgroundColor: '#a2ccff',
+                border: '1px solid #a2ccff'
+              },
+              '& .MuiButtonBase-root': {
+                height: 25
+              }
+            }}
+          >
+            Save
+          </Button>
+        )}
       </Box>
 
       <Modal
@@ -1071,35 +1087,38 @@ const DoctorAppointmentPage = () => {
                   />
                 </Box>
               </Box>
-              <Box className="w-fit flex items-center justify-end gap-8 bg-emelard-400">
-                <Button
-                  type="submit"
-                  sx={{
-                    color: '#fff',
-                    width: { md: '100px', xs: '80px' },
-                    border: '1px solid #1A4CFF',
-                    backgroundColor: '#1A4CFF',
-                    borderRadius: '10px',
-                    marginX: 'auto',
-                    ':hover': { backgroundColor: '#1201ff', border: 'none' }
-                  }}
-                >
-                  Add
-                </Button>
-                <Button
-                  onClick={handleCloseDrugModal}
-                  sx={{
-                    color: '#fff',
-                    width: { md: '100px', xs: '80px' },
-                    color: '#1A4CFF',
-                    border: '1px solid #1A4CFF',
-                    borderRadius: '10px',
-                    marginX: 'auto',
-                    ':hover': { backgroundColor: '#a2ccff', border: 'none' }
-                  }}
-                >
-                  Cancel
-                </Button>
+
+              <Box className="relative w-full h-fit min-h-[40px]">
+                <Box className="absolute right-0 w-fit flex items-center justify-end gap-5 bg-emelard-400">
+                  <Button
+                    type="submit"
+                    sx={{
+                      color: '#fff',
+                      width: { md: '100px', xs: '80px' },
+                      border: '1px solid #1A4CFF',
+                      backgroundColor: '#1A4CFF',
+                      borderRadius: '10px',
+                      marginX: 'auto',
+                      ':hover': { backgroundColor: '#1201ff', border: 'none' }
+                    }}
+                  >
+                    Add
+                  </Button>
+                  <Button
+                    onClick={handleCloseDrugModal}
+                    sx={{
+                      color: '#fff',
+                      width: { md: '100px', xs: '80px' },
+                      color: '#1A4CFF',
+                      border: '1px solid #1A4CFF',
+                      borderRadius: '10px',
+                      marginX: 'auto',
+                      ':hover': { backgroundColor: '#a2ccff', border: 'none' }
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </Box>
               </Box>
             </form>
           </Box>
@@ -1251,44 +1270,46 @@ const DoctorAppointmentPage = () => {
                   </Box>
                 </Box>
               </Box>
-              <Box className="w-fit flex items-center justify-end gap-8 bg-emelard-400">
-                {checked[0] && (
+              <Box className="relative w-full h-fit min-h-[40px]">
+                <Box className="absolute right-0 w-fit flex flex-grow items-center justify-end gap-5">
+                  {checked[0] && (
+                    <Button
+                      type="submit"
+                      sx={{
+                        color: '#fff',
+                        width: { md: '100px', xs: '80px' },
+                        border: '1px solid #1A4CFF',
+                        backgroundColor: '#1A4CFF',
+                        borderRadius: '10px',
+                        marginX: 'auto',
+                        ':hover': {
+                          backgroundColor: '#1201ff',
+                          border: '1px solid #a2ccff'
+                        }
+                      }}
+                    >
+                      Add
+                    </Button>
+                  )}
+
                   <Button
-                    type="submit"
+                    onClick={handleCloseRecommendationModal}
                     sx={{
                       color: '#fff',
                       width: { md: '100px', xs: '80px' },
+                      color: '#1A4CFF',
                       border: '1px solid #1A4CFF',
-                      backgroundColor: '#1A4CFF',
                       borderRadius: '10px',
                       marginX: 'auto',
                       ':hover': {
-                        backgroundColor: '#1201ff',
+                        backgroundColor: '#a2ccff',
                         border: '1px solid #a2ccff'
                       }
                     }}
                   >
-                    Add
+                    Cancel
                   </Button>
-                )}
-
-                <Button
-                  onClick={handleCloseRecommendationModal}
-                  sx={{
-                    color: '#fff',
-                    width: { md: '100px', xs: '80px' },
-                    color: '#1A4CFF',
-                    border: '1px solid #1A4CFF',
-                    borderRadius: '10px',
-                    marginX: 'auto',
-                    ':hover': {
-                      backgroundColor: '#a2ccff',
-                      border: '1px solid #a2ccff'
-                    }
-                  }}
-                >
-                  Cancel
-                </Button>
+                </Box>
               </Box>
             </form>
           </Box>
