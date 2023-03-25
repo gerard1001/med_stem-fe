@@ -27,7 +27,7 @@ const CreateAppointmentModal = ({
   selectedTime,
   doctorData: { doctorId, firstName, lastName },
   patientData: { patientId },
-  workDayData: { workDayId },
+  workDayData: { workDayId, workDayDate },
   scheduleData: { scheduleId },
   specialities,
   handleAfterSubmit
@@ -37,7 +37,7 @@ const CreateAppointmentModal = ({
   const appointmentData = [
     {
       name: 'Appointment date',
-      value: format(Date.now(), 'MM.dd.yyyy')
+      value: format(new Date(workDayDate || new Date()), 'MM.dd.yyyy')
     },
     {
       name: 'Appointment time',

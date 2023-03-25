@@ -86,8 +86,6 @@ const DoctorAppointmentPage = () => {
     setChecked(newChecked);
   };
 
-  console.log({ defaultComplaints });
-
   const handleRecommendationInput = (event) => {
     const {
       target: { value }

@@ -21,13 +21,17 @@ import { VscGraphLine } from 'react-icons/vsc';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
+const isDoctor =
+  JSON.parse(localStorage.getItem('userLoginData'))?.user?.Role.role ===
+  'doctor';
+
 const listItems = (role) => {
   const common = [
-    // {
-    //   listIcon: <RiCalendarTodoLine className="text-[20px]" />,
-    //   listText: 'Schedule',
-    //   url: '/dashboard/schedule'
-    // },
+    {
+      listIcon: <RiCalendarTodoLine className="text-[20px]" />,
+      listText: 'Schedule',
+      url: isDoctor ? '/dashboard/doctor/calendar' : '/dashboard/schedule'
+    },
     {
       listIcon: <FiUsers className="text-[20px]" />,
       listText: 'Patients',

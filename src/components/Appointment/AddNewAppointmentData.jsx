@@ -66,7 +66,6 @@ const AddNewAppointmentData = ({
   const onSubmitDiagnosis = async ({ diagnosis }) => {
     setLoading(true);
     const body = { diagnosis: diagnosis };
-    console.log(body);
     const data = { appointmentId, body };
     dispatch(updateAppointment(data)).then(() => {
       dispatch(getOneAppointment(appointmentId)).then(() => {

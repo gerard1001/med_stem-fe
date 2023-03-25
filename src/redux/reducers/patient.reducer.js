@@ -45,7 +45,6 @@ export const deletePatientAccount = createAsyncThunk(
     axios
       .delete(`${process.env.BACKEND_URL}/users/client/${patientId}`)
       .then((res) => {
-        console.log(res.data, 'ACTION');
         res.data;
       })
 );
@@ -113,7 +112,6 @@ const patientSlice = createSlice({
     });
     builder.addCase(deletePatientAccount.rejected, (state, action) => {
       toast.error(action.error.message);
-      console.log(action, 'ACTION');
       state.loading = false;
       state.single_data = {};
       state.error = action.error.message;

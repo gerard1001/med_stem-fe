@@ -54,11 +54,9 @@ const Daycell = memo(
     availableAppointments
   }) => {
     const isSelected = isEqual(new Date(selectedDate), new Date(date));
-    // const isGrayed = getDay(date) === 0 || getDay(date) === 6;
 
     const isGrayed = !availableAppointments || availableAppointments === 0;
 
-    // console.log(workdays?.map((values) => values.date));
     return (
       <Box
         className="text-green flex flex-col p-1 cursor-pointer"

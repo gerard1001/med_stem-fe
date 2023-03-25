@@ -50,7 +50,6 @@ const ExpectedAppointments = () => {
     return new Date(values?.work_day?.date) > new Date() && !values.is_canceled;
   });
 
-  console.log(expectedapps, '^&^&^&^&^&');
   const dispatch = useDispatch();
 
   const handleCancelAppointment = () => {
@@ -252,7 +251,6 @@ const ExpectedAppointments = () => {
                               fontSize: { md: '17px', xs: '14px' }
                             }}
                             onClick={() => {
-                              console.log({ row });
                               setAppointIdx(row.appointment_id);
                               setDoctor(
                                 `${row.doctor.first_name} ${row.doctor.last_name}`
