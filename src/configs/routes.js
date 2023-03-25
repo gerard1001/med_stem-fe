@@ -93,6 +93,10 @@ const routes = createBrowserRouter([
         element: <AdminPatientProfile />
       },
       {
+        path: 'doctor/appointments/:id',
+        element: <DoctorAppointmentPage />
+      },
+      {
         path: 'analytics',
         element: <Analytics />
       },

@@ -258,7 +258,7 @@ const DoctorAppointmentPage = () => {
 
   return (
     <Box className="bg-[#F5F5F5] w-[100vw] min-h-[100vh]">
-      <HomeNavBar />
+      {/* <HomeNavBar /> */}
       <Box
         component="form"
         onSubmit={handleSubmit(onSubmitAppointmentData)}
@@ -567,7 +567,7 @@ const DoctorAppointmentPage = () => {
             </Box>
           </Box>
         )}
-        {(inputEntered || !isStarted) && (
+        {inputEntered && !isStarted && (
           <Button
             type="submit"
             className="absolute bottom-2 right-2 mt-10"
