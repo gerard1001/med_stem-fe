@@ -2,8 +2,8 @@ const path = require('path');
 const webpack = require('webpack');
 const dotenv = require('dotenv');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
-// const CopyWebpackPlugin = require('copy-webpack-plugin');
-// const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 dotenv.config();
@@ -22,7 +22,7 @@ const envKeys = {
   )
 };
 
-const isDevelopment = process.env.NODE_ENV === 'development';
+const isDevelopment = process.env.NODE_ENV !== 'production';
 
 module.exports = {
   entry: path.join(__dirname, './src/index.js'),
@@ -41,8 +41,12 @@ module.exports = {
   devServer: {
     port: process.env.PORT || '3000',
     historyApiFallback: true,
-    open: true,
-    hot: true
+    // open: true,
+    hot: true,
+    client: {
+      overlay: false,
+      logging: 'warn'
+    }
   },
   module: {
     rules: [
@@ -69,13 +73,16 @@ module.exports = {
   },
   plugins: [
     // new webpack.HotModuleReplacementPlugin(),
-    new HtmlWebPackPlugin({ template: 'public/index.html' }),
-    // new CopyWebpackPlugin({
-    //   patterns: [{ from: './public/assets', to: 'assets' }]
-    // }),
+    isDevelopment && new ReactRefreshWebpackPlugin(),
+    new HtmlWebPackPlugin({
+      filename: './index.html',
+      template: 'public/index.html'
+    }),
+    new CopyWebpackPlugin({
+      patterns: [{ from: './public/assets', to: 'assets' }]
+    }),
     new webpack.DefinePlugin(envKeys),
-    // new CleanWebpackPlugin(),
-    isDevelopment && new ReactRefreshWebpackPlugin()
+    new CleanWebpackPlugin()
   ].filter(Boolean),
   optimization: {
     splitChunks: {
