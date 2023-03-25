@@ -84,14 +84,6 @@ const RightSideBar = () => {
         appointment_duration
       })
     );
-    console.log({
-      start_date: format(new Date(start_date), 'MM-dd-yyyy'),
-      end_date: format(new Date(end_date), 'MM-dd-yyyy'),
-      days: dayName?.join(', '),
-      from,
-      to,
-      appointment_duration
-    });
     reset();
   };
 

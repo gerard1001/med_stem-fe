@@ -123,7 +123,6 @@ const AdminMedicalHistory = () => {
         value.patients?.length > 0 ? 'yes' : 'no',
         { shouldValidate: true }
       );
-      console.log(detail, 'detail ................................');
     });
   }, [med_info]);
 

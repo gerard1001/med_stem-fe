@@ -101,7 +101,6 @@ const SchedulePage = () => {
     });
   }, [doctorId]);
 
-  console.log({ selectedWorkDay });
   return (
     <Box className="p-8">
       <Stack
@@ -176,9 +175,6 @@ const CalendarRightSideBar = ({ loading }) => {
     setDuration(selectedWorkDayData?.schedule?.appointment_duration);
   }, [selectedWorkDayData]);
 
-  // console.log({ selectedWorkDayData });
-  // console.log({ startingHour, endingHour, duration });
-
   const availableSlots =
     selectedWorkDayData && startingHour && endingHour && duration
       ? getTimePeriods(startingHour, endingHour, duration)
@@ -200,9 +196,6 @@ const CalendarRightSideBar = ({ loading }) => {
     (element) => !takenAppointmentsOnWorkDayPeriod.includes(element)
   );
 
-  // console.log(doctor?.appointments, '****');
-  // console.log(remainingSlots, '^^^');
-  // console.log({ takenAppointments, availableSlots, remainingSlots });
   return (
     <>
       <List disablePadding className="border-l border-primary w-full h-full">

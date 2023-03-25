@@ -47,18 +47,20 @@ import {
   selectWorkDaysDoctors
 } from '../redux/reducers/workDays.reducer';
 
-function PatientsCalendar() {
+function DoctorCalendar() {
   const dispatch = useDispatch();
-  const { id: doctorId } = useParams();
+  // const { id: doctorId } = useParams();
   const clientId = JSON.parse(localStorage.getItem('userLoginData'))?.user
     ?.client_id;
+  const doctorId = JSON.parse(localStorage.getItem('userLoginData'))?.user
+    ?.doctor_id;
   const calendarRef = useRef(null);
   const [viewDate, setViewDate] = useState(new Date());
   const [openRightSideBar, setOpenRightSideBar] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [slots, setSlots] = useState(null);
-  // const selectedDate = useSelector((state) => state.calendar.selectedDate);
+  const [fullSlots, setFullSlots] = useState(null);
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down('md'));
   const workDays = useSelector(
     (state) => selectWorkDaysDoctors(state, doctorId)?.workDays
@@ -97,8 +99,10 @@ function PatientsCalendar() {
 
   useEffect(() => {
     const workDaysSlots = {};
+    const workDaysFullSlots = {};
     workDays?.forEach((workDay) => {
       const slots = [];
+      const fullSlots = [];
       const { from, to, date, appointments } = workDay;
       if (isToday(new Date(date)) || isFuture(new Date(date))) {
         const duration = workDay.schedule.appointment_duration;
@@ -133,7 +137,7 @@ function PatientsCalendar() {
         }
 
         while (true) {
-          if (currentSlot >= lastSlot) {
+          if (currentSlot > lastSlot) {
             break;
           }
           if (currentSlot === taken[0]) {
@@ -152,11 +156,14 @@ function PatientsCalendar() {
               duration
             )}`;
           }
+          fullSlots.push(currentSlot);
         }
         workDaysSlots[format(new Date(date), 'yyyy-MM-dd')] = slots;
+        workDaysFullSlots[format(new Date(date), 'yyyy-MM-dd')] = fullSlots;
       }
     });
     setSlots(workDaysSlots);
+    setFullSlots(workDaysFullSlots);
   }, [workDays]);
   useEffect(() => {
     dispatch(getOneDoctor(doctorId));
@@ -184,7 +191,7 @@ function PatientsCalendar() {
   }, [doctorData, patientData, selectedWorkDay]);
 
   return (
-    <HomeNavBar>
+    <>
       <Box className="flex flex-row w-full h-full">
         <Box className="sm:p-4 p-8 flex flex-col grow sm:gap-0 gap-3 overflow-y-auto">
           <IconButton
@@ -212,13 +219,12 @@ function PatientsCalendar() {
               direction="row"
               className="gap-3 items-center sm:w-full overflow-hidden"
             >
-              <BackButton />
               <Typography
-                fontSize={{ xs: 16, sm: 32 }}
+                fontSize={{ xs: 16, sm: 25 }}
                 className="leading-none"
                 noWrap
               >
-                Select date and time
+                Schedule
               </Typography>
             </Stack>
             <Stack direction="row" justifyContent="end" className="sm:w-full">
@@ -263,15 +269,15 @@ function PatientsCalendar() {
             }}
             className="transition duration-150 ease-in-out"
           >
-            <CalendarRightSideBar {...{ loading, slots, viewDate }} />
+            <CalendarRightSideBar {...{ loading, slots, viewDate, workDays }} />
           </Drawer>
         )}
       </Box>
-    </HomeNavBar>
+    </>
   );
 }
 
-const CalendarRightSideBar = ({ loading, slots, viewDate }) => {
+const CalendarRightSideBar = ({ loading, slots, viewDate, workDays }) => {
   const dispatch = useDispatch();
   const [selectedTime, setSelectedTime] = useState();
   const [openModal, setOpenModal] = useState(false);
@@ -323,49 +329,9 @@ const CalendarRightSideBar = ({ loading, slots, viewDate }) => {
             />
           </>
         ))}
-        <Stack direction="row" alignItems="center" justifyContent="center">
-          <Button
-            variant="contained"
-            color="primary"
-            className="bg-primary m-4"
-            onClick={() => {
-              !loading && setOpenModal(true);
-            }}
-          >
-            Make Appointment
-          </Button>
-        </Stack>
       </List>
-      <CreateAppointmentModal
-        open={openModal || false}
-        {...{
-          doctorData: {
-            doctorId: doctor?.doctor_id,
-            firstName: doctor?.first_name,
-            lastName: doctor?.last_name
-          },
-          patientData: {
-            patientId: selectedPatientData?.client_id,
-            firstName: selectedPatientData?.first_name,
-            lastName: selectedPatientData?.last_name
-          },
-          workDayData: {
-            workDayId: selectedWorkDayData?._id,
-            workDayDate: selectedWorkDayData?.date
-          },
-          scheduleData: {
-            scheduleId: selectedWorkDayData?.schedule_id
-          },
-          specialities: doctor?.departments.map((dep) => dep.speciality_name),
-          onClose: () => {
-            setOpenModal(false);
-          },
-          selectedTime,
-          handleAfterSubmit
-        }}
-      />
     </>
   );
 };
 
-export default PatientsCalendar;
+export default DoctorCalendar;

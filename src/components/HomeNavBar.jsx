@@ -37,8 +37,6 @@ const HomeNavBar = (props) => {
   const url = window.location.href;
   const nav = useNavigate();
 
-  console.log({ isClient });
-
   React.useEffect(() => {
     if (url.includes('about')) {
       setOnHome(false);

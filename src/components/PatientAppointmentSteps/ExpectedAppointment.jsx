@@ -231,7 +231,6 @@ const ExpectedAppointment = () => {
                             fontSize: { md: '17px', xs: '14px' }
                           }}
                           onClick={() => {
-                            console.log({ row });
                             setAppointIdx(row.appointment_id);
                             setDoctor(
                               `${row.doctor.first_name} ${row.doctor.last_name}`
