@@ -69,8 +69,7 @@ const AppointmentPage = () => {
 
   const nav = useNavigate();
   return (
-    <Box className="bg-[#F5F5F5] w-[100vw] min-h-[100vh]">
-      <HomeNavBar />
+    <Box className="bg-[#F5F5F5] min-h-[100vh]">
       <Box className="p-10 max-w-[1200px] w-[85%] sm:w-[100%] sm:p-4 flex flex-col gap-4 items-start">
         <Box className="flex flex-center gap-3 font-semibold">
           <Typography variant="h6">Appointments</Typography>

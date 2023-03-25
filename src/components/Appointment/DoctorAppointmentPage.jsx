@@ -86,6 +86,8 @@ const DoctorAppointmentPage = () => {
     setChecked(newChecked);
   };
 
+  console.log({ defaultComplaints });
+
   const handleRecommendationInput = (event) => {
     const {
       target: { value }
@@ -257,8 +259,7 @@ const DoctorAppointmentPage = () => {
   };
 
   return (
-    <Box className="bg-[#F5F5F5] w-[100vw] min-h-[100vh]">
-      {/* <HomeNavBar /> */}
+    <Box className="bg-[#F5F5F5] min-h-[100vh]">
       <Box
         component="form"
         onSubmit={handleSubmit(onSubmitAppointmentData)}
@@ -317,7 +318,7 @@ const DoctorAppointmentPage = () => {
           appointment?.data?.diagnosis ||
           (Array.isArray(appointment?.data?.drugs) &&
             !appointment?.data?.drugs)) && (
-          <Box className="w-[100%] sm:p-4 flex flex-col gap-4 items-start">
+          <Box className="w-[100%] sm:p-0 flex flex-col gap-4 items-start">
             <Box className="flex w-full gap-2 items-start flex-col">
               <Typography variant="subtitle1" fontWeight={600}>
                 Complaints
@@ -567,29 +568,33 @@ const DoctorAppointmentPage = () => {
             </Box>
           </Box>
         )}
-        {inputEntered && !isStarted && (
-          <Button
-            type="submit"
-            className="absolute bottom-2 right-2 mt-10"
-            size="small"
-            sx={{
-              color: '#fff',
-              width: '80px',
-              color: '#1A4CFF',
-              border: '1px solid #1A4CFF',
-              borderRadius: '10px',
-              marginX: 'auto',
-              ':hover': {
-                backgroundColor: '#a2ccff',
-                border: '1px solid #a2ccff'
-              },
-              '& .MuiButtonBase-root': {
-                height: 25
-              }
-            }}
-          >
-            Save
-          </Button>
+        {inputEntered && (defaultComplaints || defaultDiagnosis) && (
+          <Box className="relative w-full h-fit min-h-[40px]">
+            <Box className="absolute right-0 w-fit flex items-center justify-end gap-5">
+              <Button
+                type="submit"
+                className=" bottom-2 right-2 mt-10"
+                size="small"
+                sx={{
+                  color: '#fff',
+                  width: '80px',
+                  color: '#1A4CFF',
+                  border: '1px solid #1A4CFF',
+                  borderRadius: '10px',
+                  marginX: 'auto',
+                  ':hover': {
+                    backgroundColor: '#a2ccff',
+                    border: '1px solid #a2ccff'
+                  },
+                  '& .MuiButtonBase-root': {
+                    height: 25
+                  }
+                }}
+              >
+                Save
+              </Button>
+            </Box>
+          </Box>
         )}
       </Box>
 
@@ -1089,7 +1094,7 @@ const DoctorAppointmentPage = () => {
               </Box>
 
               <Box className="relative w-full h-fit min-h-[40px]">
-                <Box className="absolute right-0 w-fit flex items-center justify-end gap-5 bg-emelard-400">
+                <Box className="absolute right-0 w-fit flex items-center justify-end gap-5">
                   <Button
                     type="submit"
                     sx={{
@@ -1315,43 +1320,6 @@ const DoctorAppointmentPage = () => {
           </Box>
         </Box>
       </Modal>
-
-      {/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */}
-      {/* 
-      <List className="">
-        {recommendation?.data?.data?.map((value) => {
-          const labelId = `checkbox-list-label-${value.recommendation_name}`;
-
-          return (
-            <ListItem
-              key={value.recommendation_name}
-              role={undefined}
-              dense
-              button
-              onClick={handleToggle(value.recommendation_name)}
-            >
-              <ListItemIcon>
-                <Radio
-                  edge="end"
-                  checked={checked.indexOf(value.recommendation_name) !== -1}
-                  tabIndex={-1}
-                  disableRipple
-                  inputProps={{ 'aria-labelledby': labelId }}
-                  className="text-black ml-0 p-0"
-                  sx={{
-                    '& .MuiSvgIcon-root': {
-                      fontSize: '1em'
-                    }
-                  }}
-                />
-              </ListItemIcon>
-              <ListItemText id={labelId} primary={value.recommendation_name} />
-            </ListItem>
-          );
-        })}
-      </List> */}
-
-      {/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */}
     </Box>
   );
 };

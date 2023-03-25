@@ -336,7 +336,7 @@ const AdminDoctorAccountPage = ({
                   <img
                     className="w-full h-full absolute top-0 left-0 z-10"
                     src={picUrl || image}
-                    alt="selected"
+                    alt=""
                   />
                 )}
                 {!loadingUpload && (

@@ -21,7 +21,7 @@ const AppointmantPageNavigation = ({ appointment }) => {
   return (
     <div>
       {isClient && (
-        <Box className="flex items-center gap-10 mt-8 mb-5">
+        <Box className="flex items-center gap-10 mt-8 mb-5 md:overflow-auto">
           <Typography
             variant="subtitle1"
             fontWeight="600"
@@ -53,7 +53,7 @@ const AppointmantPageNavigation = ({ appointment }) => {
         </Box>
       )}
       {!isClient && (
-        <Box className="flex items-center gap-10 mt-8 mb-5">
+        <Box className="flex items-center gap-10 mt-8 mb-5 overflow-auto">
           <Typography
             variant="subtitle1"
             fontWeight="600"
