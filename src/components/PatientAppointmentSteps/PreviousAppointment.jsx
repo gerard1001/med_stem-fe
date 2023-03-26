@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Box, Typography } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -15,10 +15,12 @@ import { getOnePatient } from '../../redux/reducers/patient.reducer';
 import { getPatientAppointments } from '../../redux/reducers/patient.appointment.reducer';
 import PatientAppointmentNavigation from './PatientAppoinmentNavigation';
 import { useNavigate } from 'react-router-dom';
+import { filterData } from './ExpectedAppointment';
 
 const PreviousAppointment = () => {
   const patient = useSelector((state) => state.patient.single_data.data);
   const appoints = useSelector((state) => state.patient_appointment);
+  const [query, setQuery] = useState('');
 
   const clientId = JSON.parse(localStorage.getItem('userLoginData'))?.user
     ?.client_id;
@@ -26,6 +28,11 @@ const PreviousAppointment = () => {
   const prevapps = appoints?.data?.data?.filter((values) => {
     return new Date(values?.work_day?.date) < new Date();
   });
+
+  const filteredPrevAppointments = useMemo(
+    () => filterData(query, prevapps),
+    [query, prevapps]
+  );
 
   const dispatch = useDispatch();
 
@@ -38,12 +45,15 @@ const PreviousAppointment = () => {
   return (
     <div>
       <Box className="w-full">
-        <PatientAppointmentNavigation />
-        <TableContainer component={Paper} elevation={0}>
+        <PatientAppointmentNavigation setQuery={setQuery} />
+        <TableContainer
+          component={Paper}
+          elevation={0}
+          sx={{ backgroundColor: '#F5F5F5' }}
+        >
           <Table
             sx={{
               minWidth: 650,
-              backgroundColor: '#fff',
               overflow: 'auto',
               marginBottom: '40px'
             }}
@@ -51,84 +61,117 @@ const PreviousAppointment = () => {
           >
             <TableHead>
               <TableRow>
-                <TableCell sx={{ color: '#797979', fontSize: '14px' }}>
+                <TableCell
+                  sx={{
+                    color: '#797979',
+                    fontSize: { md: '17px', xs: '14px' }
+                  }}
+                >
                   Doctor name
                 </TableCell>
                 <TableCell
-                  align="left"
-                  sx={{ color: '#797979', fontSize: '14px' }}
+                  align="center"
+                  sx={{
+                    color: '#797979',
+                    fontSize: { md: '17px', xs: '14px' }
+                  }}
                 >
                   Speciality
                 </TableCell>
                 <TableCell
-                  align="left"
-                  sx={{ color: '#797979', fontSize: '14px' }}
+                  align="center"
+                  sx={{
+                    color: '#797979',
+                    fontSize: { md: '17px', xs: '14px' }
+                  }}
                 >
                   Appointment num
                 </TableCell>
                 <TableCell
-                  align="left"
-                  sx={{ color: '#797979', fontSize: '14px' }}
+                  align="center"
+                  sx={{
+                    color: '#797979',
+                    fontSize: { md: '17px', xs: '14px' }
+                  }}
                 >
                   Date
                 </TableCell>
                 <TableCell
-                  align="left"
-                  sx={{ color: '#797979', fontSize: '14px' }}
+                  align="center"
+                  sx={{
+                    color: '#797979',
+                    fontSize: { md: '17px', xs: '14px' }
+                  }}
                 >
                   Options
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {prevapps?.map((row) => (
+              {filteredPrevAppointments?.map((row) => (
                 <TableRow
                   key={row.appointment_number}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  sx={{
+                    '&:last-child td, &:last-child th': { border: 0 }
+                  }}
                   id="row-height"
                 >
                   <TableCell
                     className="cell-height"
                     component="th"
                     scope="row"
-                    onClick={() => {
-                      nav(`${row.appointment_id}`);
+                    sx={{
+                      color: '#797979',
+                      fontSize: { md: '17px', xs: '14px' }
                     }}
                   >
                     {row.doctor.first_name} {row.doctor.last_name}
                   </TableCell>
                   <TableCell
                     className="cell-height"
-                    align="left"
-                    sx={{ color: '#797979', fontSize: '14px' }}
+                    align="center"
+                    sx={{
+                      color: '#797979',
+                      fontSize: { md: '17px', xs: '14px' }
+                    }}
                   >
                     {row.doctor.departments[0].speciality_name}
                   </TableCell>
                   <TableCell
                     className="cell-height"
-                    align="left"
-                    sx={{ color: '#797979', fontSize: '14px' }}
+                    align="center"
+                    sx={{
+                      color: '#797979',
+                      fontSize: { md: '17px', xs: '14px' }
+                    }}
                   >
                     {row.appointment_number}
                   </TableCell>
                   <TableCell
                     className="cell-height"
-                    align="left"
-                    sx={{ color: '#797979', fontSize: '14px' }}
+                    align="center"
+                    sx={{
+                      color: '#797979',
+                      fontSize: { md: '17px', xs: '14px' }
+                    }}
                   >
                     {new Date(row.work_day?.date).toLocaleDateString()}
                   </TableCell>
-                  <TableCell className="cell-height" align="left">
+                  <TableCell className="cell-height" align="center">
                     <Typography
                       style={{
-                        backgroundColor: '#fafcfd',
+                        width: '100%',
+                        textAlign: 'center',
                         color: '#797979',
                         textTransform: 'capitalize',
                         cursor: 'pointer',
-                        fontSize: '14px'
+                        fontSize: { md: '17px', xs: '14px' }
+                      }}
+                      onClick={() => {
+                        nav(`${row.appointment_id}`);
                       }}
                     >
-                      Edit
+                      Check
                     </Typography>
                   </TableCell>
                 </TableRow>

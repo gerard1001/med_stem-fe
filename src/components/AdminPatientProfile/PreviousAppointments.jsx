@@ -38,11 +38,16 @@ const PreviousAppointments = () => {
     <div>
       <Box className="w-full p-20 sm:p-4">
         <PatientProfileNavigation />
-        <TableContainer component={Paper} elevation={0}>
+        <TableContainer
+          component={Paper}
+          elevation={0}
+          sx={{
+            backgroundColor: '#F5F5F5'
+          }}
+        >
           <Table
             sx={{
               minWidth: 650,
-              backgroundColor: '#fff',
               overflow: 'auto',
               marginBottom: '40px'
             }}
@@ -59,7 +64,7 @@ const PreviousAppointments = () => {
                   Doctor name
                 </TableCell>
                 <TableCell
-                  align="left"
+                  align="center"
                   sx={{
                     color: '#2E3033',
                     fontSize: { md: '17px', xs: '14px' }
@@ -68,7 +73,7 @@ const PreviousAppointments = () => {
                   Speciality
                 </TableCell>
                 <TableCell
-                  align="left"
+                  align="center"
                   sx={{
                     color: '#2E3033',
                     fontSize: { md: '17px', xs: '14px' }
@@ -77,7 +82,7 @@ const PreviousAppointments = () => {
                   Appointment num
                 </TableCell>
                 <TableCell
-                  align="left"
+                  align="center"
                   sx={{
                     color: '#2E3033',
                     fontSize: { md: '17px', xs: '14px' }
@@ -86,7 +91,7 @@ const PreviousAppointments = () => {
                   Date
                 </TableCell>
                 <TableCell
-                  align="left"
+                  align="center"
                   sx={{
                     color: '#2E3033',
                     fontSize: { md: '17px', xs: '14px' }
@@ -115,7 +120,7 @@ const PreviousAppointments = () => {
                     {row.doctor.first_name} {row.doctor.last_name}
                   </TableCell>
                   <TableCell
-                    align="left"
+                    align="center"
                     sx={{
                       color: '#2E3033',
                       fontSize: { md: '17px', xs: '14px' }
@@ -129,7 +134,7 @@ const PreviousAppointments = () => {
                     {row.doctor.departments[0]?.speciality_name}
                   </TableCell>
                   <TableCell
-                    align="left"
+                    align="center"
                     sx={{
                       color: '#2E3033',
                       fontSize: { md: '17px', xs: '14px' }
@@ -144,7 +149,7 @@ const PreviousAppointments = () => {
                   </TableCell>
                   <TableCell
                     className="cell-height"
-                    align="left"
+                    align="center"
                     sx={{
                       color: '#2E3033',
                       fontSize: { md: '17px', xs: '14px' }
@@ -152,7 +157,7 @@ const PreviousAppointments = () => {
                   >
                     {new Date(row.work_day?.date).toLocaleDateString()}
                   </TableCell>
-                  <TableCell className="cell-height" align="left">
+                  <TableCell className="cell-height" align="center">
                     <Typography
                       style={{
                         backgroundColor: '#fafcfd',
@@ -162,7 +167,7 @@ const PreviousAppointments = () => {
                         fontSize: '14px'
                       }}
                     >
-                      Edit
+                      Check
                     </Typography>
                   </TableCell>
                 </TableRow>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import PatientAppointmentNavigation from './PatientAppoinmentNavigation';
 import { useSelector, useDispatch } from 'react-redux';
@@ -20,8 +20,24 @@ import { cancelAppointment } from '../../redux/reducers/patient.appointment.redu
 import EditAppointmentModal from '../Appointment/CancelAppointmentModal';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
+import LoadingButton from '../LoadingButton';
+import CloseXButton from '../CloseXButton';
+
+export const filterData = (query, data) => {
+  if (!query) {
+    return data;
+  }
+  return data?.filter(
+    (values) =>
+      values.doctor.first_name.toLowerCase().includes(query.toLowerCase()) ||
+      values.doctor.last_name.toLowerCase().includes(query.toLowerCase()) ||
+      values.appointment_number.toLowerCase().includes(query.toLowerCase())
+  );
+};
 
 const ExpectedAppointment = () => {
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const [clickedIdx, setClickedIdx] = React.useState(0);
   const [appointIdx, setAppointIdx] = React.useState(null);
   const [appointDoc, setDoctor] = React.useState(null);
@@ -32,8 +48,9 @@ const ExpectedAppointment = () => {
   const patient = useSelector((state) => state.patient.single_data.data);
   const appoints = useSelector((state) => state.patient_appointment);
   const [open, setOpen] = React.useState(false);
+  const [query, setQuery] = useState('');
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => !loading && setOpen(false);
 
   const handleShow = () => {
     console.log(appointDate, appointDoc, appointNum, appointSpec, appointTime);
@@ -45,10 +62,18 @@ const ExpectedAppointment = () => {
   const expectedapps = appoints?.data?.data?.filter((values) => {
     return new Date(values?.work_day?.date) > new Date() && !values.is_canceled;
   });
-  const dispatch = useDispatch();
+
+  const filteredExpectedAppointments = useMemo(
+    () => filterData(query, expectedapps),
+    [query, expectedapps]
+  );
 
   const handleCancelAppointment = () => {
-    dispatch(cancelAppointment(appointIdx));
+    setLoading(true);
+    dispatch(cancelAppointment(appointIdx)).then(() => {
+      setLoading(false);
+      dispatch(getPatientAppointments(clientId)).then(() => handleClose());
+    });
   };
 
   React.useEffect(() => {
@@ -84,12 +109,15 @@ const ExpectedAppointment = () => {
   return (
     <div>
       <Box className="w-full">
-        <PatientAppointmentNavigation />
-        <TableContainer component={Paper} elevation={0}>
+        <PatientAppointmentNavigation setQuery={setQuery} />
+        <TableContainer
+          component={Paper}
+          elevation={0}
+          sx={{ backgroundColor: '#F5F5F5' }}
+        >
           <Table
             sx={{
               minWidth: 650,
-              backgroundColor: '#fff',
               overflow: 'auto',
               marginBottom: '40px',
               maxHeight: '55vh',
@@ -146,174 +174,163 @@ const ExpectedAppointment = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {expectedapps ? (
-                expectedapps?.map((row, idx) => (
-                  <>
-                    <TableRow
-                      key={row.appointment_number}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              {filteredExpectedAppointments?.map((row, idx) => (
+                <>
+                  <TableRow
+                    key={row.appointment_number}
+                    sx={{
+                      '&:last-child td, &:last-child th': { border: 0 }
+                    }}
+                  >
+                    <TableCell
+                      component="th"
+                      scope="row"
+                      className="cursor-pointer"
+                      sx={{
+                        color: '#797979',
+                        fontSize: { md: '17px', xs: '14px' }
+                      }}
+                      onClick={() => {
+                        nav(`${row.appointment_id}`);
+                      }}
                     >
-                      <TableCell
-                        component="th"
-                        scope="row"
-                        className="cursor-pointer"
-                        onClick={() => {
-                          nav(`${row.appointment_id}`);
-                        }}
-                      >
-                        {row.doctor.first_name} {row.doctor.last_name}
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        className="cursor-pointer"
-                        sx={{
+                      {row.doctor.first_name} {row.doctor.last_name}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      className="cursor-pointer"
+                      sx={{
+                        color: '#797979',
+                        fontSize: { md: '17px', xs: '14px' }
+                      }}
+                      onClick={() => {
+                        nav(`${row.appointment_id}`);
+                      }}
+                    >
+                      {row.doctor.departments[0]?.speciality_name || '...'}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      className="cursor-pointer"
+                      sx={{
+                        color: '#797979',
+                        fontSize: { md: '17px', xs: '14px' }
+                      }}
+                    >
+                      {row.appointment_number}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        color: '#797979',
+                        fontSize: { md: '17px', xs: '14px' }
+                      }}
+                      onClick={() => {
+                        nav(`${row.appointment_id}`);
+                      }}
+                    >
+                      {new Date(row.work_day?.date).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        color: '#797979',
+                        fontSize: '12px',
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        overflow: 'auto',
+                        gap: '4px'
+                      }}
+                    >
+                      <Typography
+                        className="text-center w-full"
+                        style={{
                           color: '#797979',
+                          textTransform: 'capitalize',
+                          cursor: 'pointer',
                           fontSize: { md: '17px', xs: '14px' }
                         }}
                         onClick={() => {
-                          nav(`${row.appointment_id}`);
+                          setAppointIdx(row.appointment_id);
+                          setDoctor(
+                            `${row.doctor.first_name} ${row.doctor.last_name}`
+                          );
+                          setSpeciality(row.doctor.departments[0]);
+                          setAppointDate(
+                            new Date(row.work_day.date).toLocaleDateString()
+                          );
+                          setAppointNum(row.appointment_number);
+                          setAppointTime(row.appointment_period);
+                          setClickedIdx(idx);
+                          handleOpen();
+                          handleShow();
                         }}
                       >
-                        {row.doctor.departments[0]?.speciality_name || '...'}
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        className="cursor-pointer"
-                        sx={{
-                          color: '#797979',
-                          fontSize: { md: '17px', xs: '14px' }
-                        }}
-                      >
-                        {row.appointment_number}
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{
-                          color: '#797979',
-                          fontSize: { md: '17px', xs: '14px' }
-                        }}
-                        onClick={() => {
-                          nav(`${row.appointment_id}`);
-                        }}
-                      >
-                        {new Date(row.work_day?.date).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{
-                          color: '#797979',
-                          fontSize: '12px',
-                          display: 'flex',
-                          flexWrap: 'wrap',
-                          overflow: 'auto',
-                          gap: '4px'
-                        }}
-                      >
-                        <Typography
-                          style={{
-                            backgroundColor: '#fafcfd',
-                            color: '#797979',
-                            textTransform: 'capitalize',
-                            cursor: 'pointer',
-                            fontSize: { md: '14px' },
-                            xs: '14px',
-                            margin: '0 5px'
-                          }}
-                        >
-                          Edit
+                        cancel
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                  {clickedIdx === idx && (
+                    <Modal
+                      open={open}
+                      onClose={handleClose}
+                      aria-labelledby="modal-modal-title"
+                      aria-describedby="modal-modal-description"
+                      className="flex flex-col items-center justify-center"
+                      sx={{
+                        '& .MuiFormControl-root': {
+                          margin: 0
+                        }
+                      }}
+                    >
+                      <Box className="flex flex-col max-w-[450px] w-full sm:w-[98%] justify-center items-center gap-4 bg-white border border-primary shadow-2 rounded-[20px] relative py-10 px-4 m-4 overflow-y-auto">
+                        <Typography className="w-full font-semibold text-lg text-center">
+                          Appointment Cancelation
                         </Typography>
-                        <Typography
-                          style={{
-                            backgroundColor: '#fafcfd',
-                            color: '#797979',
-                            textTransform: 'capitalize',
-                            cursor: 'pointer',
-                            fontSize: { md: '17px', xs: '14px' }
-                          }}
-                          onClick={() => {
-                            setAppointIdx(row.appointment_id);
-                            setDoctor(
-                              `${row.doctor.first_name} ${row.doctor.last_name}`
-                            );
-                            setSpeciality(row.doctor.departments[0]);
-                            setAppointDate(
-                              new Date(row.work_day.date).toLocaleDateString()
-                            );
-                            setAppointNum(row.appointment_number);
-                            setAppointTime(row.appointment_period);
-                            setClickedIdx(idx);
-                            handleOpen();
-                            handleShow();
-                          }}
-                        >
-                          cancel
-                        </Typography>
-                      </TableCell>
-                    </TableRow>
-                    {clickedIdx === idx && (
-                      <Modal
-                        open={open}
-                        onClose={handleClose}
-                        aria-labelledby="modal-modal-title"
-                        aria-describedby="modal-modal-description"
-                        className="flex flex-col items-center justify-center"
-                        sx={{
-                          '& .MuiFormControl-root': {
-                            margin: 0
-                          }
-                        }}
-                      >
-                        <Box className="flex flex-col w-[500px] sm:w-[98%] justify-center items-center gap-4 bg-white border border-primary shadow-2 rounded-[20px] relative py-10 px-4 m-4 overflow-y-auto">
-                          <Typography className="w-full font-semibold text-lg text-center">
-                            Appointment Cancelation
-                          </Typography>
-
-                          <Box>
-                            <Stack direction="row" gap={6} width="100%">
-                              <Stack>
-                                {appointmentData.map(({ name, value }) => (
-                                  <Typography
-                                    key={name}
-                                    className="truncate font-semibold "
-                                  >
-                                    {name}
-                                  </Typography>
-                                ))}
-                              </Stack>
-                              <Stack>
-                                {appointmentData?.map(({ value }) => (
-                                  <Typography
-                                    component={Link}
-                                    key={value}
-                                    className="truncate"
-                                  >
-                                    {value}
-                                    {/* Edit */}
-                                  </Typography>
-                                ))}
-                              </Stack>
+                        <CloseXButton onClick={handleClose} />
+                        <Box>
+                          <Stack direction="row" gap={6} width="100%">
+                            <Stack>
+                              {appointmentData.map(({ name, value }) => (
+                                <Typography
+                                  key={name}
+                                  className="truncate font-semibold "
+                                >
+                                  {name}
+                                </Typography>
+                              ))}
                             </Stack>
-                          </Box>
-
-                          <Box>
-                            <Button
-                              className="bg-[#1A4CFF] text-white w-fit"
-                              onClick={() => {
-                                handleClose();
-                                handleCancelAppointment();
-                              }}
-                            >
-                              Cancel appointment
-                            </Button>
-                          </Box>
+                            <Stack>
+                              {appointmentData?.map(({ value }) => (
+                                <Typography
+                                  component={Link}
+                                  key={value}
+                                  className="truncate"
+                                >
+                                  {value}
+                                  {/* Edit */}
+                                </Typography>
+                              ))}
+                            </Stack>
+                          </Stack>
                         </Box>
-                      </Modal>
-                    )}
-                  </>
-                ))
-              ) : (
-                <Typography>No expected appointments</Typography>
-              )}
+
+                        <Box>
+                          <LoadingButton
+                            loading={loading}
+                            className="max-w-fit w-full"
+                            onClick={() => {
+                              handleCancelAppointment();
+                            }}
+                          >
+                            Cancel appointment
+                          </LoadingButton>
+                        </Box>
+                      </Box>
+                    </Modal>
+                  )}
+                </>
+              ))}
             </TableBody>
           </Table>
         </TableContainer>
