@@ -10,17 +10,28 @@ function DashboardNavBar({
   toggleLeftSideBar
 }) {
   const loggedInUser = useSelector((state) => state.user.loginData);
+  const doctorLoginData = useSelector(
+    (state) => state.doctor?.single_data?.data
+  );
   const [isDoctor, setIsDoctor] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [doctorName, setDoctorName] = useState('Not Available');
 
   useEffect(() => {
     if (loggedInUser?.role_id === 2) {
       setIsDoctor(true);
+      setDoctorName(loggedInUser?.last_name);
     }
     if (loggedInUser?.role_id === 1) {
       setIsAdmin(true);
+      setDoctorName(loggedInUser?.last_name);
     }
   }, [loggedInUser]);
+  useEffect(() => {
+    if (doctorLoginData) {
+      setDoctorName(doctorLoginData.last_name);
+    }
+  }, [doctorLoginData]);
 
   return (
     <Box
@@ -49,12 +60,8 @@ function DashboardNavBar({
       <Box className="pr-5">
         <Typography variant="subtitle1" color="primary">
           <p className="leading-5">Hello,</p>
-          {isDoctor && (
-            <p className="leading-5">Dr. {loggedInUser?.last_name}</p>
-          )}
-          {isAdmin && (
-            <p className="leading-5">Admin {loggedInUser?.last_name}</p>
-          )}
+          {isDoctor && <p className="leading-5">Dr. {doctorName}</p>}
+          {isAdmin && <p className="leading-5">Admin {doctorName}</p>}
 
           {rightSideBarContent && (
             <IconButton
@@ -62,7 +69,7 @@ function DashboardNavBar({
                 position: 'absolute',
                 backgroundColor: '#9b9b9b2d',
                 color: '#000',
-                top: '64px',
+                top: '80px',
                 right: '24px',
                 display: { md: 'none', xs: 'block' }
               }}
