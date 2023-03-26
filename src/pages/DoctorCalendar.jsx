@@ -34,6 +34,7 @@ import CreateAppointmentModal from '../components/Appointment/CreateAppointmentM
 import BackButton from '../components/BackButton';
 import CalendarMonthYearSelector from '../components/Calendar/CalendarMonthYearSelector';
 import DoctorAppointmentsCalendar from '../components/Calendar/DoctorAppointmentsCalendar';
+import DoctorPageCalendar from '../components/Calendar/DoctorPageCalendar';
 import HomeNavBar from '../components/HomeNavBar';
 import { getOneDoctor } from '../redux/reducers/doctor.reducer';
 import { getOnePatient } from '../redux/reducers/patient.reducer';
@@ -46,6 +47,35 @@ import {
   getDoctorWorkDays,
   selectWorkDaysDoctors
 } from '../redux/reducers/workDays.reducer';
+
+function checkAppointments(variableDate, slots, selectedDate) {
+  const result = [];
+  const setSlots = slots ? slots[selectedDate] : [];
+  for (let i = 0; i < setSlots?.length; i++) {
+    const slot = setSlots[i];
+    let found = false;
+    for (let j = 0; j < variableDate.length; j++) {
+      const appointments = variableDate[j].appointments;
+      for (let k = 0; k < appointments.length; k++) {
+        const appointment = appointments[k];
+        if (appointment.appointment_period === slot) {
+          result.push({
+            [slot]: `${appointment.client.first_name} ${appointment.client.last_name}`
+          });
+          found = true;
+          break;
+        }
+      }
+      if (found) {
+        break;
+      }
+    }
+    if (!found) {
+      result.push({ [slot]: 'Free' });
+    }
+  }
+  return result;
+}
 
 function DoctorCalendar() {
   const dispatch = useDispatch();
@@ -67,6 +97,28 @@ function DoctorCalendar() {
   );
   const doctor = useSelector((state) => state.doctor);
   const patient = useSelector((state) => state.patient);
+
+  const variableDate = workDays?.filter((value) => {
+    return value.date === selectedDate;
+  });
+
+  console.log(slots, '***');
+  console.log(fullSlots, '+++');
+
+  const resultData = checkAppointments(
+    variableDate,
+    fullSlots,
+    selectedDate?.split('T')[0]
+  );
+
+  const newRes = resultData?.map((values) => {
+    const period = Object.keys(values)[0];
+    const name = Object.values(values)[0];
+    return {
+      period,
+      name
+    };
+  });
 
   const doctorData = doctor?.single_data?.data;
   const patientData = patient?.single_data?.data;
@@ -137,7 +189,8 @@ function DoctorCalendar() {
         }
 
         while (true) {
-          if (currentSlot > lastSlot) {
+          fullSlots.push(currentSlot);
+          if (currentSlot >= lastSlot) {
             break;
           }
           if (currentSlot === taken[0]) {
@@ -156,7 +209,6 @@ function DoctorCalendar() {
               duration
             )}`;
           }
-          fullSlots.push(currentSlot);
         }
         workDaysSlots[format(new Date(date), 'yyyy-MM-dd')] = slots;
         workDaysFullSlots[format(new Date(date), 'yyyy-MM-dd')] = fullSlots;
@@ -235,7 +287,7 @@ function DoctorCalendar() {
             </Stack>
           </Stack>
           <Box className="xl:px-0 px-20">
-            <DoctorAppointmentsCalendar
+            <DoctorPageCalendar
               ref={calendarRef}
               {...{
                 handleDayClick,
@@ -247,7 +299,7 @@ function DoctorCalendar() {
             />
           </Box>
         </Box>
-        {selectedDate && slots && (
+        {selectedDate && slots && newRes[0] && (
           <Drawer
             open={openRightSideBar}
             anchor="right"
@@ -269,7 +321,9 @@ function DoctorCalendar() {
             }}
             className="transition duration-150 ease-in-out"
           >
-            <CalendarRightSideBar {...{ loading, slots, viewDate, workDays }} />
+            <CalendarRightSideBar
+              {...{ loading, slots, viewDate, workDays, newRes }}
+            />
           </Drawer>
         )}
       </Box>
@@ -277,7 +331,13 @@ function DoctorCalendar() {
   );
 }
 
-const CalendarRightSideBar = ({ loading, slots, viewDate, workDays }) => {
+const CalendarRightSideBar = ({
+  loading,
+  slots,
+  viewDate,
+  workDays,
+  newRes
+}) => {
   const dispatch = useDispatch();
   const [selectedTime, setSelectedTime] = useState();
   const [openModal, setOpenModal] = useState(false);
@@ -303,33 +363,38 @@ const CalendarRightSideBar = ({ loading, slots, viewDate, workDays }) => {
     });
   };
 
-  const appointmentHours =
-    slots && selectedWorkDayData
-      ? slots[format(new Date(selectedWorkDayData.date), 'yyyy-MM-dd')]
-      : [];
-
   return (
     <>
-      <List disablePadding className="border-l border-primary w-full h-full">
-        {appointmentHours?.map((hour) => (
+      <Box
+        disablePadding
+        className="border-l flex flex-col items-start border-primary w-full h-full max-w-[250px] min-w-[245px]"
+      >
+        {newRes?.map((row) => (
           <>
-            <ListItemButton
-              key={hour}
+            <Box
+              key={row}
               onClick={() => {
-                !loading && setSelectedTime(hour);
+                !loading && setSelectedTime(row);
               }}
-              className="border-b border-primary p-3 text-center"
-              selected={hour === selectedTime}
+              className={`p-3 text-[#333]${row.name !== 'Free' && 'font-bold'}`}
+              selected={row === selectedTime}
             >
-              <ListItemText primary={hour} />
-            </ListItemButton>
+              <Typography
+                className={`text-[#333] ${
+                  row.name !== 'Free' ? 'font-bold' : 'font-normal'
+                } truncate`}
+              >
+                {row.period}: {row.name}
+              </Typography>
+            </Box>
             <Divider
-              key={`${hour} divider `}
+              className="w-full"
+              key={`${row} divider `}
               sx={{ borderColor: 'primary.main' }}
             />
           </>
         ))}
-      </List>
+      </Box>
     </>
   );
 };
