@@ -26,6 +26,9 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import SelectDateRangeMenu from '../components/Analytics/SelectDateRangeMenu';
 import LoadingButton from '../components/LoadingButton';
+import { Chart } from 'react-google-charts';
+import genderAnalyticsHelper from '../components/Analytics/helpers/genderAnalyticsHelper';
+import ageAnalyticsHelper from '../components/Analytics/helpers/ageAnalyticsHelper';
 
 const formatDoctorName = (doctor) => {
   if (doctor) {
@@ -75,7 +78,7 @@ const GraphBox = styled(({ name, children, className, ...props }) => (
     }}
     {...props}
   >
-    <Typography className="text-dark text-xs m-3 leading-tight">
+    <Typography className="text-dark text-sm m-4 leading-tight">
       {name}
     </Typography>
     {children}
@@ -121,6 +124,22 @@ function Analytics() {
       ),
     [patients, selectedToggler]
   );
+
+  // gender analytics data
+  const genderPatientsData = useMemo(
+    () => genderAnalyticsHelper(patients),
+    [patients]
+  );
+  const genderDoctorsData = useMemo(
+    () => genderAnalyticsHelper(doctors),
+    [doctors]
+  );
+  // age analytics data
+  const agePatientsData = useMemo(
+    () => ageAnalyticsHelper(patients),
+    [patients]
+  );
+  const ageDoctorsData = useMemo(() => ageAnalyticsHelper(doctors), [doctors]);
 
   useEffect(() => {
     if (doctors) {
@@ -257,8 +276,53 @@ function Analytics() {
             mt: 2
           }}
         >
-          <GraphBox name="Gender" />
-          <GraphBox name="Age" />
+          <GraphBox name="Gender">
+            <Chart
+              chartType="PieChart"
+              data={genderPatientsData}
+              // height="200px"
+              // width="250px"
+              options={{
+                backgroundColor: '',
+                slices: [{ color: '#1D91C0' }, { color: '#225EA8' }],
+                legend: 'none',
+                chartArea: { width: '100%', height: '90%' }
+              }}
+            />
+          </GraphBox>
+          <GraphBox name="Age">
+            <Chart
+              chartType="ColumnChart"
+              data={agePatientsData}
+              // height="200px"
+              // width="250px"
+              options={{
+                backgroundColor: '',
+                hAxis: {
+                  gridlines: { color: 'transparent' }
+                },
+                vAxis: {
+                  gridlines: { color: 'transparent' }
+                },
+                legend: {
+                  position: 'none'
+                },
+                chartArea: {
+                  width: '80%',
+                  height: '80%'
+                },
+                colors: [
+                  '#86B0CC',
+                  '#0C2C84',
+                  '#225EA8',
+                  '#41B6C4',
+                  '#1D91C0',
+                  '#A3CBE5',
+                  '#A3CBE5'
+                ]
+              }}
+            />
+          </GraphBox>
           <GraphBox name="Top 5 most visited doctors" />
           <GraphBox name="Amount of female and male doctors per department" />
           <GraphBox name="Amount of doctors per department" />
