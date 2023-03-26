@@ -28,40 +28,131 @@ import CalendarMonthYearSelector from '../components/Calendar/CalendarMonthYearS
 import { format } from 'date-fns';
 import { DatePicker } from '@mui/x-date-pickers';
 import SmallSearchBar from '../components/SmallSearchBar';
-import { getDoctorList } from '../redux/reducers/doctor.reducer';
+import { getDoctorList, getOneDoctor } from '../redux/reducers/doctor.reducer';
 import { createSchedule } from '../redux/reducers/schedule.reducer';
 import { days } from '../utils/dummyData';
 import { FiChevronLeft } from 'react-icons/fi';
 import { GrClose } from 'react-icons/gr';
 import AdminCalendarRightSideBar from '../components/AdminCalendarRightSideBar';
+import AdminCalendarComponent from '../components/Calendar/AdminCalendarComponent';
 
 function AdminCalendar() {
+  const dispatch = useDispatch();
   const doctors = useSelector((state) => state.doctor);
   const calendarRef = useRef(null);
   const [viewDate, setViewDate] = useState(new Date());
+  const [workDays, setWorkDays] = useState([]);
   const [openRightSideBar, setOpenRightSideBar] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState();
+  const [searchQuery, setSearchQuery] = useState();
+  const [loading, setLoading] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [slots, setSlots] = useState(null);
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down('md'));
 
-  useEffect(() => {
-    calendarRef.current.calendar.gotoDate(new Date(viewDate));
-  }, [viewDate]);
+  const doctor = useSelector((state) => state.doctor);
+  const doctorData = doctor?.single_data?.data;
+
+  console.log(workDays, 'workDays');
+  console.log(searchQuery, 'searchQuery');
+
+  // function addSubstractTime(hour, minute, minutesToAdd, operation) {
+  //   hour = parseInt(hour, 10);
+  //   minute = parseInt(minute, 10);
+  //   minutesToAdd = parseInt(minutesToAdd, 10);
+
+  //   const date = new Date();
+  //   date.setHours(hour);
+  //   date.setMinutes(minute);
+  //   const newDate =
+  //     operation === 's'
+  //       ? subMinutes(date, minutesToAdd)
+  //       : addMinutes(date, minutesToAdd);
+  //   return format(newDate, 'HH:mm');
+  // }
+
+  // useEffect(() => {
+  //   const workDaysSlots = {};
+  //   workDays?.forEach((workDay) => {
+  //     const slots = [];
+  //     const { from, to, date, appointments } = workDay;
+  //     if (isToday(new Date(date)) || isFuture(new Date(date))) {
+  //       const duration = workDay.schedule.appointment_duration;
+  //       // const { appointments } = workDay.schedule;
+  //       let taken = [];
+  //       appointments.forEach((appointment) => {
+  //         if (appointment.is_canceled) return;
+  //         taken.push(appointment.appointment_period);
+  //       });
+  //       taken = taken.sort((a, b) => (a < b ? -1 : 1));
+  //       const [fromHour, fromMinute] = from.trim().split(':');
+  //       const [toHour, toMinute] = to.trim().split(':');
+
+  //       const lastSlot = `${addSubstractTime(
+  //         toHour,
+  //         toMinute,
+  //         duration,
+  //         's'
+  //       )} - ${toHour}:${toMinute}`;
+  //       let currentSlot = `${fromHour}:${fromMinute} - ${addSubstractTime(
+  //         fromHour,
+  //         fromMinute,
+  //         duration
+  //       )}`;
+  //       if (isToday(new Date(date))) {
+  //         const Hour = getHours(new Date());
+  //         currentSlot = `${Hour + 1}:00 - ${addSubstractTime(
+  //           Hour + 1,
+  //           '00',
+  //           duration
+  //         )}`;
+  //       }
+
+  //       while (true) {
+  //         if (currentSlot >= lastSlot) {
+  //           break;
+  //         }
+  //         if (currentSlot === taken[0]) {
+  //           taken.shift();
+  //         } else {
+  //           slots.push(currentSlot);
+  //         }
+  //         if (currentSlot === '17:00') {
+  //           currentSlot = `17:00 - ${addSubstractTime(17, 0, duration)}`;
+  //         } else {
+  //           const slotLastPart = currentSlot.split('-')[1].trim();
+  //           const splitLastSlotPart = slotLastPart.split(':');
+  //           currentSlot = `${slotLastPart} - ${addSubstractTime(
+  //             splitLastSlotPart[0],
+  //             splitLastSlotPart[1],
+  //             duration
+  //           )}`;
+  //         }
+  //       }
+  //       workDaysSlots[format(new Date(date), 'yyyy-MM-dd')] = slots;
+  //     }
+  //   });
+  //   setSlots(workDaysSlots);
+  // }, [workDays]);
 
   const filteredData = doctors?.data?.data?.map((obj) => ({
     ...obj,
-    label: `${obj.first_name} ${obj.last_name}`
+    label: `${obj.first_name} ${obj.last_name}, ${obj.doctor_id}`
   }));
-
-  const dispatch = useDispatch();
 
   const toggleRightSideBar = () => {
     setOpenRightSideBar((open) => !open);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch(getDoctorList());
   }, []);
-
+  // useEffect(() => {
+  //   calendarRef.current.calendar.gotoDate(new Date(viewDate));
+  // }, [viewDate]);
+  // useEffect(() => {
+  //   dispatch(getOneDoctor(searchQuery));
+  // });
   return (
     <Box
       className="flex flex-row items-start"
@@ -145,22 +236,26 @@ function AdminCalendar() {
         </Stack>
 
         <Box className="sm:px-0 px-5 w-full overflow-auto">
-          <Calendar
+          <AdminCalendarComponent
             ref={calendarRef}
-            dayCellContent={(props) => (
-              <Box
-                className="text-green flex flex-col"
-                sx={{
-                  width: '100%',
-                  height: '100%'
-                }}
-              >
-                <Box className="grow px-[10px]">
-                  <Typography>{props.date.getDate()}</Typography>
-                </Box>
-                {/* If active step we add the plus sign */}
-              </Box>
-            )}
+            {...{
+              viewDate,
+              slots
+            }}
+            // dayCellContent={(props) => (
+            //   <Box
+            //     className="text-green flex flex-col"
+            //     sx={{
+            //       width: '100%',
+            //       height: '100%'
+            //     }}
+            //   >
+            //     <Box className="grow px-[10px]">
+            //       <Typography>{props.date.getDate()}</Typography>
+            //     </Box>
+            //     {/* If active step we add the plus sign */}
+            //   </Box>
+            // )}
           />
         </Box>
       </Box>
@@ -199,7 +294,11 @@ function AdminCalendar() {
               <GrClose />
             </IconButton>
           </Box>
-          <AdminCalendarRightSideBar />
+          <AdminCalendarRightSideBar
+            setWorkDays={setWorkDays}
+            setSearchQuery={setSearchQuery}
+            viewDate={viewDate}
+          />
         </Drawer>
       )}
     </Box>

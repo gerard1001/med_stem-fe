@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
@@ -16,12 +17,16 @@ import {
   Typography
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
-import { format } from 'date-fns';
-import React from 'react';
+import { format, getMonth, getYear } from 'date-fns';
 import { Controller, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
+import { getOneDoctor } from '../redux/reducers/doctor.reducer';
 import { createSchedule } from '../redux/reducers/schedule.reducer';
+import {
+  getDoctorWorkDays,
+  selectWorkDaysDoctors
+} from '../redux/reducers/workDays.reducer';
 import { days } from '../utils/dummyData';
 
 const schema = yup.object().shape({
@@ -35,9 +40,23 @@ const schema = yup.object().shape({
 });
 
 const AdminCalendarRightSideBar = () => {
-  const [dayName, setDayName] = React.useState([]);
-  const searchQuery = useSelector((state) => state.user?.searchQueryRedux);
   const dispatch = useDispatch();
+  const [dayName, setDayName] = React.useState([]);
+  const [doctorId, setDoctorId] = useState(null);
+  const searchQuery = useSelector((state) => state.user?.searchQueryRedux);
+  const [viewDate, setViewDate] = useState(new Date());
+  const workDays = useSelector(
+    (state) => selectWorkDaysDoctors(state, searchQuery)?.workDays
+  );
+
+  const doctor = useSelector((state) => state.doctor);
+
+  const doctorData = doctor?.single_data?.data;
+
+  console.log({ doctorData });
+  console.log({ searchQuery });
+  console.log({ workDays });
+
   const {
     handleSubmit,
     control,
@@ -63,18 +82,8 @@ const AdminCalendarRightSideBar = () => {
     to,
     appointment_duration
   }) => {
-    dispatch(
-      createSchedule({
-        doctor_id: searchQuery?.doctor_id,
-        start_date: format(new Date(start_date), 'MM-dd-yyyy'),
-        end_date: format(new Date(end_date), 'MM-dd-yyyy'),
-        days: dayName?.join(', '),
-        from,
-        to,
-        appointment_duration
-      })
-    );
     console.log({
+      doctor_id: searchQuery,
       start_date: format(new Date(start_date), 'MM-dd-yyyy'),
       end_date: format(new Date(end_date), 'MM-dd-yyyy'),
       days: dayName?.join(', '),
@@ -82,8 +91,32 @@ const AdminCalendarRightSideBar = () => {
       to,
       appointment_duration
     });
+    dispatch(
+      createSchedule({
+        doctor_id: searchQuery,
+        start_date: format(new Date(start_date), 'MM-dd-yyyy'),
+        end_date: format(new Date(end_date), 'MM-dd-yyyy'),
+        days: dayName?.join(', '),
+        from,
+        to,
+        appointment_duration
+      })
+    ).then(() => {
+      dispatch(getOneDoctor(searchQuery));
+    });
+
     reset();
   };
+
+  useEffect(() => {
+    dispatch(
+      getDoctorWorkDays({
+        id: searchQuery
+        // month: getMonth(viewDate),
+        // year: getYear(viewDate)
+      })
+    );
+  }, [searchQuery]);
 
   const resetData = () => {
     reset();

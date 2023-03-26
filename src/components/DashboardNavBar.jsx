@@ -16,15 +16,16 @@ function DashboardNavBar({
   const [isDoctor, setIsDoctor] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [doctorName, setDoctorName] = useState('Not Available');
+  const [adminName, setAdminName] = useState('Anonymous');
 
   useEffect(() => {
     if (loggedInUser?.role_id === 2) {
       setIsDoctor(true);
-      setDoctorName(loggedInUser?.last_name);
+      setDoctorName(loggedInUser?.last_name || loggedInUser?.first_name);
     }
     if (loggedInUser?.role_id === 1) {
       setIsAdmin(true);
-      setDoctorName(loggedInUser?.last_name);
+      setAdminName(loggedInUser?.last_name || loggedInUser?.first_name);
     }
   }, [loggedInUser]);
   useEffect(() => {
@@ -61,7 +62,7 @@ function DashboardNavBar({
         <Typography variant="subtitle1" color="primary">
           <p className="leading-5">Hello,</p>
           {isDoctor && <p className="leading-5">Dr. {doctorName}</p>}
-          {isAdmin && <p className="leading-5">Admin {doctorName}</p>}
+          {isAdmin && <p className="leading-5">Admin {adminName}</p>}
 
           {rightSideBarContent && (
             <IconButton

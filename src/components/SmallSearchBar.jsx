@@ -30,8 +30,11 @@ const SmallSearchBar = ({
   setInputValue,
   filteredData
 }) => {
-  // const [inputValue, setInputValue] = React.useState('');
-
+  const dispatch = useDispatch();
+  const newFilteredData = filteredData?.map((value) => ({
+    ...value,
+    label: value.label?.split(', ')[0]
+  }));
   return (
     <div className={clsx('relative w-full h-max max-w-[300px]', className)}>
       <StyledAutoComplete
@@ -41,7 +44,10 @@ const SmallSearchBar = ({
         value={inputValue}
         inputValue={inputValue}
         onInputChange={(event, newInputValue) => {
-          setInputValue(newInputValue);
+          const name = newInputValue?.split(', ')[0];
+          const id = newInputValue?.split(', ')[1];
+          setInputValue(name || '');
+          dispatch(setSearchQueryRedux(id));
         }}
         sx={{ width: '100%' }}
         // disableClearable
@@ -58,33 +64,43 @@ const SmallSearchBar = ({
             className: 'bg-[#E7E7E7]'
           }
         }}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            id="search-bar"
-            className="text"
-            variant="outlined"
-            placeholder="Select Doctor"
-            sx={{
-              width: '100%',
-              '& .MuiInputBase-input': {
-                padding: '5px 10px',
-                // backgroundColor: '#F5F5F5',
-                borderRadius: '5px'
-              },
-              '& .MuiFormLabel-root': {
-                top: '-10px'
-              },
-              '& .MuiInputLabel-root': {
-                top: '-1px'
-              },
-              '& .MuiInputBase-root': {
-                borderRadius: '5px'
-              }
-            }}
-            size="small"
-          />
-        )}
+        renderInput={(params) => {
+          console.log(params.inputProps.value);
+          const modifiedParams = {
+            ...params,
+            inputProps: {
+              ...params.inputProps,
+              value: params.inputProps.value.split(', ')[0]
+            }
+          };
+          return (
+            <TextField
+              {...modifiedParams}
+              id="search-bar"
+              className="text"
+              variant="outlined"
+              placeholder="Select Doctor"
+              sx={{
+                width: '100%',
+                '& .MuiInputBase-input': {
+                  padding: '5px 10px',
+                  // backgroundColor: '#F5F5F5',
+                  borderRadius: '5px'
+                },
+                '& .MuiFormLabel-root': {
+                  top: '-10px'
+                },
+                '& .MuiInputLabel-root': {
+                  top: '-1px'
+                },
+                '& .MuiInputBase-root': {
+                  borderRadius: '5px'
+                }
+              }}
+              size="small"
+            />
+          );
+        }}
       />
     </div>
   );
