@@ -90,11 +90,16 @@ const ExpectedAppointments = () => {
     <div>
       <Box className="w-full p-20 sm:p-4 max-w-[1400px]">
         <PatientProfileNavigation />
-        <TableContainer component={Paper} elevation={0}>
+        <TableContainer
+          component={Paper}
+          elevation={0}
+          sx={{
+            backgroundColor: '#F5F5F5'
+          }}
+        >
           <Table
             sx={{
               minWidth: 650,
-              backgroundColor: '#fff',
               overflow: 'auto',
               marginBottom: '40px',
               maxHeight: '55vh',
@@ -166,16 +171,6 @@ const ExpectedAppointments = () => {
                           color: '#2E3033',
                           fontSize: { md: '17px', xs: '14px' }
                         }}
-                        onClick={() => {
-                          dispatch(toAdminPatientExpectedAppointments());
-                          nav(
-                            `${
-                              isDoctor
-                                ? `/dashboard/doctor/appointments/${row.appointment_id}`
-                                : `/dashboard/appointments/${row.appointment_id}`
-                            }`
-                          );
-                        }}
                       >
                         {row.doctor.first_name} {row.doctor.last_name}
                       </TableCell>
@@ -185,16 +180,6 @@ const ExpectedAppointments = () => {
                         sx={{
                           color: '#2E3033',
                           fontSize: { md: '17px', xs: '14px' }
-                        }}
-                        onClick={() => {
-                          nav(
-                            `${
-                              isDoctor
-                                ? `/dashboard/doctor/appointments/${row.appointment_id}`
-                                : `/dashboard/appointments/${row.appointment_id}`
-                            }`
-                          );
-                          dispatch(toAdminPatientExpectedAppointments());
                         }}
                       >
                         {row.doctor.departments[0]?.speciality_name || '...'}
@@ -215,16 +200,6 @@ const ExpectedAppointments = () => {
                           color: '#2E3033',
                           fontSize: { md: '17px', xs: '14px' }
                         }}
-                        onClick={() => {
-                          dispatch(toAdminPatientExpectedAppointments());
-                          nav(
-                            `${
-                              isDoctor
-                                ? `/dashboard/doctor/appointments/${row.appointment_id}`
-                                : `/dashboard/appointments/${row.appointment_id}`
-                            }`
-                          );
-                        }}
                       >
                         {new Date(row.work_day?.date).toLocaleDateString()}
                       </TableCell>
@@ -232,19 +207,27 @@ const ExpectedAppointments = () => {
                         <Box className="text-[#797979] text-[12px] flex flex-wrap items-center justify-center gap-2 overflow-auto">
                           <Typography
                             style={{
-                              backgroundColor: '#fafcfd',
                               color: '#2E3033',
                               textTransform: 'capitalize',
                               cursor: 'pointer',
                               fontSize: { md: '17px', xs: '14px' },
                               margin: '0 5px'
                             }}
+                            onClick={() => {
+                              dispatch(toAdminPatientExpectedAppointments());
+                              nav(
+                                `${
+                                  isDoctor
+                                    ? `/dashboard/doctor/appointments/${row.appointment_id}`
+                                    : `/dashboard/appointments/${row.appointment_id}`
+                                }`
+                              );
+                            }}
                           >
-                            Edit
+                            Check
                           </Typography>
                           <Typography
                             style={{
-                              backgroundColor: '#fafcfd',
                               color: '#2E3033',
                               textTransform: 'capitalize',
                               cursor: 'pointer',

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   toPreviousAppointments,
@@ -7,10 +7,16 @@ import {
 import { Box, Typography, IconButton, TextField } from '@mui/material';
 import { IoCloseSharp, IoSearch } from 'react-icons/io5';
 import { getOnePatient } from '../../redux/reducers/patient.reducer';
+import InputAdornment from '@mui/material/InputAdornment';
 
-const PatientAppointmentNavigation = () => {
+const PatientAppointmentNavigation = ({ setQuery }) => {
   const step = useSelector((state) => state.step.appointment_step);
   const patient = useSelector((state) => state.patient.single_data.data);
+  const [searchValue, setSearchValue] = React.useState('');
+
+  useEffect(() => {
+    setQuery(searchValue);
+  }, [searchValue]);
 
   const isClient =
     JSON.parse(localStorage.getItem('userLoginData'))?.user?.Role.role ===
@@ -63,55 +69,44 @@ const PatientAppointmentNavigation = () => {
           Previous Appointments
         </Typography>
       </Box>
-      <Box className="relative w-full, max-w-[320px] h-min mb-4 mt-2">
+      <Box className="relative w-full max-w-[320px] h-min mb-4 mt-2">
         <TextField
           id="search-bar"
           className="text"
           variant="outlined"
           size="small"
+          value={searchValue}
+          onChange={(e) => {
+            setSearchValue(e.target.value);
+          }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <IoSearch className="text-[20px] font-bold" />
+              </InputAdornment>
+            ),
+            endAdornment: (
+              <InputAdornment position="start">
+                <IconButton
+                  className="-mr-4"
+                  onClick={() => {
+                    setSearchValue('');
+                  }}
+                >
+                  <IoCloseSharp className="text-[16px] font-bold" />
+                </IconButton>
+              </InputAdornment>
+            )
+          }}
           sx={{
             backgroundColor: '#EDF0F2',
             borderRadius: '10px',
-            width: '100%'
-          }}
-          onInput={() => {
-            setHideSearch(true);
-          }}
-          onEmptied={() => {
-            setHideSearch(false);
+            width: '100%',
+            '& .MuiOutlinedInput-notchedOutline': {
+              border: 'none'
+            }
           }}
         />
-        <IconButton
-          type="submit"
-          aria-label="search"
-          sx={{
-            position: 'absolute',
-            transform: 'translate(-50%, -50%)',
-            top: '50%',
-            padding: 0,
-            border: '1px solid #797979'
-          }}
-          className="right-0"
-        >
-          <IoCloseSharp className="text-[16px] font-bold" />
-        </IconButton>
-        {!hideSearch && (
-          <IconButton
-            type="submit"
-            aria-label="search"
-            sx={{
-              position: 'absolute',
-              width: 'fit-content',
-              transform: 'translateY(-50%)',
-              top: '50%',
-              left: '10px',
-              padding: 0
-            }}
-            className="right-0"
-          >
-            <IoSearch className="text-[20px] font-bold" />
-          </IconButton>
-        )}
       </Box>
     </div>
   );

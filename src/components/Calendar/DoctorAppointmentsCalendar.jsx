@@ -68,10 +68,7 @@ const Daycell = memo(
           ...(isSelected && { borderColor: theme.palette.primary.main })
         })}
         onClick={() => {
-          !loading &&
-            !isGrayed &&
-            !isOther &&
-            handleDayClick(new Date(date).toISOString());
+          !loading && !isGrayed && !isOther && handleDayClick(new Date(date));
         }}
       >
         <Box className="grow px-[10px]">

@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import { subYears } from 'date-fns';
 import React from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router';
@@ -57,7 +58,12 @@ const schema = yup
         'Marital status can be only single or married'
       )
       .required(),
-    birth_date: yup.date().required(),
+    birth_date: yup
+      .date()
+      .typeError('Invalid date')
+      .min(subYears(new Date(), 100))
+      .max(new Date())
+      .required(),
     country: yup.string().required(),
     address_1: yup.string().required(),
     address_2: yup.string().required(),

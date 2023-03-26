@@ -77,7 +77,10 @@ function PatientsCalendar() {
   };
 
   const selectedWorkDay = workDays?.filter((values) => {
-    return values.date === selectedDate;
+    return (
+      format(new Date(values.date), 'yyyy-MM-dd') ===
+      format(new Date(selectedDate), 'yyyy-MM-dd')
+    );
   });
 
   function addSubstractTime(hour, minute, minutesToAdd, operation) {
@@ -141,8 +144,8 @@ function PatientsCalendar() {
           } else {
             slots.push(currentSlot);
           }
-          if (currentSlot === '17:00') {
-            currentSlot = `17:00 - ${addSubstractTime(17, 0, duration)}`;
+          if (currentSlot.split(' - ')[1] === '13:00') {
+            currentSlot = `14:00 - ${addSubstractTime(14, 0, duration)}`;
           } else {
             const slotLastPart = currentSlot.split('-')[1].trim();
             const splitLastSlotPart = slotLastPart.split(':');
@@ -165,6 +168,7 @@ function PatientsCalendar() {
   }, [doctorId]);
 
   useEffect(() => {
+    setSelectedDate(null);
     setLoading(true);
     dispatch(
       getDoctorWorkDays({
@@ -300,6 +304,10 @@ const CalendarRightSideBar = ({ loading, slots, viewDate }) => {
     });
   };
 
+  useEffect(() => {
+    setSelectedTime(null);
+  }, [viewDate, slots, selectedWorkDayData]);
+
   const appointmentHours =
     slots && selectedWorkDayData
       ? slots[format(new Date(selectedWorkDayData.date), 'yyyy-MM-dd')]
@@ -328,6 +336,7 @@ const CalendarRightSideBar = ({ loading, slots, viewDate }) => {
         ))}
         <Stack direction="row" alignItems="center" justifyContent="center">
           <Button
+            disabled={!selectedTime}
             variant="contained"
             color="primary"
             className="bg-primary m-4"
