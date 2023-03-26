@@ -158,10 +158,12 @@ function PatientsCalendar() {
     });
     setSlots(workDaysSlots);
   }, [workDays]);
+
   useEffect(() => {
     dispatch(getOneDoctor(doctorId));
     dispatch(getOnePatient(clientId));
   }, [doctorId]);
+
   useEffect(() => {
     setLoading(true);
     dispatch(
@@ -177,6 +179,7 @@ function PatientsCalendar() {
       setLoading(false);
     });
   }, [doctorId, viewDate]);
+
   useEffect(() => {
     dispatch(setSelectedDoctorDataRedux(doctorData));
     dispatch(setSelectedPatientDataRedux(patientData));

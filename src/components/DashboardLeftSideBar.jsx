@@ -30,7 +30,8 @@ const listItems = (role) => {
     {
       listIcon: <RiCalendarTodoLine className="text-[20px]" />,
       listText: 'Schedule',
-      url: isDoctor ? '/dashboard/doctor/calendar' : '/dashboard/schedule'
+      url:
+        role === 'doctor' ? '/dashboard/doctor/calendar' : '/dashboard/schedule'
     },
     {
       listIcon: <FiUsers className="text-[20px]" />,
