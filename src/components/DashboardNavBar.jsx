@@ -20,11 +20,11 @@ function DashboardNavBar({
   useEffect(() => {
     if (loggedInUser?.role_id === 2) {
       setIsDoctor(true);
-      setDoctorName(loggedInUser.loginData?.last_name);
+      setDoctorName(loggedInUser?.last_name);
     }
     if (loggedInUser?.role_id === 1) {
       setIsAdmin(true);
-      setDoctorName(loggedInUser.loginData?.last_name);
+      setDoctorName(loggedInUser?.last_name);
     }
   }, [loggedInUser]);
   useEffect(() => {
