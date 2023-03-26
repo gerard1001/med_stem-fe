@@ -34,6 +34,7 @@ import CreateAppointmentModal from '../components/Appointment/CreateAppointmentM
 import BackButton from '../components/BackButton';
 import CalendarMonthYearSelector from '../components/Calendar/CalendarMonthYearSelector';
 import DoctorAppointmentsCalendar from '../components/Calendar/DoctorAppointmentsCalendar';
+import DoctorPageCalendar from '../components/Calendar/DoctorPageCalendar';
 import HomeNavBar from '../components/HomeNavBar';
 import { getOneDoctor } from '../redux/reducers/doctor.reducer';
 import { getOnePatient } from '../redux/reducers/patient.reducer';
@@ -286,7 +287,7 @@ function DoctorCalendar() {
             </Stack>
           </Stack>
           <Box className="xl:px-0 px-20">
-            <DoctorAppointmentsCalendar
+            <DoctorPageCalendar
               ref={calendarRef}
               {...{
                 handleDayClick,
