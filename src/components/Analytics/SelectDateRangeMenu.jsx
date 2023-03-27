@@ -56,10 +56,9 @@ const SelectDateRangeMenu = ({
 }) => {
   const {
     control,
-    getValues,
     reset,
     handleSubmit,
-    formState: { errors, isValid }
+    formState: { errors, isValid, isDirty }
   } = useForm({
     mode: 'all',
     resolver: yupResolver(schema),
@@ -71,10 +70,12 @@ const SelectDateRangeMenu = ({
     setSelectPeriodOpen(false);
   };
   const handleSelect = ({ from, to }) => {
-    setSelectedPeriod([
-      format(new Date(from), 'yyyy-MM-dd'),
-      format(new Date(to), 'yyyy-MM-dd')
-    ]);
+    setSelectedPeriod(
+      `${format(new Date(from), 'yyyy/MM/dd')} - ${format(
+        new Date(to),
+        'yyyy/MM/dd'
+      )}`
+    );
     reset();
     setSelectPeriodOpen(false);
   };
@@ -83,7 +84,7 @@ const SelectDateRangeMenu = ({
     <Menu
       anchorEl={selectPeriodRef.current}
       open={selectPeriodOpen}
-      onClose={() => isValid && setSelectPeriodOpen(false)}
+      onClose={() => !isDirty && isValid && setSelectPeriodOpen(false)}
       anchorOrigin={{
         vertical: 'bottom',
         horizontal: 'right'
@@ -108,7 +109,7 @@ const SelectDateRangeMenu = ({
             <Button
               variant="text"
               className="bg-[#EEF1F5] px-[10px] py-[5px] rounded-md h-max"
-              onClick={handleSubmit(handleCancel)}
+              onClick={handleCancel}
             >
               Cancel
             </Button>

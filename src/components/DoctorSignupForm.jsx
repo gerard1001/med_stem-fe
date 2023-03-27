@@ -14,6 +14,8 @@ import {
   TextField,
   Typography
 } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers';
+import { subYears } from 'date-fns';
 import React, { useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { FiUser } from 'react-icons/fi';
@@ -32,7 +34,12 @@ const schema = yup.object().shape({
     .string()
     .oneOf(['male', 'female'], 'Gender must be male or female')
     .required(),
-  birth_date: yup.date().required('Birth Date is required'),
+  birth_date: yup
+    .date()
+    .typeError('Invalid Date')
+    .min(subYears(new Date(), 100))
+    .max(new Date())
+    .required('Birth Date is required'),
   category: yup.string(),
   education: yup.string(),
   experience_years: yup.number(),
@@ -226,7 +233,7 @@ const DoctorSignupForm = () => {
                   className="w-[100%]"
                   size="small"
                 >
-                  <InputLabel required>Gender</InputLabel>
+                  <InputLabel>Gender</InputLabel>
                   <Select
                     {...field}
                     label="Gender"
@@ -251,20 +258,21 @@ const DoctorSignupForm = () => {
               name="birth_date"
               defaultValue=""
               render={({ field }) => (
-                <TextField
+                <DatePicker
                   {...field}
-                  label="Birth Date"
-                  type="date"
-                  variant="outlined"
-                  sx={{ width: '100%', margin: 0, maxWidth: '400px' }}
-                  InputLabelProps={{ shrink: true }}
-                  // label="Birth date"
-                  // placeholder="Birth date"
-                  margin="normal"
+                  label="Birth date"
                   size="small"
-                  error={!!errors.birth_date}
-                  helperText={errors.birth_date && errors.birth_date.message}
-                  required
+                  minDate={subYears(new Date(), 100)}
+                  disableFuture
+                  slotProps={{
+                    textField: {
+                      size: 'small',
+                      variant: 'outlined',
+                      fullWidth: true,
+                      error: !!errors.birth_date,
+                      helperText: errors.birth_date && errors.birth_date.message
+                    }
+                  }}
                 />
               )}
             />

@@ -1,13 +1,11 @@
 import { differenceInYears, subYears } from 'date-fns';
 
 export default function ageAnalyticsHelper(entities, type = 'Patients') {
-  console.log(entities, 'entities');
   const data = {};
 
-  entities?.forEach((entities) => {
-    const { birth_date } = entities;
+  entities?.forEach((entity) => {
+    const { birth_date } = entity;
     const age = differenceInYears(new Date(), new Date(birth_date));
-    console.log(age, birth_date);
 
     if (age <= 24) {
       data[1] = data[1] ? data[1] + 1 : 1;
@@ -29,14 +27,14 @@ export default function ageAnalyticsHelper(entities, type = 'Patients') {
   });
 
   const res = [
-    ['Age', type],
-    ['18-24', data[1] || ''],
-    ['25-30', data[2] || ''],
-    ['31-40', data[3] || ''],
-    ['41-50', data[4] || ''],
-    ['51-60', data[5] || ''],
-    ['61-70', data[6] || ''],
-    ['70+', data[7] || '']
+    ['Age', type, { role: 'style' }],
+    ['18-24', data[1] || '', '#86B0CC'],
+    ['25-30', data[2] || '', '#0C2C84'],
+    ['31-40', data[3] || '', '#225EA8'],
+    ['41-50', data[4] || '', '#41B6C4'],
+    ['51-60', data[5] || '', '#1D91C0'],
+    ['61-70', data[6] || '', '#A3CBE5'],
+    ['70+', data[7] || '', '#C1E7FF']
   ];
 
   return res;

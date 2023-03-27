@@ -145,7 +145,6 @@ const PersonalInfo = () => {
                 label="Birth date"
                 size="small"
                 minDate={subYears(new Date(), 100)}
-                // maxDate={}
                 disableFuture
                 slotProps={{
                   textField: {
@@ -156,38 +155,7 @@ const PersonalInfo = () => {
                     helperText: errors.birth_date && errors.birth_date.message
                   }
                 }}
-                // required
-                // sx={{
-                //   width: '110px',
-                //   '& .MuiInputBase-input': {
-                //     padding: '5px 10px',
-                //     backgroundColor: '#E7E7E7',
-                //     borderRadius: '5px 0 0 5px'
-                //   },
-                //   '& .MuiFormLabel-root': {
-                //     top: '-10px'
-                //   },
-                //   '& .MuiInputLabel-root.MuiInputLabel-shrink': {
-                //     top: '0px'
-                //   },
-                //   '& .MuiInputBase-root': {
-                //     paddingY: 0,
-                //     borderRadius: '5px'
-                //   }
-                // }}
               />
-              // <TextField
-              //   {...field}
-              //   type="date"
-              //   variant="outlined"
-              //   fullWidth
-              //   // label="Birth date"
-              //   // placeholder="Birth date"
-              //   error={!!errors.birth_date}
-              //   helperText={errors.birth_date && errors.birth_date.message}
-              //   required
-              //   size="small"
-              // />
             )}
           />
         </Box>

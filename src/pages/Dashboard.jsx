@@ -8,8 +8,6 @@ import HomeNavBar from '../components/HomeNavBar';
 import DashboardContextProvider, {
   DashboardContext
 } from '../context/DashboardContext';
-import { getDoctorList } from '../redux/reducers/doctor.reducer';
-import { getPatientList } from '../redux/reducers/patient.reducer';
 import { setLoginData } from '../redux/reducers/user.reducer';
 
 const Dashboard = () => {
@@ -46,8 +44,6 @@ const Dashboard = () => {
   }, [isMobile]);
   useEffect(() => {
     dispatch(setLoginData(userData?.user));
-    dispatch(getDoctorList());
-    dispatch(getPatientList());
   }, []);
 
   if (!userData?.token) {

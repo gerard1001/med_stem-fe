@@ -18,6 +18,8 @@ import {
   TextField,
   Typography
 } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers';
+import { subYears } from 'date-fns';
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
@@ -63,7 +65,12 @@ const schema = yup.object({
       'Marital status can be only single or married'
     )
     .required(),
-  birth_date: yup.date().required(),
+  birth_date: yup
+    .date()
+    .typeError('Invalid Date')
+    .min(subYears(new Date(), 100))
+    .max(new Date())
+    .required(),
   country: yup.string().required(),
   address_1: yup.string().required(),
   address_2: yup.string().required(),
@@ -255,16 +262,21 @@ const PatientSignupForm = () => {
             control={control}
             name="birth_date"
             render={({ field }) => (
-              <TextField
+              <DatePicker
                 {...field}
-                type="date"
-                variant="outlined"
-                fullWidth
-                // label="Birth date"
-                // placeholder="Birth date"
-                error={!!errors.birth_date}
-                helperText={errors.birth_date && errors.birth_date.message}
+                label="Birth date"
                 size="small"
+                minDate={subYears(new Date(), 100)}
+                disableFuture
+                slotProps={{
+                  textField: {
+                    size: 'small',
+                    variant: 'outlined',
+                    fullWidth: true,
+                    error: !!errors.birth_date,
+                    helperText: errors.birth_date && errors.birth_date.message
+                  }
+                }}
               />
             )}
           />
