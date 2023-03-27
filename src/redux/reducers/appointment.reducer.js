@@ -58,8 +58,10 @@ export const updateAppointment = createAsyncThunk(
         `/appointments/${data.appointmentId}`,
         data.body
       );
+      toast.success(response.data.message);
       return response;
     } catch (error) {
+      toast.error(error.response.data.message);
       throw new Error(error.response.data.message);
     }
   }

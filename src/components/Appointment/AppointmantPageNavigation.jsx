@@ -7,13 +7,17 @@ import {
   toExpectedAppointments,
   toAdminPatientExpectedAppointments,
   toAdminPatientPersonalDetails,
-  toAdminPatientPreviousAppointments
+  toAdminPatientPreviousAppointments,
+  toDoctorPatientMedicalHistory
 } from '../../redux/reducers/step.reducer';
 
 const AppointmantPageNavigation = ({ appointment }) => {
   const step = useSelector((state) => state.step.appointment_step);
   const admin_step = useSelector((state) => state.step.admin_patient_step);
   const dispatch = useDispatch();
+  const isDoctor =
+    JSON.parse(localStorage.getItem('userLoginData'))?.user?.Role.role ===
+    'doctor';
   const isClient =
     JSON.parse(localStorage.getItem('userLoginData'))?.user?.Role.role ===
     'client';
@@ -67,6 +71,20 @@ const AppointmantPageNavigation = ({ appointment }) => {
             }}
           >
             Personal Information
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            fontWeight="600"
+            fontSize="17px"
+            className={`${
+              step === 3 && 'text-primary underline'
+            }  cursor-pointer`}
+            onClick={() => {
+              nav(`/dashboard/patient/profile/${appointment.client_id}`);
+              dispatch(toDoctorPatientMedicalHistory());
+            }}
+          >
+            Medical History
           </Typography>
           <Typography
             variant="subtitle1"

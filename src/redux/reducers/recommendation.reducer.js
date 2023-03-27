@@ -9,8 +9,14 @@ const initialState = {
 
 export const addRecommendation = createAsyncThunk(
   'recommendation/create',
-  async (data) =>
-    axios.post(`/recommendation`, data.body).then((res) => res.data)
+  async (data) => {
+    try {
+      axios.post(`/recommendation`, data.body).then((res) => res.data);
+    } catch (error) {
+      toast.error(error.response.data.message);
+      throw new Error(error.response.data.message);
+    }
+  }
 );
 
 export const getRecommendations = createAsyncThunk(
@@ -20,12 +26,18 @@ export const getRecommendations = createAsyncThunk(
 
 export const removeRecommendation = createAsyncThunk(
   'recommendation/remove',
-  async (data) =>
-    axios
-      .patch(
-        `/appointments/${data.appointmentId}/recommendation/${data.recommendationIndex}`
-      )
-      .then((res) => res.data)
+  async (data) => {
+    try {
+      const response = await axios
+        .patch(
+          `/appointments/${data.appointmentId}/recommendation/${data.recommendationIndex}`
+        )
+        .then((res) => res.data);
+    } catch (error) {
+      toast.error(error.response.data.message);
+      throw new Error(error.response.data.message);
+    }
+  }
 );
 
 const recommendationSlice = createSlice({

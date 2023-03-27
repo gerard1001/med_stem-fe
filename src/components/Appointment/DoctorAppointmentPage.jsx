@@ -51,6 +51,7 @@ import {
 } from '../../utils/dummyData';
 import Loader from '../Loader/Loader';
 import { IoCloseSharp } from 'react-icons/io5';
+import BackButton from '../BackButton';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: '#E7E7E7',
@@ -261,9 +262,10 @@ const DoctorAppointmentPage = () => {
       <Box
         component="form"
         onSubmit={handleSubmit(onSubmitAppointmentData)}
-        className="p-10 max-w-[1200px] w-[85%] sm:w-[100%] sm:p-4 flex flex-col gap-4 items-start relative pb-20"
+        className="p-20 max-w-[1200px] w-[85%] sm:w-[100%] sm:p-4 flex flex-col gap-4 items-start relative"
       >
         <Box className="flex flex-center gap-3 font-semibold">
+          <BackButton />
           <Typography variant="h6">Appointments</Typography>
           <Typography variant="h6">-</Typography>
           <Typography variant="h6">

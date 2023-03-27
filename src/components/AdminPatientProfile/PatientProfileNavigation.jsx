@@ -8,6 +8,7 @@ import {
   toDoctorPatientMedicalHistory
 } from '../../redux/reducers/step.reducer';
 import { Box, Typography } from '@mui/material';
+import BackButton from '../BackButton';
 
 const PatientProfileNavigation = () => {
   const step = useSelector((state) => state.step.admin_patient_step);
@@ -25,6 +26,7 @@ const PatientProfileNavigation = () => {
   return (
     <div>
       <Box className="flex flex-center gap-3">
+        <BackButton />
         <Typography variant="h6">Profile</Typography>
         <Typography variant="h6">-</Typography>
         <Typography variant="h6">
