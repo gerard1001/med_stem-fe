@@ -106,10 +106,6 @@ const routes = createBrowserRouter([
         element: <AppointmentPage />
       },
       {
-        path: 'doctor/appointments/:id',
-        element: <DoctorAppointmentPage />
-      },
-      {
         path: 'doctor/calendar',
         element: <DoctorCalendar />
       },

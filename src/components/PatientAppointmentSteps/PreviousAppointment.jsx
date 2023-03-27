@@ -63,7 +63,7 @@ const PreviousAppointment = () => {
               <TableRow>
                 <TableCell
                   sx={{
-                    color: '#797979',
+                    color: '#2E3033',
                     fontSize: { md: '17px', xs: '14px' }
                   }}
                 >
@@ -72,7 +72,7 @@ const PreviousAppointment = () => {
                 <TableCell
                   align="center"
                   sx={{
-                    color: '#797979',
+                    color: '#2E3033',
                     fontSize: { md: '17px', xs: '14px' }
                   }}
                 >
@@ -81,7 +81,7 @@ const PreviousAppointment = () => {
                 <TableCell
                   align="center"
                   sx={{
-                    color: '#797979',
+                    color: '#2E3033',
                     fontSize: { md: '17px', xs: '14px' }
                   }}
                 >
@@ -90,7 +90,7 @@ const PreviousAppointment = () => {
                 <TableCell
                   align="center"
                   sx={{
-                    color: '#797979',
+                    color: '#2E3033',
                     fontSize: { md: '17px', xs: '14px' }
                   }}
                 >
@@ -99,7 +99,7 @@ const PreviousAppointment = () => {
                 <TableCell
                   align="center"
                   sx={{
-                    color: '#797979',
+                    color: '#2E3033',
                     fontSize: { md: '17px', xs: '14px' }
                   }}
                 >
@@ -121,7 +121,7 @@ const PreviousAppointment = () => {
                     component="th"
                     scope="row"
                     sx={{
-                      color: '#797979',
+                      color: '#2E3033',
                       fontSize: { md: '17px', xs: '14px' }
                     }}
                   >
@@ -131,7 +131,7 @@ const PreviousAppointment = () => {
                     className="cell-height"
                     align="center"
                     sx={{
-                      color: '#797979',
+                      color: '#2E3033',
                       fontSize: { md: '17px', xs: '14px' }
                     }}
                   >
@@ -141,7 +141,7 @@ const PreviousAppointment = () => {
                     className="cell-height"
                     align="center"
                     sx={{
-                      color: '#797979',
+                      color: '#2E3033',
                       fontSize: { md: '17px', xs: '14px' }
                     }}
                   >
@@ -151,7 +151,7 @@ const PreviousAppointment = () => {
                     className="cell-height"
                     align="center"
                     sx={{
-                      color: '#797979',
+                      color: '#2E3033',
                       fontSize: { md: '17px', xs: '14px' }
                     }}
                   >
@@ -162,7 +162,7 @@ const PreviousAppointment = () => {
                       style={{
                         width: '100%',
                         textAlign: 'center',
-                        color: '#797979',
+                        color: '#2E3033',
                         textTransform: 'capitalize',
                         cursor: 'pointer',
                         fontSize: { md: '17px', xs: '14px' }

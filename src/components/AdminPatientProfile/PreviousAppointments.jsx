@@ -105,16 +105,18 @@ const PreviousAppointments = () => {
               {prevapps?.map((row) => (
                 <TableRow
                   key={row.appointment_number}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  sx={{
+                    '&:last-child td, &:last-child th': { border: 0 },
+                    fontSize: { md: '17px', xs: '14px' }
+                  }}
                   id="row-height"
                 >
                   <TableCell
                     component="th"
                     scope="row"
-                    className="cursor-pointer"
-                    onClick={() => {
-                      dispatch(toAdminPatientPreviousAppointments());
-                      nav(`/dashboard/appointments/${row.appointment_id}`);
+                    sx={{
+                      color: '#2E3033',
+                      fontSize: { md: '17px', xs: '14px' }
                     }}
                   >
                     {row.doctor.first_name} {row.doctor.last_name}
@@ -125,11 +127,6 @@ const PreviousAppointments = () => {
                       color: '#2E3033',
                       fontSize: { md: '17px', xs: '14px' }
                     }}
-                    className="cursor-pointer"
-                    onClick={() => {
-                      dispatch(toAdminPatientPreviousAppointments());
-                      nav(`/dashboard/appointments/${row.appointment_id}`);
-                    }}
                   >
                     {row.doctor.departments[0]?.speciality_name}
                   </TableCell>
@@ -138,11 +135,6 @@ const PreviousAppointments = () => {
                     sx={{
                       color: '#2E3033',
                       fontSize: { md: '17px', xs: '14px' }
-                    }}
-                    className="cursor-pointer"
-                    onClick={() => {
-                      dispatch(toAdminPatientPreviousAppointments());
-                      nav(`/dashboard/appointments/${row.appointment_id}`);
                     }}
                   >
                     {row.appointment_number}
@@ -160,11 +152,14 @@ const PreviousAppointments = () => {
                   <TableCell className="cell-height" align="center">
                     <Typography
                       style={{
-                        backgroundColor: '#fafcfd',
-                        color: '#797979',
+                        color: '#2E3033',
                         textTransform: 'capitalize',
                         cursor: 'pointer',
-                        fontSize: '14px'
+                        fontSize: { md: '17px', xs: '14px' }
+                      }}
+                      onClick={() => {
+                        dispatch(toAdminPatientPreviousAppointments());
+                        nav(`/dashboard/appointments/${row.appointment_id}`);
                       }}
                     >
                       Check

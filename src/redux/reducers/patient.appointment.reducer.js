@@ -20,12 +20,16 @@ export const getPatientAppointments = createAsyncThunk(
 export const cancelAppointment = createAsyncThunk(
   'appointments/cancelAppointment',
   async (id) => {
-    const res = await axios.get(
-      `${process.env.BACKEND_URL}/appointments/cancel/${id}`
-    );
-    // .then((res) => res.data);
+    try {
+      const response = await axios.get(
+        `${process.env.BACKEND_URL}/appointments/cancel/${id}`
+      );
 
-    return res;
+      toast.success(response.data.message);
+    } catch (error) {
+      toast.error(error.response.data.message);
+      throw new Error(error.response.data.message);
+    }
   }
 );
 
@@ -45,22 +49,6 @@ const patientAppointmentSlice = createSlice({
     builder.addCase(getPatientAppointments.rejected, (state, action) => {
       state.loading = false;
       state.data = {};
-      state.error = action.error.message;
-    });
-    builder.addCase(cancelAppointment.pending, (state, action) => {
-      state.loading = true;
-      state.single_data = {};
-    });
-    builder.addCase(cancelAppointment.fulfilled, (state, action) => {
-      toast.success('Appointment successfully cancelled');
-      state.loading = false;
-      state.single_data = action.payload;
-      state.error = '';
-    });
-    builder.addCase(cancelAppointment.rejected, (state, action) => {
-      toast.error(action.error.message);
-      state.loading = false;
-      state.single_data = {};
       state.error = action.error.message;
     });
   }
