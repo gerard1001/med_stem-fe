@@ -54,7 +54,8 @@ const Daycell = memo(
   }) => {
     const isSelected = isEqual(new Date(selectedDate), new Date(date));
 
-    const isGrayed = !availableAppointments || availableAppointments === 0;
+    const isGrayed =
+      availableAppointments === null || availableAppointments === undefined;
 
     return (
       <Box
@@ -67,10 +68,7 @@ const Daycell = memo(
           ...(isSelected && { borderColor: theme.palette.primary.main })
         })}
         onClick={() => {
-          !loading &&
-            !isGrayed &&
-            !isOther &&
-            handleDayClick(new Date(date).toISOString());
+          !loading && !isGrayed && !isOther && handleDayClick(new Date(date));
         }}
       >
         <Box className="grow px-[10px]">

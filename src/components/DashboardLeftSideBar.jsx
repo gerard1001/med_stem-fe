@@ -28,12 +28,6 @@ const isDoctor =
 const listItems = (role) => {
   const common = [
     {
-      listIcon: <RiCalendarTodoLine className="text-[20px]" />,
-      listText: 'Schedule',
-      url:
-        role === 'doctor' ? '/dashboard/doctor/calendar' : '/dashboard/schedule'
-    },
-    {
       listIcon: <FiUsers className="text-[20px]" />,
       listText: 'Patients',
       url: '/dashboard/patient'
@@ -60,6 +54,11 @@ const listItems = (role) => {
   }
   if (role === 'doctor') {
     return [
+      {
+        listIcon: <RiCalendarTodoLine className="text-[20px]" />,
+        listText: 'Schedule',
+        url: '/dashboard/doctor/calendar'
+      },
       ...common
       // {
       //   listIcon: <RiBillLine className="text-[20px]" />,

@@ -31,6 +31,7 @@ function DashboardNavBar({
   useEffect(() => {
     if (doctorLoginData) {
       setDoctorName(doctorLoginData.last_name);
+      setAdminName(doctorLoginData.last_name);
     }
   }, [doctorLoginData]);
 

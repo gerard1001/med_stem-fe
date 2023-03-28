@@ -51,7 +51,7 @@ const ExpectedAppointment = () => {
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = useState('');
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => !loading && setOpen(false);
 
   console.log({ appointIdx });
   console.log({ loading });
@@ -78,12 +78,14 @@ const ExpectedAppointment = () => {
   }, [clientId, appointIdx]);
 
   const handleCancelAppointment = async () => {
+    setLoading(true);
     dispatch(cancelAppointment(appointIdx)).then(() => {
-      dispatch(getPatientAppointments(clientId));
-      setLoading(false);
-      handleClose();
+      dispatch(getPatientAppointments(clientId)).then(() => {
+        setLoading(false);
+        handleClose();
+      });
     });
-    handleClose();
+    // handleClose();
     // setLoading(true);
   };
 
