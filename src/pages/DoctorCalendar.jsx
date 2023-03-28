@@ -91,6 +91,8 @@ function DoctorCalendar() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [slots, setSlots] = useState(null);
   const [fullSlots, setFullSlots] = useState(null);
+  const [remainSlots, setRemainSlots] = useState(null);
+  const [appointmentIds, setAppointmentIds] = useState(null);
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down('md'));
   const workDays = useSelector(
     (state) => selectWorkDaysDoctors(state, doctorId)?.workDays
@@ -99,16 +101,20 @@ function DoctorCalendar() {
   const patient = useSelector((state) => state.patient);
 
   const variableDate = workDays?.filter((value) => {
-    return value.date === selectedDate;
+    return (
+      format(new Date(value.date), 'yyyy-MM-dd') ===
+      format(new Date(selectedDate), 'yyyy-MM-dd')
+    );
   });
 
   console.log(slots, '***');
   console.log(fullSlots, '+++');
+  console.log(appointmentIds, 'appointmentIds');
 
   const resultData = checkAppointments(
     variableDate,
     fullSlots,
-    selectedDate?.split('T')[0]
+    format(new Date(selectedDate), 'yyyy-MM-dd')
   );
 
   const newRes = resultData?.map((values) => {
@@ -154,70 +160,83 @@ function DoctorCalendar() {
   useEffect(() => {
     const workDaysSlots = {};
     const workDaysFullSlots = {};
+    const remainingSlots = {};
+    const appointmentIds = {};
     workDays?.forEach((workDay) => {
       const slots = [];
       const fullSlots = [];
       const { from, to, date, appointments } = workDay;
-      if (isToday(new Date(date)) || isFuture(new Date(date))) {
-        const duration = workDay.schedule.appointment_duration;
-        // const { appointments } = workDay.schedule;
-        let taken = [];
-        appointments.forEach((appointment) => {
-          if (appointment.is_canceled) return;
-          taken.push(appointment.appointment_period);
-        });
-        taken = taken.sort((a, b) => (a < b ? -1 : 1));
-        const [fromHour, fromMinute] = from.trim().split(':');
-        const [toHour, toMinute] = to.trim().split(':');
+      remainingSlots[format(new Date(date), 'yyyy-MM-dd')] = appointments;
+      // if (isToday(new Date(date)) || isFuture(new Date(date))) {
+      const duration = workDay.schedule.appointment_duration;
+      // const { appointments } = workDay.schedule;
+      let taken = [];
+      appointments.forEach((appointment) => {
+        if (appointment.is_canceled) return;
+        console.log(appointment, 'appointment ----------------------------');
+        taken.push(appointment.appointment_period);
+        appointmentIds[workDay._id] = {
+          ...(appointmentIds[workDay._id] || []),
+          [appointment.appointment_period]: appointment.appointment_id
+        };
+      });
+      taken = taken.sort((a, b) => (a < b ? -1 : 1));
+      const [fromHour, fromMinute] = from.trim().split(':');
+      const [toHour, toMinute] = to.trim().split(':');
 
-        const lastSlot = `${addSubstractTime(
-          toHour,
-          toMinute,
-          duration,
-          's'
-        )} - ${toHour}:${toMinute}`;
-        let currentSlot = `${fromHour}:${fromMinute} - ${addSubstractTime(
-          fromHour,
-          fromMinute,
+      const lastSlot = `${addSubstractTime(
+        toHour,
+        toMinute,
+        duration,
+        's'
+      )} - ${toHour}:${toMinute}`;
+      let currentSlot = `${fromHour}:${fromMinute} - ${addSubstractTime(
+        fromHour,
+        fromMinute,
+        duration
+      )}`;
+      if (isToday(new Date(date))) {
+        const Hour = getHours(new Date());
+        currentSlot = `${Hour + 1}:00 - ${addSubstractTime(
+          Hour + 1,
+          '00',
           duration
         )}`;
-        if (isToday(new Date(date))) {
-          const Hour = getHours(new Date());
-          currentSlot = `${Hour + 1}:00 - ${addSubstractTime(
-            Hour + 1,
-            '00',
+      }
+
+      while (true) {
+        fullSlots.push(currentSlot);
+        if (currentSlot >= lastSlot) {
+          break;
+        }
+        if (currentSlot === taken[0]) {
+          taken.shift();
+        } else {
+          slots.push(currentSlot);
+        }
+        if (currentSlot === '17:00') {
+          currentSlot = `17:00 - ${addSubstractTime(17, 0, duration)}`;
+        } else {
+          const slotLastPart = currentSlot.split('-')[1].trim();
+          const splitLastSlotPart = slotLastPart.split(':');
+          currentSlot = `${slotLastPart} - ${addSubstractTime(
+            splitLastSlotPart[0],
+            splitLastSlotPart[1],
             duration
           )}`;
         }
-
-        while (true) {
-          fullSlots.push(currentSlot);
-          if (currentSlot >= lastSlot) {
-            break;
-          }
-          if (currentSlot === taken[0]) {
-            taken.shift();
-          } else {
-            slots.push(currentSlot);
-          }
-          if (currentSlot === '17:00') {
-            currentSlot = `17:00 - ${addSubstractTime(17, 0, duration)}`;
-          } else {
-            const slotLastPart = currentSlot.split('-')[1].trim();
-            const splitLastSlotPart = slotLastPart.split(':');
-            currentSlot = `${slotLastPart} - ${addSubstractTime(
-              splitLastSlotPart[0],
-              splitLastSlotPart[1],
-              duration
-            )}`;
-          }
-        }
-        workDaysSlots[format(new Date(date), 'yyyy-MM-dd')] = slots;
-        workDaysFullSlots[format(new Date(date), 'yyyy-MM-dd')] = fullSlots;
       }
+      workDaysSlots[format(new Date(date), 'yyyy-MM-dd')] = slots;
+      slots?.length > 0 &&
+        !remainingSlots[format(new Date(date), 'yyyy-MM-dd')] &&
+        (remainingSlots[format(new Date(date), 'yyyy-MM-dd')] = []);
+      workDaysFullSlots[format(new Date(date), 'yyyy-MM-dd')] = fullSlots;
+      // }
     });
     setSlots(workDaysSlots);
     setFullSlots(workDaysFullSlots);
+    setRemainSlots(remainingSlots);
+    setAppointmentIds(appointmentIds);
   }, [workDays]);
   useEffect(() => {
     dispatch(getOneDoctor(doctorId));
@@ -244,9 +263,11 @@ function DoctorCalendar() {
     dispatch(setSelectedWorkDay(selectedWorkDay && selectedWorkDay[0]));
   }, [doctorData, patientData, selectedWorkDay]);
 
+  console.log(selectedDate, slots);
+
   return (
     <>
-      <Box className="flex flex-row w-full h-full">
+      <Box className="flex flex-row w-full h-full bg-[#FAFAFA]">
         <Box className="sm:p-4 p-8 flex flex-col grow sm:gap-0 gap-3 overflow-y-auto">
           <IconButton
             onClick={toggleRightSideBar}
@@ -296,13 +317,13 @@ function DoctorCalendar() {
                 selectedDate,
                 loading,
                 viewDate,
-                slots
+                slots: remainSlots
                 // fullSlots
               }}
             />
           </Box>
         </Box>
-        {selectedDate && slots && newRes[0] && (
+        {selectedDate && slots && (
           <Drawer
             open={openRightSideBar}
             anchor="right"

@@ -102,7 +102,7 @@ function Analytics() {
     () =>
       selectedToggler &&
       patients?.filter((patient) => {
-        return isBefore(subHours(new Date(), 2), new Date(patient?.createdAt));
+        return isBefore(subWeeks(new Date(), 1), new Date(patient?.createdAt));
       }),
     [patients, selectedToggler]
   );
@@ -110,7 +110,7 @@ function Analytics() {
     () =>
       !selectedToggler &&
       doctors?.filter((doctor) =>
-        isBefore(subHours(new Date(), 2), new Date(doctor?.createdAt))
+        isBefore(subWeeks(new Date(), 1), new Date(doctor?.createdAt))
       ),
     [doctors, selectedToggler]
   );
