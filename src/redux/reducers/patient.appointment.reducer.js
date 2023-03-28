@@ -17,22 +17,6 @@ export const getPatientAppointments = createAsyncThunk(
       .then((res) => res.data)
 );
 
-export const cancelAppointment = createAsyncThunk(
-  'appointments/cancelAppointment',
-  async (id) => {
-    try {
-      const response = await axios.get(
-        `${process.env.BACKEND_URL}/appointments/cancel/${id}`
-      );
-
-      toast.success(response.data.message);
-    } catch (error) {
-      toast.error(error.response.data.message);
-      throw new Error(error.response.data.message);
-    }
-  }
-);
-
 const patientAppointmentSlice = createSlice({
   name: 'patient_appointment',
   initialState,

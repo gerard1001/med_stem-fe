@@ -49,8 +49,10 @@ const AdminPatientProfile = () => {
       {step === 0 && !patient?.loading && <PatientInfo />}
       {step === 1 && !patient?.loading && <ExpectedAppointments />}
       {step === 2 && !patient?.loading && <PreviousAppointments />}
-      {step === 3 && !patient?.loading && isDoctor && <DoctorMedicalHistory />}
-      {step === 4 && !patient?.loading && isAdmin && <AdminMedicalHistory />}
+      {step === 3 &&
+        !patient?.loading &&
+        (isDoctor ? <DoctorMedicalHistory /> : <AdminMedicalHistory />)}
+      {/* {step === 4 && !patient?.loading && isAdmin && <AdminMedicalHistory />} */}
     </div>
   );
 };

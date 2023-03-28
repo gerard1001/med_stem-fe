@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 import { getOnePatient } from '../../redux/reducers/patient.reducer';
 import { getPatientAppointments } from '../../redux/reducers/patient.appointment.reducer';
-import { cancelAppointment } from '../../redux/reducers/patient.appointment.reducer';
+import { cancelAppointment } from '../../redux/reducers/appointment.reducer';
 import EditAppointmentModal from '../Appointment/CancelAppointmentModal';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -55,11 +55,12 @@ const ExpectedAppointments = () => {
   const dispatch = useDispatch();
 
   const handleCancelAppointment = () => {
-    setLoading(true);
+    // setLoading(true);
     dispatch(cancelAppointment(appointIdx)).then(() => {
       setLoading(false);
       dispatch(getPatientAppointments(clientId)).then(() => handleClose());
     });
+    handleClose();
   };
 
   React.useEffect(() => {

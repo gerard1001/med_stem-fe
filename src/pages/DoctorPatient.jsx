@@ -219,7 +219,7 @@ const MyTable = () => {
     <Box className="p-10 sm:p-3">
       <Box
         className="w-[100%] border border-[#71A9F7]
-] max-w-[1200px] flex flex-col justify-between py-3 px-2 my-3 bg-white"
+] max-w-[1200px] flex flex-col justify-between py-3 px-6 my-3 bg-white"
       >
         <Box className="flex flex-row items-center justify-between">
           <Box>
@@ -485,7 +485,7 @@ const MyTable = () => {
                     }) => (
                       <TableRow
                         key={client_id}
-                        className="cursor-default"
+                        className="cursor-pointer"
                         onClick={() => {
                           nav(`/dashboard/patient/profile/${client_id}`);
                         }}

@@ -66,6 +66,7 @@ const CreateAppointmentModal = ({
     dispatch(makeAppointment(form)).then(async (props) => {
       handleAfterSubmit && (await handleAfterSubmit(props));
       setLoading(false);
+      onClose();
     });
   };
 

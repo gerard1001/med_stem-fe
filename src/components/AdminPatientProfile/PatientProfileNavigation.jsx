@@ -56,8 +56,8 @@ const PatientProfileNavigation = () => {
             step === 3 && 'text-primary underline'
           }  cursor-pointer`}
           onClick={() => {
-            isAdmin && dispatch(toAdminPatientMedicalHistory());
-            isDoctor && dispatch(toDoctorPatientMedicalHistory());
+            // isAdmin && dispatch(toAdminPatientMedicalHistory());
+            dispatch(toDoctorPatientMedicalHistory());
           }}
         >
           Medical History
