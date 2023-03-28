@@ -16,6 +16,7 @@ import { getOnePatient } from '../../redux/reducers/patient.reducer';
 import { getPatientAppointments } from '../../redux/reducers/patient.appointment.reducer';
 import { useNavigate } from 'react-router-dom';
 import { toAdminPatientPreviousAppointments } from '../../redux/reducers/step.reducer';
+import { format } from 'date-fns';
 
 const PreviousAppointments = () => {
   const patient = useSelector((state) => state.patient.single_data.data);
@@ -23,8 +24,26 @@ const PreviousAppointments = () => {
 
   const clientId = patient?.client_id;
 
+  const doctorId = JSON.parse(localStorage.getItem('userLoginData'))?.user
+    ?.doctor_id;
+
+  const isDoctor =
+    JSON.parse(localStorage.getItem('userLoginData'))?.user?.Role.role ===
+    'doctor';
+
   const prevapps = appoints?.data?.data?.filter((values) => {
-    return new Date(values?.work_day?.date) < new Date();
+    if (isDoctor) {
+      return (
+        values.doctor_id === doctorId &&
+        format(new Date(values?.work_day?.date), 'MM-dd-yyyy') <
+          format(new Date(), 'MM-dd-yyyy')
+      );
+    } else {
+      return (
+        format(new Date(values?.work_day?.date), 'MM-dd-yyyy') <
+        format(new Date(), 'MM-dd-yyyy')
+      );
+    }
   });
 
   const dispatch = useDispatch();

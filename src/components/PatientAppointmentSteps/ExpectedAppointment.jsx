@@ -53,9 +53,6 @@ const ExpectedAppointment = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => !loading && setOpen(false);
 
-  console.log({ appointIdx });
-  console.log({ loading });
-
   const handleShow = () => {
     console.log(appointDate, appointDoc, appointNum, appointSpec, appointTime);
   };

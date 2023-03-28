@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -10,7 +10,8 @@ import {
   TableContainer,
   TableCell,
   Table,
-  TableBody
+  TableBody,
+  CircularProgress
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { getOneAppointment } from '../../redux/reducers/appointment.reducer';
@@ -23,6 +24,7 @@ import {
   toExpectedAppointments
 } from '../../redux/reducers/step.reducer';
 import AppointmantPageNavigation from './AppointmantPageNavigation';
+import BackButton from '../BackButton';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: '#E7E7E7',
@@ -38,6 +40,8 @@ const AppointmentPage = () => {
   const appointment = useSelector(
     (state) => state.appointment.entities.undefined
   );
+  const [loading, setLoading] = useState(false);
+  console.log({ loading });
 
   let urlId = window.location.href.substring(
     window.location.href.lastIndexOf('/') + 1
@@ -49,17 +53,15 @@ const AppointmentPage = () => {
     ? (appointmentId = urlId.slice(0, urlId.lastIndexOf('?')))
     : (appointmentId = urlId);
 
-  useEffect(() => {
-    dispatch(getOneAppointment(appointmentId));
-  }, [appointmentId, urlId]);
-
   const date = new Date(appointment?.data?.work_day?.date);
-  const drugs = !appointment?.data?.drugs[0]
-    ? appointment?.data?.drugs
-    : JSON.parse(appointment?.data?.drugs);
-  const recommendations = !appointment?.data?.recommendations[0]
-    ? appointment?.data?.recommendations
-    : JSON.parse(appointment?.data?.recommendations);
+  const drugs =
+    appointment?.data !== 'string' && !appointment?.data?.drugs?.[0]
+      ? appointment?.data?.drugs
+      : JSON.parse(appointment?.data?.drugs);
+  const recommendations =
+    appointment?.data !== 'string' && !appointment?.data?.recommendations?.[0]
+      ? appointment?.data?.recommendations
+      : JSON.parse(appointment?.data?.recommendations);
 
   const [month, day, year] = [
     date.getMonth(),
@@ -67,17 +69,28 @@ const AppointmentPage = () => {
     date.getFullYear()
   ];
 
+  useEffect(() => {
+    setLoading(true);
+    dispatch(getOneAppointment(appointmentId)).then(() => {
+      setLoading(false);
+    });
+  }, [appointmentId, urlId]);
+
   const nav = useNavigate();
   return (
     <Box className="bg-[#F5F5F5] min-h-[100vh]">
       <Box className="p-10 max-w-[1200px] w-[85%] sm:w-[100%] sm:p-4 flex flex-col gap-4 items-start">
         <Box className="flex flex-center gap-3 font-semibold">
+          <BackButton />
           <Typography variant="h6">Appointments</Typography>
           <Typography variant="h6">-</Typography>
-          <Typography variant="h6">
-            {appointment?.data?.client?.first_name}{' '}
-            {appointment?.data?.client?.last_name}
-          </Typography>
+          {loading && <CircularProgress />}
+          {!loading && (
+            <Typography variant="h6">
+              {appointment?.data?.client?.first_name}{' '}
+              {appointment?.data?.client?.last_name}
+            </Typography>
+          )}
         </Box>
         <AppointmantPageNavigation appointment={appointment?.data} />
         <Box className="flex w-fit gap-5 items-start flex-row sm:flex-col sm:gap-2">

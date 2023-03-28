@@ -145,8 +145,6 @@ const CalendarRightSideBar = ({ loading, slots, viewDate }) => {
   const [openModal, setOpenModal] = useState(false);
   const doctor = useSelector((state) => state.doctor.single_data.data);
 
-  console.log({ doctor }, '+++++++++++=');
-
   const selectedPatientData = useSelector(
     (state) => state.user.selectedPatient
   );

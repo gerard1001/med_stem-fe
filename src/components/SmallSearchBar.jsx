@@ -65,7 +65,6 @@ const SmallSearchBar = ({
           }
         }}
         renderInput={(params) => {
-          console.log(params.inputProps.value);
           const modifiedParams = {
             ...params,
             inputProps: {

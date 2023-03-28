@@ -86,14 +86,6 @@ function Analytics() {
   const departments = useSelector((state) => state.department?.data?.data);
   const loginData = useSelector((state) => state.user?.loginData);
 
-  // console.log(
-  //   patients,
-  //   doctors,
-  //   selectedDoctorRef.current,
-  //   selectedPeriodValue,
-  //   'patients, doctors,'
-  // );
-
   const toggleToggler = () => {
     setSelectedToggler((value) => !value);
   };

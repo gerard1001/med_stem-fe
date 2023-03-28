@@ -24,7 +24,13 @@ import {
   List,
   ListItem,
   ListItemIcon,
-  Radio
+  Radio,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  DialogActions,
+  Slide
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -53,13 +59,9 @@ import Loader from '../Loader/Loader';
 import { IoCloseSharp } from 'react-icons/io5';
 import BackButton from '../BackButton';
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: '#E7E7E7',
-  ...theme.typography.body2,
-  padding: '2px 5px',
-  boxShadow: 'none',
-  borderRadius: 'none'
-}));
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const DoctorAppointmentPage = () => {
   const dispatch = useDispatch();
@@ -73,6 +75,16 @@ const DoctorAppointmentPage = () => {
   const [defaultDiagnosis, setDefaultDiagnosis] = useState('');
   const [isStarted, setIsStarted] = useState(false);
   const [inputEntered, setInputEntered] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [hoveredId, setHoveredId] = useState();
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -272,7 +284,7 @@ const DoctorAppointmentPage = () => {
             {appointment?.data?.client?.first_name}{' '}
             {appointment?.data?.client?.last_name}
           </Typography>
-        </Box>
+        </Box>{' '}
         <AppointmantPageNavigation appointment={appointment?.data} />
         <Box className="flex w-fit gap-5 items-start flex-row sm:flex-col sm:gap-2">
           <Typography variant="subtitle1" fontSize="17px">
@@ -306,14 +318,12 @@ const DoctorAppointmentPage = () => {
               Start Appointment
             </Button>
           )}
-
         {isStarted && (!defaultDiagnosis || !defaultComplaints) && (
           <AddNewAppointmentData
             handleOpenDrugModal={handleOpenDrugModal}
             handleOpenRecommendationModal={handleOpenRecommendationModal}
           />
         )}
-
         {(appointment?.data?.complaints ||
           appointment?.data?.diagnosis ||
           (Array.isArray(appointment?.data?.drugs) &&
@@ -507,7 +517,15 @@ const DoctorAppointmentPage = () => {
                                 sx={{
                                   fontSize: '14px'
                                 }}
-                                className="truncate max-w-[100px]"
+                                className="truncate max-w-[100px] cursor-pointer"
+                                onMouseEnter={() => {
+                                  setHoveredId(row.explanation);
+                                  // handleClickOpen();
+                                }}
+                                onClick={() => {
+                                  setHoveredId(row.explanation);
+                                  handleClickOpen();
+                                }}
                               >
                                 {row.explanation}
                               </TableCell>
@@ -1320,6 +1338,24 @@ const DoctorAppointmentPage = () => {
           </Box>
         </Box>
       </Modal>
+
+      <Dialog
+        open={open}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleClose}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <CloseXButton onClick={handleClose} />
+        <DialogTitle className="mt-10 min-w-[320px]">
+          Full explanation
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            {hoveredId || '"None provided"'}
+          </DialogContentText>
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 };
