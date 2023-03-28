@@ -55,11 +55,12 @@ const ExpectedAppointments = () => {
   const dispatch = useDispatch();
 
   const handleCancelAppointment = () => {
-    setLoading(true);
+    // setLoading(true);
     dispatch(cancelAppointment(appointIdx)).then(() => {
       setLoading(false);
       dispatch(getPatientAppointments(clientId)).then(() => handleClose());
     });
+    handleClose();
   };
 
   React.useEffect(() => {

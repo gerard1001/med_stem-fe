@@ -83,7 +83,8 @@ const ExpectedAppointment = () => {
       setLoading(false);
       handleClose();
     });
-    setLoading(true);
+    handleClose();
+    // setLoading(true);
   };
 
   const nav = useNavigate();
