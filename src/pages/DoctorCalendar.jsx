@@ -28,7 +28,7 @@ import {
 import React, { useEffect, useRef, useState } from 'react';
 import { FiChevronLeft } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import CreateAppointmentModal from '../components/Appointment/CreateAppointmentModal';
 import BackButton from '../components/BackButton';
@@ -51,6 +51,7 @@ import {
 function checkAppointments(variableDate, slots, selectedDate) {
   const result = [];
   const setSlots = slots ? slots[selectedDate] : [];
+
   for (let i = 0; i < setSlots?.length; i++) {
     const slot = setSlots[i];
     let found = false;
@@ -60,7 +61,10 @@ function checkAppointments(variableDate, slots, selectedDate) {
         const appointment = appointments[k];
         if (appointment.appointment_period === slot) {
           result.push({
-            [slot]: `${appointment.client.first_name} ${appointment.client.last_name}`
+            [slot]: {
+              name: `${appointment.client.first_name} ${appointment.client.last_name}`,
+              id: `${appointment.appointment_id}`
+            }
           });
           found = true;
           break;
@@ -71,7 +75,7 @@ function checkAppointments(variableDate, slots, selectedDate) {
       }
     }
     if (!found) {
-      result.push({ [slot]: 'Free' });
+      result.push({ [slot]: { name: 'Free', id: '' } });
     }
   }
   return result;
@@ -107,10 +111,6 @@ function DoctorCalendar() {
     );
   });
 
-  console.log(slots, '***');
-  console.log(fullSlots, '+++');
-  console.log(appointmentIds, 'appointmentIds');
-
   const resultData = checkAppointments(
     variableDate,
     fullSlots,
@@ -119,14 +119,12 @@ function DoctorCalendar() {
 
   const newRes = resultData?.map((values) => {
     const period = Object.keys(values)[0];
-    const name = Object.values(values)[0];
+    const name = values;
     return {
       period,
       name
     };
   });
-
-  console.log({ newRes });
 
   const doctorData = doctor?.single_data?.data;
   const patientData = patient?.single_data?.data;
@@ -162,23 +160,21 @@ function DoctorCalendar() {
     const workDaysFullSlots = {};
     const remainingSlots = {};
     const appointmentIds = {};
+
     workDays?.forEach((workDay) => {
       const slots = [];
       const fullSlots = [];
       const { from, to, date, appointments } = workDay;
+      const newWorkDay =
+        format(new Date(date), 'yyyy-MM-dd') ===
+          format(new Date(selectedDate), 'yyyy-MM-dd') && workDay;
+
       remainingSlots[format(new Date(date), 'yyyy-MM-dd')] = appointments;
-      // if (isToday(new Date(date)) || isFuture(new Date(date))) {
       const duration = workDay.schedule.appointment_duration;
-      // const { appointments } = workDay.schedule;
       let taken = [];
       appointments.forEach((appointment) => {
         if (appointment.is_canceled) return;
-        console.log(appointment, 'appointment ----------------------------');
         taken.push(appointment.appointment_period);
-        appointmentIds[workDay._id] = {
-          ...(appointmentIds[workDay._id] || []),
-          [appointment.appointment_period]: appointment.appointment_id
-        };
       });
       taken = taken.sort((a, b) => (a < b ? -1 : 1));
       const [fromHour, fromMinute] = from.trim().split(':');
@@ -241,7 +237,7 @@ function DoctorCalendar() {
   useEffect(() => {
     dispatch(getOneDoctor(doctorId));
     dispatch(getOnePatient(clientId));
-  }, [doctorId]);
+  }, [doctorId, clientId]);
   useEffect(() => {
     setLoading(true);
     dispatch(
@@ -261,9 +257,9 @@ function DoctorCalendar() {
     dispatch(setSelectedDoctorDataRedux(doctorData));
     dispatch(setSelectedPatientDataRedux(patientData));
     dispatch(setSelectedWorkDay(selectedWorkDay && selectedWorkDay[0]));
-  }, [doctorData, patientData, selectedWorkDay]);
+  }, [doctorData, patientData, selectedWorkDay, selectedDate]);
 
-  console.log(selectedDate, slots);
+  const nav = useNavigate();
 
   return (
     <>
@@ -387,6 +383,8 @@ const CalendarRightSideBar = ({
     });
   };
 
+  const nav = useNavigate();
+
   return (
     <>
       <Box
@@ -396,19 +394,26 @@ const CalendarRightSideBar = ({
         {newRes?.map((row) => (
           <>
             <Box
-              key={row}
+              key={row.period}
               onClick={() => {
                 !loading && setSelectedTime(row);
+                nav(
+                  `/dashboard/doctor/appointments/${row.name[row.period].id}`
+                );
               }}
-              className={`p-3 text-[#333]${row.name !== 'Free' && 'font-bold'}`}
+              className={`p-3 text-[#333]${
+                row.name[row.period].name !== 'Free' && 'font-bold'
+              }`}
               selected={row === selectedTime}
             >
               <Typography
                 className={`text-[#333] ${
-                  row.name !== 'Free' ? 'font-bold' : 'font-normal'
+                  row.name[row.period].name !== 'Free'
+                    ? 'font-bold cursor-pointer'
+                    : 'font-normal cursor-default'
                 } truncate`}
               >
-                {row.period}: {row.name}
+                {row.period}: {row.name[row.period].name}
               </Typography>
             </Box>
             <Divider

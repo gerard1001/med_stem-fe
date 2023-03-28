@@ -53,88 +53,6 @@ function AdminCalendar() {
   const doctor = useSelector((state) => state.doctor);
   const doctorData = doctor?.single_data?.data;
 
-  console.log(workDays, 'workDays');
-  console.log(searchQuery, 'searchQuery');
-
-  // function addSubstractTime(hour, minute, minutesToAdd, operation) {
-  //   hour = parseInt(hour, 10);
-  //   minute = parseInt(minute, 10);
-  //   minutesToAdd = parseInt(minutesToAdd, 10);
-
-  //   const date = new Date();
-  //   date.setHours(hour);
-  //   date.setMinutes(minute);
-  //   const newDate =
-  //     operation === 's'
-  //       ? subMinutes(date, minutesToAdd)
-  //       : addMinutes(date, minutesToAdd);
-  //   return format(newDate, 'HH:mm');
-  // }
-
-  // useEffect(() => {
-  //   const workDaysSlots = {};
-  //   workDays?.forEach((workDay) => {
-  //     const slots = [];
-  //     const { from, to, date, appointments } = workDay;
-  //     if (isToday(new Date(date)) || isFuture(new Date(date))) {
-  //       const duration = workDay.schedule.appointment_duration;
-  //       // const { appointments } = workDay.schedule;
-  //       let taken = [];
-  //       appointments.forEach((appointment) => {
-  //         if (appointment.is_canceled) return;
-  //         taken.push(appointment.appointment_period);
-  //       });
-  //       taken = taken.sort((a, b) => (a < b ? -1 : 1));
-  //       const [fromHour, fromMinute] = from.trim().split(':');
-  //       const [toHour, toMinute] = to.trim().split(':');
-
-  //       const lastSlot = `${addSubstractTime(
-  //         toHour,
-  //         toMinute,
-  //         duration,
-  //         's'
-  //       )} - ${toHour}:${toMinute}`;
-  //       let currentSlot = `${fromHour}:${fromMinute} - ${addSubstractTime(
-  //         fromHour,
-  //         fromMinute,
-  //         duration
-  //       )}`;
-  //       if (isToday(new Date(date))) {
-  //         const Hour = getHours(new Date());
-  //         currentSlot = `${Hour + 1}:00 - ${addSubstractTime(
-  //           Hour + 1,
-  //           '00',
-  //           duration
-  //         )}`;
-  //       }
-
-  //       while (true) {
-  //         if (currentSlot >= lastSlot) {
-  //           break;
-  //         }
-  //         if (currentSlot === taken[0]) {
-  //           taken.shift();
-  //         } else {
-  //           slots.push(currentSlot);
-  //         }
-  //         if (currentSlot === '17:00') {
-  //           currentSlot = `17:00 - ${addSubstractTime(17, 0, duration)}`;
-  //         } else {
-  //           const slotLastPart = currentSlot.split('-')[1].trim();
-  //           const splitLastSlotPart = slotLastPart.split(':');
-  //           currentSlot = `${slotLastPart} - ${addSubstractTime(
-  //             splitLastSlotPart[0],
-  //             splitLastSlotPart[1],
-  //             duration
-  //           )}`;
-  //         }
-  //       }
-  //       workDaysSlots[format(new Date(date), 'yyyy-MM-dd')] = slots;
-  //     }
-  //   });
-  //   setSlots(workDaysSlots);
-  // }, [workDays]);
-
   const filteredData = doctors?.data?.data?.map((obj) => ({
     ...obj,
     label: `${obj.first_name} ${obj.last_name}, ${obj.doctor_id}`
@@ -147,12 +65,6 @@ function AdminCalendar() {
   useEffect(() => {
     dispatch(getDoctorList());
   }, []);
-  // useEffect(() => {
-  //   calendarRef.current.calendar.gotoDate(new Date(viewDate));
-  // }, [viewDate]);
-  // useEffect(() => {
-  //   dispatch(getOneDoctor(searchQuery));
-  // });
   return (
     <Box
       className="flex flex-row items-start"
@@ -242,20 +154,6 @@ function AdminCalendar() {
               viewDate,
               slots
             }}
-            // dayCellContent={(props) => (
-            //   <Box
-            //     className="text-green flex flex-col"
-            //     sx={{
-            //       width: '100%',
-            //       height: '100%'
-            //     }}
-            //   >
-            //     <Box className="grow px-[10px]">
-            //       <Typography>{props.date.getDate()}</Typography>
-            //     </Box>
-            //     {/* If active step we add the plus sign */}
-            //   </Box>
-            // )}
           />
         </Box>
       </Box>

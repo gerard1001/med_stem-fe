@@ -30,32 +30,20 @@ import {
 import { days } from '../utils/dummyData';
 
 const schema = yup.object().shape({
-  doctor_id: yup.string(),
-  start_date: yup.string(),
-  end_date: yup.string(),
-  days: yup.string(),
-  from: yup.string(),
-  to: yup.string(),
-  appointment_duration: yup.number()
+  start_date: yup.date().typeError('Invalid date').required(),
+  end_date: yup.date().typeError('Invalid date').required(),
+  from: yup.string().required(),
+  to: yup.string().required(),
+  appointment_duration: yup.number().required(),
+  dayName: yup.array().min(1, 'On minimun day to select').required()
 });
 
 const AdminCalendarRightSideBar = () => {
   const dispatch = useDispatch();
   const [dayName, setDayName] = React.useState([]);
-  const [doctorId, setDoctorId] = useState(null);
   const searchQuery = useSelector((state) => state.user?.searchQueryRedux);
-  const [viewDate, setViewDate] = useState(new Date());
-  const workDays = useSelector(
-    (state) => selectWorkDaysDoctors(state, searchQuery)?.workDays
-  );
 
   const doctor = useSelector((state) => state.doctor);
-
-  const doctorData = doctor?.single_data?.data;
-
-  console.log({ doctorData });
-  console.log({ searchQuery });
-  console.log({ workDays });
 
   const {
     handleSubmit,
@@ -144,9 +132,13 @@ const AdminCalendarRightSideBar = () => {
                   label="From"
                   margin="normal"
                   size="small"
-                  error={!!errors.start_date}
-                  helperText={errors.start_date && errors.start_date.message}
-                  required
+                  minDate={new Date()}
+                  slotProps={{
+                    textField: {
+                      error: !!errors.start_date,
+                      helperText: errors.start_date && errors.start_date.message
+                    }
+                  }}
                   sx={{
                     width: '110px',
                     '& .MuiInputBase-input': {
@@ -183,9 +175,13 @@ const AdminCalendarRightSideBar = () => {
                   variant="filled"
                   margin="normal"
                   size="small"
-                  error={!!errors.end_date}
-                  helperText={errors.end_date && errors.end_date.message}
-                  required
+                  minDate={new Date()}
+                  slotProps={{
+                    textField: {
+                      error: !!errors.end_date,
+                      helperText: errors.end_date && errors.end_date.message
+                    }
+                  }}
                   className=""
                   sx={{
                     width: '110px',
@@ -220,7 +216,12 @@ const AdminCalendarRightSideBar = () => {
               control={control}
               defaultValue={[]}
               render={({ field }) => (
-                <FormControl size="small" sx={{ width: '140px' }}>
+                <FormControl
+                  size="small"
+                  sx={{ width: '140px' }}
+                  error={!!errors.dayName}
+                  helperText={errors.dayName && errors.dayName.message}
+                >
                   <InputLabel
                     sx={{
                       fontSize: '1rem',
@@ -241,6 +242,8 @@ const AdminCalendarRightSideBar = () => {
                       handleChangeSelectInput(event);
                       field.onChange(event.target.value);
                     }}
+                    error={!!errors.dayName}
+                    helperText={errors.dayName && errors.dayName.message}
                     className="rounded-[5px]"
                     sx={{
                       width: '120px',
@@ -314,9 +317,8 @@ const AdminCalendarRightSideBar = () => {
                   }}
                   margin="normal"
                   size="small"
-                  error={!!errors.end_date}
-                  helperText={errors.end_date && errors.end_date.message}
-                  required
+                  error={!!errors.from}
+                  helperText={errors.from && errors.from.message}
                 />
               )}
             />
@@ -349,9 +351,8 @@ const AdminCalendarRightSideBar = () => {
                   }}
                   margin="normal"
                   size="small"
-                  error={!!errors.end_date}
-                  helperText={errors.end_date && errors.end_date.message}
-                  required
+                  error={!!errors.to}
+                  helperText={errors.to && errors.to.message}
                 />
               )}
             />
@@ -397,12 +398,6 @@ const AdminCalendarRightSideBar = () => {
                         backgroundColor: '#E7E7E7',
                         borderRadius: '5px'
                       },
-                      // '& .MuiFormLabel-root': {
-                      //   top: '-4px'
-                      // },
-                      // '& .MuiInputLabel-root': {
-                      //   top: '-4px'
-                      // },
                       '& .MuiInputBase-root': {
                         borderRadius: '5px'
                       }

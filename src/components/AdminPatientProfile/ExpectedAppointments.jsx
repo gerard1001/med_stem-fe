@@ -22,8 +22,11 @@ import { Link } from 'react-router-dom';
 import PatientProfileNavigation from './PatientProfileNavigation';
 import { toAdminPatientExpectedAppointments } from '../../redux/reducers/step.reducer';
 import LoadingButton from '../LoadingButton';
+import CloseXButton from '../CloseXButton';
+import { format } from 'date-fns';
 
 const ExpectedAppointments = () => {
+  const dispatch = useDispatch();
   const [clickedIdx, setClickedIdx] = React.useState(0);
   const [appointIdx, setAppointIdx] = React.useState(null);
   const [appointDoc, setDoctor] = React.useState(null);
@@ -46,27 +49,41 @@ const ExpectedAppointments = () => {
     JSON.parse(localStorage.getItem('userLoginData'))?.user?.Role.role ===
     'doctor';
 
+  const doctorId = JSON.parse(localStorage.getItem('userLoginData'))?.user
+    ?.doctor_id;
+
   const clientId = patient?.client_id;
 
   const expectedapps = appoints?.data?.data?.filter((values) => {
-    return new Date(values?.work_day?.date) > new Date() && !values.is_canceled;
+    if (isDoctor) {
+      return (
+        values.doctor_id === doctorId &&
+        format(new Date(values?.work_day?.date), 'MM-dd-yyyy') >
+          format(new Date(), 'MM-dd-yyyy') &&
+        !values.is_canceled
+      );
+    } else {
+      return (
+        format(new Date(values?.work_day?.date), 'MM-dd-yyyy') >
+          format(new Date(), 'MM-dd-yyyy') && !values.is_canceled
+      );
+    }
   });
-
-  const dispatch = useDispatch();
-
-  const handleCancelAppointment = () => {
-    // setLoading(true);
-    dispatch(cancelAppointment(appointIdx)).then(() => {
-      setLoading(false);
-      dispatch(getPatientAppointments(clientId)).then(() => handleClose());
-    });
-    handleClose();
-  };
 
   React.useEffect(() => {
     // dispatch(getOnePatient(clientId));
     dispatch(getPatientAppointments(clientId));
-  }, [clientId, patient]);
+  }, [clientId, appointIdx]);
+
+  const handleCancelAppointment = async () => {
+    setLoading(true);
+    dispatch(cancelAppointment(appointIdx)).then(() => {
+      dispatch(getPatientAppointments(clientId)).then(() => {
+        setLoading(false);
+        handleClose();
+      });
+    });
+  };
 
   const nav = useNavigate();
 
@@ -280,7 +297,7 @@ const ExpectedAppointments = () => {
                             <Typography className="w-full font-semibold text-lg text-center">
                               Appointment Cancelation
                             </Typography>
-
+                            <CloseXButton onClick={handleClose} />
                             <Box>
                               <Stack direction="row" gap={6} width="100%">
                                 <Stack>
@@ -312,9 +329,7 @@ const ExpectedAppointments = () => {
                               <LoadingButton
                                 loading={loading}
                                 className="max-w-fit w-full"
-                                onClick={() => {
-                                  handleCancelAppointment();
-                                }}
+                                onClick={handleCancelAppointment}
                               >
                                 Cancel appointment
                               </LoadingButton>
