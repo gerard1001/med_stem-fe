@@ -16,12 +16,13 @@ import {
 } from '@mui/material';
 import { getOnePatient } from '../../redux/reducers/patient.reducer';
 import { getPatientAppointments } from '../../redux/reducers/patient.appointment.reducer';
-import { cancelAppointment } from '../../redux/reducers/patient.appointment.reducer';
+import { cancelAppointment } from '../../redux/reducers/appointment.reducer';
 import EditAppointmentModal from '../Appointment/CancelAppointmentModal';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import LoadingButton from '../LoadingButton';
 import CloseXButton from '../CloseXButton';
+import { toast } from 'react-toastify';
 
 export const filterData = (query, data) => {
   if (!query) {
@@ -50,7 +51,10 @@ const ExpectedAppointment = () => {
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = useState('');
   const handleOpen = () => setOpen(true);
-  const handleClose = () => !loading && setOpen(false);
+  const handleClose = () => setOpen(false);
+
+  console.log({ appointIdx });
+  console.log({ loading });
 
   const handleShow = () => {
     console.log(appointDate, appointDoc, appointNum, appointSpec, appointTime);
@@ -68,18 +72,19 @@ const ExpectedAppointment = () => {
     [query, expectedapps]
   );
 
-  const handleCancelAppointment = () => {
-    setLoading(true);
-    dispatch(cancelAppointment(appointIdx)).then(() => {
-      setLoading(false);
-      dispatch(getPatientAppointments(clientId)).then(() => handleClose());
-    });
-  };
-
   React.useEffect(() => {
     dispatch(getOnePatient(clientId));
     dispatch(getPatientAppointments(clientId));
-  }, [clientId]);
+  }, [clientId, appointIdx]);
+
+  const handleCancelAppointment = async () => {
+    dispatch(cancelAppointment(appointIdx)).then(() => {
+      dispatch(getPatientAppointments(clientId));
+      setLoading(false);
+      handleClose();
+    });
+    setLoading(true);
+  };
 
   const nav = useNavigate();
 
@@ -319,9 +324,7 @@ const ExpectedAppointment = () => {
                           <LoadingButton
                             loading={loading}
                             className="max-w-fit w-full"
-                            onClick={() => {
-                              handleCancelAppointment();
-                            }}
+                            onClick={handleCancelAppointment}
                           >
                             Cancel appointment
                           </LoadingButton>

@@ -18,7 +18,6 @@ const DoctorPageCalendar = forwardRef(
     useEffect(() => {
       ref.current.calendar.gotoDate(new Date(viewDate));
     }, [viewDate, ref]);
-
     return (
       <Calendar
         ref={ref}
@@ -85,7 +84,7 @@ const Daycell = memo(
         >
           <Typography>{availableAppointments || '0'}</Typography>
           <Typography color="gray.main" className="text-xs leading-tight">
-            available apointments
+            apointments
           </Typography>
         </Box>
       </Box>

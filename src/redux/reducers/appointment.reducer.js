@@ -67,6 +67,23 @@ export const updateAppointment = createAsyncThunk(
   }
 );
 
+export const cancelAppointment = createAsyncThunk(
+  'appointments/cancelAppointment',
+  async (id) => {
+    try {
+      const response = await axiosInstance.get(
+        `${process.env.BACKEND_URL}/appointments/cancel/${id}`
+      );
+
+      toast.success(response.data.message);
+      return response;
+    } catch (error) {
+      toast.error(error.response.data.message);
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
 const appointmentSlice = createSlice({
   name: 'appointments',
   initialState: appointmentAdapter.getInitialState(),
@@ -74,7 +91,8 @@ const appointmentSlice = createSlice({
   extraReducers: {
     [getDoctorAppointments.fulfilled]: appointmentAdapter.upsertOne,
     [getOneAppointment.fulfilled]: appointmentAdapter.upsertOne,
-    [updateAppointment.fulfilled]: appointmentAdapter.upsertOne
+    [updateAppointment.fulfilled]: appointmentAdapter.upsertOne,
+    [cancelAppointment.fulfilled]: appointmentAdapter.upsertOne
   }
 });
 

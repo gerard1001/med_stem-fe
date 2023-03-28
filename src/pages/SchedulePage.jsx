@@ -139,95 +139,67 @@ const SchedulePage = () => {
   );
 };
 
-const CalendarRightSideBar = ({ loading }) => {
-  const appointmentHours = [
-    '09:00 - 09:30',
-    '09:00 - 09:31',
-    '09:00 - 09:32',
-    '09:00 - 09:33'
-  ];
+const CalendarRightSideBar = ({ loading, slots, viewDate }) => {
   const dispatch = useDispatch();
-  const [selectedTime, setSelectedTime] = useState('');
+  const [selectedTime, setSelectedTime] = useState();
   const [openModal, setOpenModal] = useState(false);
-  const [startingHour, setStartingHour] = useState('08:00:00');
-  const [endingHour, setEndingHour] = useState('18:00:00');
-  const [duration, setDuration] = useState(30);
-  // const [remainingSlots, setRemainingSlots] = useState([]);
   const doctor = useSelector((state) => state.doctor.single_data.data);
 
-  const selectedDoctordata = useSelector((state) => state.user.selectedDoctor);
+  console.log({ doctor }, '+++++++++++=');
+
   const selectedPatientData = useSelector(
     (state) => state.user.selectedPatient
   );
   const selectedWorkDayData = useSelector(
     (state) => state.user.selectedWorkDay
   );
-
-  // alert(selectedDoctordata?.doctor_id);
+  const handleAfterSubmit = async () => {
+    return new Promise((res, rej) => {
+      dispatch(
+        getDoctorWorkDays({
+          id: doctor.doctor_id,
+          month: getMonth(viewDate) + 1,
+          year: getYear(viewDate)
+        })
+      ).then(() => {
+        res();
+      });
+    });
+  };
 
   useEffect(() => {
-    dispatch(getOneDoctor(selectedDoctordata?.doctor_id));
-  }, [selectedDoctordata]);
+    setSelectedTime(null);
+  }, [viewDate, slots, selectedWorkDayData]);
 
-  useEffect(() => {
-    setStartingHour(selectedWorkDayData?.from);
-    setEndingHour(selectedWorkDayData?.to);
-    setDuration(selectedWorkDayData?.schedule?.appointment_duration);
-  }, [selectedWorkDayData]);
-
-  const availableSlots =
-    selectedWorkDayData && startingHour && endingHour && duration
-      ? getTimePeriods(startingHour, endingHour, duration)
+  const appointmentHours =
+    slots && selectedWorkDayData
+      ? slots[format(new Date(selectedWorkDayData.date), 'yyyy-MM-dd')]
       : [];
-
-  const takenAppointmentsOnWorkDay = doctor?.appointments?.filter((values) => {
-    return values._id === selectedWorkDayData?._id;
-  });
-  const takenAppointmentsOnWorkDayPeriod = takenAppointmentsOnWorkDay?.map(
-    (values) => {
-      return values.appointment_period;
-    }
-  );
-  const takenAppointments = doctor?.appointments?.map((values) => {
-    return values.appointment_period;
-  });
-
-  const remainingSlots = availableSlots?.filter(
-    (element) => !takenAppointmentsOnWorkDayPeriod.includes(element)
-  );
 
   return (
     <>
       <List disablePadding className="border-l border-primary w-full h-full">
-        {remainingSlots ? (
-          remainingSlots?.map((hour, index) => (
-            <Box key={hour}>
-              <ListItemButton
-                onClick={() => {
-                  !loading && setSelectedTime(hour);
-                }}
-                className="border-b border-primary p-3 text-center"
-                selected={hour === selectedTime}
-              >
-                <ListItemText primary={hour} />
-              </ListItemButton>
-              <Divider
-                key={hour + index}
-                sx={{ borderColor: 'primary.main' }}
-              />
-            </Box>
-          ))
-        ) : (
-          <Typography>No work day has been selected</Typography>
-        )}
+        {appointmentHours?.map((hour) => (
+          <>
+            <ListItemButton
+              key={hour}
+              onClick={() => {
+                !loading && setSelectedTime(hour);
+              }}
+              className="border-b border-primary p-3 text-center"
+              selected={hour === selectedTime}
+            >
+              <ListItemText primary={hour} />
+            </ListItemButton>
+            <Divider
+              key={`${hour} divider `}
+              sx={{ borderColor: 'primary.main' }}
+            />
+          </>
+        ))}
         <Stack direction="row" alignItems="center" justifyContent="center">
           <Button
-            disabled={
-              !selectedWorkDayData ||
-              !selectedPatientData ||
-              !selectedDoctordata ||
-              !selectedTime
-            }
+            disabled={!selectedTime}
             variant="contained"
             color="primary"
             className="bg-primary m-4"
@@ -243,32 +215,164 @@ const CalendarRightSideBar = ({ loading }) => {
         open={openModal || false}
         {...{
           doctorData: {
-            doctorId: selectedDoctordata?.doctor_id,
-            firstName: selectedDoctordata?.first_name,
-            lastName: selectedDoctordata?.last_name
+            doctorId: doctor?.doctor_id,
+            firstName: doctor?.first_name,
+            lastName: doctor?.last_name
           },
-          specialities: selectedDoctordata?.departments.map(
-            (dep) => dep.speciality_name
-          ),
           patientData: {
             patientId: selectedPatientData?.client_id,
             firstName: selectedPatientData?.first_name,
             lastName: selectedPatientData?.last_name
           },
           workDayData: {
-            workDayId: selectedWorkDayData?._id
+            workDayId: selectedWorkDayData?._id,
+            workDayDate: selectedWorkDayData?.date
           },
           scheduleData: {
             scheduleId: selectedWorkDayData?.schedule_id
           },
+          specialities: doctor?.departments.map((dep) => dep.speciality_name),
           onClose: () => {
             setOpenModal(false);
           },
-          selectedTime
+          selectedTime,
+          handleAfterSubmit
         }}
       />
     </>
   );
 };
+
+// const CalendarRightSideBar = ({ loading }) => {
+//   const appointmentHours = [
+//     '09:00 - 09:30',
+//     '09:00 - 09:31',
+//     '09:00 - 09:32',
+//     '09:00 - 09:33'
+//   ];
+//   const dispatch = useDispatch();
+//   const [selectedTime, setSelectedTime] = useState('');
+//   const [openModal, setOpenModal] = useState(false);
+//   const [startingHour, setStartingHour] = useState('08:00:00');
+//   const [endingHour, setEndingHour] = useState('18:00:00');
+//   const [duration, setDuration] = useState(30);
+//   // const [remainingSlots, setRemainingSlots] = useState([]);
+//   const doctor = useSelector((state) => state.doctor.single_data.data);
+
+//   const selectedDoctordata = useSelector((state) => state.user.selectedDoctor);
+//   const selectedPatientData = useSelector(
+//     (state) => state.user.selectedPatient
+//   );
+//   const selectedWorkDayData = useSelector(
+//     (state) => state.user.selectedWorkDay
+//   );
+
+//   // alert(selectedDoctordata?.doctor_id);
+
+//   useEffect(() => {
+//     dispatch(getOneDoctor(selectedDoctordata?.doctor_id));
+//   }, [selectedDoctordata]);
+
+//   useEffect(() => {
+//     setStartingHour(selectedWorkDayData?.from);
+//     setEndingHour(selectedWorkDayData?.to);
+//     setDuration(selectedWorkDayData?.schedule?.appointment_duration);
+//   }, [selectedWorkDayData]);
+
+//   const availableSlots =
+//     selectedWorkDayData && startingHour && endingHour && duration
+//       ? getTimePeriods(startingHour, endingHour, duration)
+//       : [];
+
+//   const takenAppointmentsOnWorkDay = doctor?.appointments?.filter((values) => {
+//     return values._id === selectedWorkDayData?._id;
+//   });
+//   const takenAppointmentsOnWorkDayPeriod = takenAppointmentsOnWorkDay?.map(
+//     (values) => {
+//       return values.appointment_period;
+//     }
+//   );
+//   const takenAppointments = doctor?.appointments?.map((values) => {
+//     return values.appointment_period;
+//   });
+
+//   const remainingSlots = availableSlots?.filter(
+//     (element) => !takenAppointmentsOnWorkDayPeriod.includes(element)
+//   );
+
+//   return (
+//     <>
+//       <List disablePadding className="border-l border-primary w-full h-full">
+//         {remainingSlots ? (
+//           remainingSlots?.map((hour, index) => (
+//             <Box key={hour}>
+//               <ListItemButton
+//                 onClick={() => {
+//                   !loading && setSelectedTime(hour);
+//                 }}
+//                 className="border-b border-primary p-3 text-center"
+//                 selected={hour === selectedTime}
+//               >
+//                 <ListItemText primary={hour} />
+//               </ListItemButton>
+//               <Divider
+//                 key={hour + index}
+//                 sx={{ borderColor: 'primary.main' }}
+//               />
+//             </Box>
+//           ))
+//         ) : (
+//           <Typography>No work day has been selected</Typography>
+//         )}
+//         <Stack direction="row" alignItems="center" justifyContent="center">
+//           <Button
+//             disabled={
+//               !selectedWorkDayData ||
+//               !selectedPatientData ||
+//               !selectedDoctordata ||
+//               !selectedTime
+//             }
+//             variant="contained"
+//             color="primary"
+//             className="bg-primary m-4"
+//             onClick={() => {
+//               !loading && setOpenModal(true);
+//             }}
+//           >
+//             Make Appointment
+//           </Button>
+//         </Stack>
+//       </List>
+//       <CreateAppointmentModal
+//         open={openModal || false}
+//         {...{
+//           doctorData: {
+//             doctorId: selectedDoctordata?.doctor_id,
+//             firstName: selectedDoctordata?.first_name,
+//             lastName: selectedDoctordata?.last_name
+//           },
+//           specialities: selectedDoctordata?.departments.map(
+//             (dep) => dep.speciality_name
+//           ),
+//           patientData: {
+//             patientId: selectedPatientData?.client_id,
+//             firstName: selectedPatientData?.first_name,
+//             lastName: selectedPatientData?.last_name
+//           },
+//           workDayData: {
+//             workDayId: selectedWorkDayData?._id
+//           },
+//           scheduleData: {
+//             scheduleId: selectedWorkDayData?.schedule_id
+//           },
+//           onClose: () => {
+//             setOpenModal(false);
+//           },
+//           selectedTime
+//         }}
+//       />
+//     </>
+//   );
+// };
 
 export default SchedulePage;

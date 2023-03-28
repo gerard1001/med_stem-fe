@@ -120,6 +120,8 @@ function DoctorCalendar() {
     };
   });
 
+  console.log({ newRes });
+
   const doctorData = doctor?.single_data?.data;
   const patientData = patient?.single_data?.data;
 
@@ -295,6 +297,7 @@ function DoctorCalendar() {
                 loading,
                 viewDate,
                 slots
+                // fullSlots
               }}
             />
           </Box>
