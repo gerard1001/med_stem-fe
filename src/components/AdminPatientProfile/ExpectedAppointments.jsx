@@ -118,23 +118,30 @@ const ExpectedAppointments = () => {
           component={Paper}
           elevation={0}
           sx={{
-            backgroundColor: '#F5F5F5'
+            backgroundColor: '#F5F5F5',
+            maxHeight: '65vh',
+            overflow: 'auto'
           }}
         >
           <Table
             sx={{
               minWidth: 650,
               overflow: 'auto',
-              marginBottom: '40px',
-              maxHeight: '55vh',
-              overflow: 'auto'
+              marginBottom: '40px'
             }}
             aria-label="simple table"
+            stickyHeader
           >
-            <TableHead>
+            <TableHead
+              className="bg-slate-300"
+              sx={{
+                backgroundColor: '#F5F5F5'
+              }}
+            >
               <TableRow>
                 <TableCell
                   sx={{
+                    backgroundColor: '#F5F5F5',
                     color: '#2E3033',
                     fontSize: { md: '17px', xs: '14px' }
                   }}
@@ -144,6 +151,7 @@ const ExpectedAppointments = () => {
                 <TableCell
                   align="center"
                   sx={{
+                    backgroundColor: '#F5F5F5',
                     color: '#2E3033',
                     fontSize: { md: '17px', xs: '14px' }
                   }}
@@ -153,6 +161,7 @@ const ExpectedAppointments = () => {
                 <TableCell
                   align="center"
                   sx={{
+                    backgroundColor: '#F5F5F5',
                     color: '#2E3033',
                     fontSize: { md: '17px', xs: '14px' }
                   }}
@@ -162,6 +171,7 @@ const ExpectedAppointments = () => {
                 <TableCell
                   align="center"
                   sx={{
+                    backgroundColor: '#F5F5F5',
                     color: '#2E3033',
                     fontSize: { md: '17px', xs: '14px' }
                   }}
@@ -171,6 +181,7 @@ const ExpectedAppointments = () => {
                 <TableCell
                   align="center"
                   sx={{
+                    backgroundColor: '#F5F5F5',
                     color: '#2E3033',
                     fontSize: { md: '17px', xs: '14px' }
                   }}
@@ -179,7 +190,7 @@ const ExpectedAppointments = () => {
                 </TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
+            <TableBody className="max-[400px] overflow-auto">
               {expectedapps
                 ? expectedapps?.map((row, idx) => (
                     <>

@@ -28,6 +28,7 @@ import {
   selectWorkDaysDoctors
 } from '../redux/reducers/workDays.reducer';
 import { days } from '../utils/dummyData';
+import { getDoctorVacations } from '../redux/reducers/vacation.reducer';
 
 const schema = yup.object().shape({
   start_date: yup.date().typeError('Invalid date').required(),
@@ -38,7 +39,7 @@ const schema = yup.object().shape({
   dayName: yup.array().min(1, 'On minimun day to select').required()
 });
 
-const AdminCalendarRightSideBar = () => {
+const AdminCalendarRightSideBar = ({ toggleRightSideBar }) => {
   const dispatch = useDispatch();
   const [dayName, setDayName] = React.useState([]);
   const searchQuery = useSelector((state) => state.user?.searchQueryRedux);
@@ -104,10 +105,20 @@ const AdminCalendarRightSideBar = () => {
         // year: getYear(viewDate)
       })
     );
+    dispatch(
+      getDoctorVacations({
+        id: searchQuery
+        // month: getMonth(viewDate),
+        // year: getYear(viewDate)
+      })
+    );
   }, [searchQuery]);
 
   const resetData = () => {
     reset();
+    setTimeout(() => {
+      toggleRightSideBar();
+    }, 750);
   };
   return (
     <Box className="w-[250px] z-50 bg-white fixed right-0 top-16 bottom-0 h-[calc(100vh-64px)] border-l border-t border-sky-400">
@@ -154,7 +165,8 @@ const AdminCalendarRightSideBar = () => {
                     },
                     '& .MuiInputBase-root': {
                       paddingY: 0,
-                      borderRadius: '5px'
+                      borderRadius: '5px',
+                      background: '#E7E7E7'
                     }
                   }}
                 />
@@ -198,7 +210,8 @@ const AdminCalendarRightSideBar = () => {
                     },
                     '& .MuiInputBase-root': {
                       paddingY: 0,
-                      borderRadius: '5px'
+                      borderRadius: '5px',
+                      background: '#E7E7E7'
                     }
                   }}
                 />

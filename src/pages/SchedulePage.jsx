@@ -26,7 +26,8 @@ import {
   setSelectedPatientDataRedux,
   setSelectedWorkDay
 } from '../redux/reducers/user.reducer';
-import getTimePeriods from '../utils/generateTimePeriods';
+import { getTimePeriods } from '../utils/generateTimePeriods';
+import { getDoctorVacations } from '../redux/reducers/vacation.reducer';
 
 const SchedulePage = () => {
   const calendarRef = useRef();
@@ -92,6 +93,15 @@ const SchedulePage = () => {
     setLoading(true);
     dispatch(
       getDoctorWorkDays({
+        id: doctorId,
+        month: getMonth(viewDate) + 1,
+        year: getYear(viewDate)
+      })
+    ).then(() => {
+      setLoading(false);
+    });
+    dispatch(
+      getDoctorVacations({
         id: doctorId,
         month: getMonth(viewDate) + 1,
         year: getYear(viewDate)

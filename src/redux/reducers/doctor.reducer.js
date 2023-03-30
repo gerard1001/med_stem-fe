@@ -27,7 +27,9 @@ export const registerDoctor = createAsyncThunk(
 );
 
 export const getDoctorList = createAsyncThunk('users/fetchDoctors', async () =>
-  axios.get(`${process.env.BACKEND_URL}/users/doctors`).then((res) => res.data)
+  axiosInstance
+    .get(`${process.env.BACKEND_URL}/users/doctors`)
+    .then((res) => res.data)
 );
 
 export const getOneDoctor = createAsyncThunk(
