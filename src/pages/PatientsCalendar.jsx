@@ -35,6 +35,7 @@ import BackButton from '../components/BackButton';
 import CalendarMonthYearSelector from '../components/Calendar/CalendarMonthYearSelector';
 import DoctorAppointmentsCalendar from '../components/Calendar/DoctorAppointmentsCalendar';
 import HomeNavBar from '../components/HomeNavBar';
+import { getDoctorDayoffs } from '../redux/reducers/dayoff.reducer';
 import { getOneDoctor } from '../redux/reducers/doctor.reducer';
 import { getOnePatient } from '../redux/reducers/patient.reducer';
 import {
@@ -42,6 +43,7 @@ import {
   setSelectedPatientDataRedux,
   setSelectedWorkDay
 } from '../redux/reducers/user.reducer';
+import { getDoctorVacations } from '../redux/reducers/vacation.reducer';
 import {
   getDoctorWorkDays,
   selectWorkDaysDoctors
@@ -63,11 +65,42 @@ function PatientsCalendar() {
   const workDays = useSelector(
     (state) => selectWorkDaysDoctors(state, doctorId)?.workDays
   );
+  const dayoffs = useSelector(
+    (state) => state.dayoff.entities[doctorId]?.dayoffs
+  );
+  const vacations = useSelector(
+    (state) => state.vacation.entities[doctorId]?.vacations
+  );
+
   const doctor = useSelector((state) => state.doctor);
   const patient = useSelector((state) => state.patient);
 
   const doctorData = doctor?.single_data?.data;
   const patientData = patient?.single_data?.data;
+
+  const vacationDates = vacations?.flatMap((vacation) => {
+    const start = Date.parse(vacation.from_date);
+    const end = Date.parse(vacation.to_date);
+    const day = 24 * 60 * 60 * 1000;
+
+    const dateArray = [];
+    for (let time = start; time <= end; time += day) {
+      dateArray.push(format(new Date(time), 'yyyy-MM-dd'));
+    }
+
+    return dateArray;
+  });
+
+  const vacationSlots = {};
+  const dayoffSlots = {};
+
+  vacationDates?.forEach((date) => {
+    vacationSlots[date] = ['vacation'];
+  });
+
+  dayoffs?.forEach((date) => {
+    dayoffSlots[format(new Date(date.dayoff_date), 'yyyy-MM-dd')] = ['dayoff'];
+  });
 
   const toggleRightSideBar = () => {
     setOpenRightSideBar((open) => !open);
@@ -105,7 +138,6 @@ function PatientsCalendar() {
       const { from, to, date, appointments } = workDay;
       if (isToday(new Date(date)) || isFuture(new Date(date))) {
         const duration = workDay.schedule.appointment_duration;
-        // const { appointments } = workDay.schedule;
         let taken = [];
         appointments.forEach((appointment) => {
           if (appointment.is_canceled) return;
@@ -178,7 +210,33 @@ function PatientsCalendar() {
       })
     ).then(({ error }) => {
       if (error) {
-        toast.error(error.message);
+        // toast.error(error.message);
+      }
+      setLoading(false);
+    });
+
+    dispatch(
+      getDoctorVacations({
+        id: doctorId,
+        month: getMonth(viewDate) + 1,
+        year: getYear(viewDate)
+      })
+    ).then(({ error }) => {
+      if (error) {
+        // toast.error(error.message);
+      }
+      setLoading(false);
+    });
+
+    dispatch(
+      getDoctorDayoffs({
+        id: doctorId,
+        month: getMonth(viewDate) + 1,
+        year: getYear(viewDate)
+      })
+    ).then(({ error }) => {
+      if (error) {
+        // toast.error(error.message);
       }
       setLoading(false);
     });
@@ -243,7 +301,10 @@ function PatientsCalendar() {
                 selectedDate,
                 loading,
                 viewDate,
-                slots
+                slots,
+                vacationSlots,
+                dayoffSlots,
+                workDays
               }}
             />
           </Box>
@@ -294,6 +355,15 @@ const CalendarRightSideBar = ({ loading, slots, viewDate }) => {
     return new Promise((res, rej) => {
       dispatch(
         getDoctorWorkDays({
+          id: doctor.doctor_id,
+          month: getMonth(viewDate) + 1,
+          year: getYear(viewDate)
+        })
+      ).then(() => {
+        res();
+      });
+      dispatch(
+        getDoctorVacations({
           id: doctor.doctor_id,
           month: getMonth(viewDate) + 1,
           year: getYear(viewDate)

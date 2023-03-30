@@ -14,7 +14,6 @@ export const createSchedule = createAsyncThunk(
   async (data) => {
     try {
       const response = await axios.post(`/schedule`, data);
-
       return response;
     } catch (error) {
       throw Error(error.response.data.message);

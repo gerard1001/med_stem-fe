@@ -43,6 +43,7 @@ import {
   setSelectedPatientDataRedux,
   setSelectedWorkDay
 } from '../redux/reducers/user.reducer';
+import { getDoctorVacations } from '../redux/reducers/vacation.reducer';
 import {
   getDoctorWorkDays,
   selectWorkDaysDoctors
@@ -248,7 +249,19 @@ function DoctorCalendar() {
       })
     ).then(({ error }) => {
       if (error) {
-        toast.error(error.message);
+        // toast.error(error.message);
+      }
+      setLoading(false);
+    });
+    dispatch(
+      getDoctorVacations({
+        id: doctorId,
+        month: getMonth(viewDate) + 1,
+        year: getYear(viewDate)
+      })
+    ).then(({ error }) => {
+      if (error) {
+        // toast.error(error.message);
       }
       setLoading(false);
     });
@@ -397,9 +410,10 @@ const CalendarRightSideBar = ({
               key={row.period}
               onClick={() => {
                 !loading && setSelectedTime(row);
-                nav(
-                  `/dashboard/doctor/appointments/${row.name[row.period].id}`
-                );
+                row.name[row.period].name !== 'Free' &&
+                  nav(
+                    `/dashboard/doctor/appointments/${row.name[row.period].id}`
+                  );
               }}
               className={`p-3 text-[#333]${
                 row.name[row.period].name !== 'Free' && 'font-bold'

@@ -118,7 +118,11 @@ const ExpectedAppointment = () => {
         <TableContainer
           component={Paper}
           elevation={0}
-          sx={{ backgroundColor: '#F5F5F5' }}
+          sx={{
+            backgroundColor: '#FF2',
+            maxHeight: '400px',
+            overflow: 'auto'
+          }}
         >
           <Table
             sx={{

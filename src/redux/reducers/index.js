@@ -11,6 +11,8 @@ import appointmentReducer from './appointment.reducer';
 import workDaysReducer from './workDays.reducer';
 import patientAppointmentReducer from './patient.appointment.reducer';
 import recommendationReducer from './recommendation.reducer';
+import vacationReducer from './vacation.reducer';
+import dayoffReducer from './dayoff.reducer';
 
 const allReducers = combineReducers({
   info: infoReducer,
@@ -24,7 +26,9 @@ const allReducers = combineReducers({
   appointment: appointmentReducer,
   workDays: workDaysReducer,
   patient_appointment: patientAppointmentReducer,
-  recommendation: recommendationReducer
+  recommendation: recommendationReducer,
+  vacation: vacationReducer,
+  dayoff: dayoffReducer
 });
 
 export default allReducers;

@@ -134,7 +134,10 @@ const AddNewAppointmentData = ({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box className="absolute translate-x-[-50%] translate-y-[-50%] top-[50%] left-[50%] w-[80%] max-w-[720px] border-none p-8 bg-white">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="absolute translate-x-[-50%] translate-y-[-50%] top-[50%] left-[50%] w-[80%] max-w-[720px] border-none p-8 bg-white"
+        >
           <Box className="flex flex-col items-center gap-8">
             <Box className="flex w-[100%] gap-2 p-4 px-8 items-center justify-between border border-[#797979] bg-white rounded-[8px] leading-3">
               <Typography variant="subtitle1" className="leading-5 text-[15px]">
@@ -158,9 +161,7 @@ const AddNewAppointmentData = ({
                   >
                     Cancel
                   </Button>
-                  <Button disabled={loading} onClick={handleSubmit(onSubmit)}>
-                    Add
-                  </Button>
+                  <Button type="submit">Add</Button>
                 </Box>
               </Box>
               <Controller
@@ -172,6 +173,7 @@ const AddNewAppointmentData = ({
                     {...field}
                     fullWidth
                     multiline
+                    required
                     minRows={3}
                     maxRows={5}
                     className="w-full"
@@ -180,7 +182,7 @@ const AddNewAppointmentData = ({
               />
             </Box>
           </Box>
-        </Box>
+        </form>
       </Modal>
       <Modal
         open={openDiagnosisModal}
@@ -188,7 +190,10 @@ const AddNewAppointmentData = ({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box className="absolute translate-x-[-50%] translate-y-[-50%] top-[50%] left-[50%] w-[80%] max-w-[720px] border-none p-8 bg-white">
+        <form
+          onSubmit={handleSubmit(onSubmitDiagnosis)}
+          className="absolute translate-x-[-50%] translate-y-[-50%] top-[50%] left-[50%] w-[80%] max-w-[720px] border-none p-8 bg-white"
+        >
           <Box className="flex flex-col items-center gap-8">
             <Box className="flex w-[100%] gap-2 p-4 px-8 items-center justify-between border border-[#797979] bg-white rounded-[8px] leading-3">
               <Typography variant="subtitle1" className="leading-5 text-[15px]">
@@ -212,12 +217,7 @@ const AddNewAppointmentData = ({
                   >
                     Cancel
                   </Button>
-                  <Button
-                    disabled={loading}
-                    onClick={handleSubmit(onSubmitDiagnosis)}
-                  >
-                    Add
-                  </Button>
+                  <Button type="submit">Add</Button>
                 </Box>
               </Box>
               <Controller
@@ -237,7 +237,7 @@ const AddNewAppointmentData = ({
               />
             </Box>
           </Box>
-        </Box>
+        </form>
       </Modal>
     </>
   );

@@ -25,7 +25,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
 import Calendar from '../components/Calendar';
 import CalendarMonthYearSelector from '../components/Calendar/CalendarMonthYearSelector';
-import { format } from 'date-fns';
+import {
+  addMinutes,
+  format,
+  getHours,
+  getMonth,
+  getYear,
+  isFuture,
+  isPast,
+  isToday,
+  subMinutes
+} from 'date-fns';
+import { toast } from 'react-toastify';
 import { DatePicker } from '@mui/x-date-pickers';
 import SmallSearchBar from '../components/SmallSearchBar';
 import { getDoctorList, getOneDoctor } from '../redux/reducers/doctor.reducer';
@@ -35,23 +46,58 @@ import { FiChevronLeft } from 'react-icons/fi';
 import { GrClose } from 'react-icons/gr';
 import AdminCalendarRightSideBar from '../components/AdminCalendarRightSideBar';
 import AdminCalendarComponent from '../components/Calendar/AdminCalendarComponent';
+import {
+  getDoctorWorkDays,
+  selectWorkDaysDoctors
+} from '../redux/reducers/workDays.reducer';
+import { getDoctorVacations } from '../redux/reducers/vacation.reducer';
+import { getDoctorDayoffs } from '../redux/reducers/dayoff.reducer';
 
 function AdminCalendar() {
   const dispatch = useDispatch();
   const doctors = useSelector((state) => state.doctor);
   const calendarRef = useRef(null);
   const [viewDate, setViewDate] = useState(new Date());
-  const [workDays, setWorkDays] = useState([]);
   const [openRightSideBar, setOpenRightSideBar] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState();
-  const [searchQuery, setSearchQuery] = useState();
   const [loading, setLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [slots, setSlots] = useState(null);
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down('md'));
+  const searchQuery = useSelector((state) => state.user?.searchQueryRedux);
+  const workDays = useSelector(
+    (state) => selectWorkDaysDoctors(state, searchQuery)?.workDays
+  );
+  const dayoffs = useSelector(
+    (state) => state.dayoff.entities[searchQuery]?.dayoffs
+  );
+  const vacations = useSelector(
+    (state) => state.vacation.entities[searchQuery]?.vacations
+  );
 
-  const doctor = useSelector((state) => state.doctor);
-  const doctorData = doctor?.single_data?.data;
+  const vacationDates = vacations?.flatMap((vacation) => {
+    const start = Date.parse(vacation.from_date);
+    const end = Date.parse(vacation.to_date);
+    const day = 24 * 60 * 60 * 1000;
+
+    const dateArray = [];
+    for (let time = start; time <= end; time += day) {
+      dateArray.push(format(new Date(time), 'yyyy-MM-dd'));
+    }
+
+    return dateArray;
+  });
+
+  const vacationSlots = {};
+  const dayoffSlots = {};
+
+  vacationDates?.forEach((date) => {
+    vacationSlots[date] = ['vacation'];
+  });
+
+  dayoffs?.forEach((date) => {
+    dayoffSlots[format(new Date(date.dayoff_date), 'yyyy-MM-dd')] = ['dayoff'];
+  });
 
   const filteredData = doctors?.data?.data?.map((obj) => ({
     ...obj,
@@ -61,10 +107,168 @@ function AdminCalendar() {
   const toggleRightSideBar = () => {
     setOpenRightSideBar((open) => !open);
   };
+  const handleDayClick = (date) => {
+    setSelectedDate(date);
+  };
+
+  const selectedWorkDay = workDays?.filter((values) => {
+    return (
+      format(new Date(values.date), 'yyyy-MM-dd') ===
+      format(new Date(selectedDate), 'yyyy-MM-dd')
+    );
+  });
+
+  function addSubstractTime(hour, minute, minutesToAdd, operation) {
+    hour = parseInt(hour, 10);
+    minute = parseInt(minute, 10);
+    minutesToAdd = parseInt(minutesToAdd, 10);
+
+    const date = new Date();
+    date.setHours(hour);
+    date.setMinutes(minute);
+    const newDate =
+      operation === 's'
+        ? subMinutes(date, minutesToAdd)
+        : addMinutes(date, minutesToAdd);
+    return format(newDate, 'HH:mm');
+  }
+
+  useEffect(() => {
+    const workDaysSlots = {};
+    workDays?.forEach((workDay) => {
+      const slots = [];
+      const { from, to, date, appointments } = workDay;
+      if (isToday(new Date(date)) || isFuture(new Date(date))) {
+        const duration = workDay.schedule.appointment_duration;
+        // const { appointments } = workDay.schedule;
+        let taken = [];
+        appointments.forEach((appointment) => {
+          if (appointment.is_canceled) return;
+          taken.push(appointment.appointment_period);
+        });
+        taken = taken.sort((a, b) => (a < b ? -1 : 1));
+        const [fromHour, fromMinute] = from.trim().split(':');
+        const [toHour, toMinute] = to.trim().split(':');
+
+        const lastSlot = `${addSubstractTime(
+          toHour,
+          toMinute,
+          duration,
+          's'
+        )} - ${toHour}:${toMinute}`;
+        let currentSlot = `${fromHour}:${fromMinute} - ${addSubstractTime(
+          fromHour,
+          fromMinute,
+          duration
+        )}`;
+        if (isToday(new Date(date))) {
+          const Hour = getHours(new Date());
+          currentSlot = `${Hour + 1}:00 - ${addSubstractTime(
+            Hour + 1,
+            '00',
+            duration
+          )}`;
+        }
+
+        while (true) {
+          if (currentSlot >= lastSlot) {
+            break;
+          }
+          if (currentSlot === taken[0]) {
+            taken.shift();
+          } else {
+            slots.push(currentSlot);
+          }
+          if (currentSlot.split(' - ')[1] === '13:00') {
+            currentSlot = `14:00 - ${addSubstractTime(14, 0, duration)}`;
+          } else {
+            const slotLastPart = currentSlot.split('-')[1].trim();
+            const splitLastSlotPart = slotLastPart.split(':');
+            currentSlot = `${slotLastPart} - ${addSubstractTime(
+              splitLastSlotPart[0],
+              splitLastSlotPart[1],
+              duration
+            )}`;
+          }
+        }
+        workDaysSlots[format(new Date(date), 'yyyy-MM-dd')] = slots;
+      }
+    });
+    setSlots(workDaysSlots);
+  }, [workDays]);
+
+  const newSlots = {};
+  for (const date in slots) {
+    for (let i = 0; i < workDays?.length; i++) {
+      const formattedFrom = workDays[i].from.split(':');
+      const formattedTo = workDays[i].to.split(':');
+      if (
+        format(new Date(workDays[i].date), 'yyyy-MM-dd') ===
+        format(new Date(date), 'yyyy-MM-dd')
+      ) {
+        newSlots[date] = {
+          slots: slots[date],
+          day: {
+            _id: workDays[i]._id,
+            date: workDays[i].date,
+            from: `${formattedFrom[0]}:${formattedFrom[1]}`,
+            to: `${formattedTo[0]}:${formattedTo[1]}`,
+            schedule_id: workDays[i].schedule_id,
+            doctor_id: workDays[i].doctor_id
+          }
+        };
+        break;
+      }
+    }
+  }
 
   useEffect(() => {
     dispatch(getDoctorList());
   }, []);
+
+  useEffect(() => {
+    setSelectedDate(null);
+    setLoading(true);
+    dispatch(
+      getDoctorWorkDays({
+        id: searchQuery,
+        month: getMonth(viewDate) + 1,
+        year: getYear(viewDate)
+      })
+    ).then(({ error }) => {
+      if (error) {
+        // toast.error(error.message);
+      }
+      setLoading(false);
+    });
+
+    dispatch(
+      getDoctorVacations({
+        id: searchQuery,
+        month: getMonth(viewDate) + 1,
+        year: getYear(viewDate)
+      })
+    ).then(({ error }) => {
+      if (error) {
+        // toast.error(error.message);
+      }
+      setLoading(false);
+    });
+
+    dispatch(
+      getDoctorDayoffs({
+        id: searchQuery,
+        month: getMonth(viewDate) + 1,
+        year: getYear(viewDate)
+      })
+    ).then(({ error }) => {
+      if (error) {
+        // toast.error(error.message);
+      }
+      setLoading(false);
+    });
+  }, [searchQuery, viewDate]);
+
   return (
     <Box
       className="flex flex-row items-start"
@@ -151,8 +355,15 @@ function AdminCalendar() {
           <AdminCalendarComponent
             ref={calendarRef}
             {...{
+              handleDayClick,
+              selectedDate,
+              loading,
               viewDate,
-              slots
+              slots,
+              vacationSlots,
+              dayoffSlots,
+              workDays,
+              newSlots
             }}
           />
         </Box>
@@ -193,9 +404,8 @@ function AdminCalendar() {
             </IconButton>
           </Box>
           <AdminCalendarRightSideBar
-            setWorkDays={setWorkDays}
-            setSearchQuery={setSearchQuery}
             viewDate={viewDate}
+            toggleRightSideBar={toggleRightSideBar}
           />
         </Drawer>
       )}

@@ -11,7 +11,9 @@ const DoctorAppointmentsCalendar = forwardRef(
       selectedDate,
       loading = false,
       viewDate = new Date(),
-      slots
+      slots,
+      vacationSlots,
+      dayoffSlots
     },
     ref
   ) => {
@@ -26,6 +28,14 @@ const DoctorAppointmentsCalendar = forwardRef(
           const formattedDate = format(new Date(date), 'yyyy-MM-dd');
           const availableAppointments =
             slots && slots[formattedDate] && slots[formattedDate].length;
+          const availableVacations =
+            vacationSlots &&
+            vacationSlots[formattedDate] &&
+            vacationSlots[formattedDate].length;
+          const availableDayoffs =
+            dayoffSlots &&
+            dayoffSlots[formattedDate] &&
+            dayoffSlots[formattedDate].length;
           return (
             <Daycell
               {...{
@@ -34,7 +44,9 @@ const DoctorAppointmentsCalendar = forwardRef(
                 selectedDate,
                 handleDayClick,
                 loading,
-                availableAppointments
+                availableAppointments,
+                availableDayoffs,
+                availableVacations
               }}
             />
           );
@@ -51,11 +63,14 @@ const Daycell = memo(
     selectedDate,
     handleDayClick,
     loading,
-    availableAppointments
+    availableAppointments,
+    availableDayoffs,
+    availableVacations
   }) => {
     const isSelected = isEqual(new Date(selectedDate), new Date(date));
-
     const isGrayed = !availableAppointments || availableAppointments === 0;
+    const isVacant = availableVacations;
+    const isDayoff = availableDayoffs;
 
     return (
       <Box
@@ -76,8 +91,9 @@ const Daycell = memo(
         </Box>
         <Box
           className={`flex flex-col px-2 py-1 rounded-[4px] ${
-            isGrayed && 'opacity-0'
-          }`}
+            (isGrayed || isVacant) && 'opacity-0'
+          }  
+          `}
           bgcolor="gray.light"
         >
           <Typography>{availableAppointments || '0'}</Typography>

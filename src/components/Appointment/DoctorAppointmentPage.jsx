@@ -40,7 +40,8 @@ import {
 import {
   addRecommendation,
   getRecommendations,
-  removeRecommendation
+  removeRecommendation,
+  removeDrug
 } from '../../redux/reducers/recommendation.reducer';
 import HomeNavBar from '../HomeNavBar';
 import AppointmantPageNavigation from './AppointmantPageNavigation';
@@ -56,8 +57,13 @@ import {
   weekfrequency
 } from '../../utils/dummyData';
 import Loader from '../Loader/Loader';
-import { IoCloseSharp } from 'react-icons/io5';
+import {
+  IoCloseCircleOutline,
+  IoCloseOutline,
+  IoCloseSharp
+} from 'react-icons/io5';
 import BackButton from '../BackButton';
+import { FaApple } from 'react-icons/fa';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -77,6 +83,7 @@ const DoctorAppointmentPage = () => {
   const [inputEntered, setInputEntered] = useState(false);
   const [open, setOpen] = React.useState(false);
   const [hoveredId, setHoveredId] = useState();
+  const [showCloseButton, setShowCloseButton] = useState({});
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -167,6 +174,13 @@ const DoctorAppointmentPage = () => {
   const existingRecommendations = recommendations?.map((value) => {
     return value;
   });
+
+  console.log(appointment?.data?.drugs, drugs, 'QWQWQMW');
+  console.log(
+    appointment?.data?.recommendations,
+    recommendations?.length === 0,
+    'MWMWM'
+  );
 
   const [month, day, year] = [
     date.getMonth(),
@@ -269,6 +283,18 @@ const DoctorAppointmentPage = () => {
     reset();
   };
 
+  const onSubmitRemoveDrug = (idx) => {
+    const data = {
+      appointmentId: appointmentId,
+      drugIndex: idx
+    };
+
+    dispatch(removeDrug(data)).then(() => {
+      dispatch(getOneAppointment(appointmentId));
+    });
+    reset();
+  };
+
   return (
     <Box className="bg-[#F5F5F5] min-h-[100vh]">
       <Box
@@ -294,9 +320,11 @@ const DoctorAppointmentPage = () => {
             ID: {appointment?.data?.appointment_number}
           </Typography>
         </Box>
-        {!isStarted &&
-          !appointment?.data?.complaints &&
-          !appointment?.data?.diagnosis && (
+        {!defaultDiagnosis &&
+          !defaultComplaints &&
+          (!appointment?.data?.drugs || drugs?.length === 0) &&
+          (!appointment?.data?.recommendations ||
+            recommendations?.length === 0) && (
             <Button
               className="border border-primary"
               sx={{
@@ -318,16 +346,23 @@ const DoctorAppointmentPage = () => {
               Start Appointment
             </Button>
           )}
-        {isStarted && (!defaultDiagnosis || !defaultComplaints) && (
-          <AddNewAppointmentData
-            handleOpenDrugModal={handleOpenDrugModal}
-            handleOpenRecommendationModal={handleOpenRecommendationModal}
-          />
-        )}
+        {isStarted &&
+          (!defaultDiagnosis ||
+            !defaultComplaints ||
+            !appointment?.data?.drugs ||
+            // !Array.isArray(appointment?.data?.drugs) ||
+            !appointment?.data?.drugs ||
+            // Array.isArray(appointment?.data?.recommendations) ||
+            !appointment?.data?.recommendations) && (
+            <AddNewAppointmentData
+              handleOpenDrugModal={handleOpenDrugModal}
+              handleOpenRecommendationModal={handleOpenRecommendationModal}
+            />
+          )}
         {(appointment?.data?.complaints ||
           appointment?.data?.diagnosis ||
-          (Array.isArray(appointment?.data?.drugs) &&
-            !appointment?.data?.drugs)) && (
+          (!Array.isArray(appointment?.data?.drugs) &&
+            appointment?.data?.drugs)) && (
           <Box className="w-[100%] sm:p-0 flex flex-col gap-4 items-start">
             <Box className="flex w-full gap-2 items-start flex-col">
               <Typography variant="subtitle1" fontWeight={600}>
@@ -480,6 +515,10 @@ const DoctorAppointmentPage = () => {
                             >
                               Explanation
                             </TableCell>
+                            <TableCell
+                              align="left"
+                              sx={{ fontSize: '14px', width: 50 }}
+                            ></TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
@@ -487,27 +526,48 @@ const DoctorAppointmentPage = () => {
                             <TableRow
                               key={idx + 1}
                               sx={{
+                                position: 'relative',
                                 '&:last-child td, &:last-child th': {
                                   border: 0
                                 }
+                              }}
+                              onMouseEnter={() => {
+                                setShowCloseButton((position) => ({
+                                  [idx]: !position[idx]
+                                }));
+                              }}
+                              onMouseLeave={() => {
+                                setShowCloseButton((position) => ({
+                                  [idx]: false
+                                }));
                               }}
                             >
                               <TableCell component="th" scope="row">
                                 {row.name}
                               </TableCell>
-                              <TableCell align="left" sx={{ fontSize: '14px' }}>
+                              <TableCell
+                                align="left"
+                                sx={{ fontSize: '14px', height: '73.2px' }}
+                              >
                                 {row.dosage}
                               </TableCell>
-                              <TableCell align="left" sx={{ fontSize: '14px' }}>
+                              <TableCell
+                                align="left"
+                                sx={{ fontSize: '14px', height: '73.2px' }}
+                              >
                                 {row.frequency_per_day}
                               </TableCell>
-                              <TableCell align="left" sx={{ fontSize: '14px' }}>
+                              <TableCell
+                                align="left"
+                                sx={{ fontSize: '14px', height: '73.2px' }}
+                              >
                                 {row.duration}
                               </TableCell>
                               <TableCell
                                 align="left"
                                 sx={{
-                                  fontSize: '14px'
+                                  fontSize: '14px',
+                                  height: '73.2px'
                                 }}
                               >
                                 {row.start_date}
@@ -516,6 +576,7 @@ const DoctorAppointmentPage = () => {
                                 align="left"
                                 sx={{
                                   fontSize: '14px'
+                                  // height: '73.2px'
                                 }}
                                 className="truncate max-w-[100px] cursor-pointer"
                                 onMouseEnter={() => {
@@ -528,6 +589,18 @@ const DoctorAppointmentPage = () => {
                                 }}
                               >
                                 {row.explanation}
+                              </TableCell>
+
+                              <TableCell className="w-[50px]">
+                                {showCloseButton[idx] && (
+                                  <IconButton
+                                    onClick={() => {
+                                      onSubmitRemoveDrug(idx);
+                                    }}
+                                  >
+                                    <IoCloseOutline className="cursor-pointer" />
+                                  </IconButton>
+                                )}
                               </TableCell>
                             </TableRow>
                           ))}
@@ -565,7 +638,6 @@ const DoctorAppointmentPage = () => {
                       <IconButton
                         className="text-[#686868] ml-0 absolute right-[6px] top-[8px] w-fit h-fit p-[1px] bg-slate-300 hover:bg-slate-400"
                         onClick={() => {
-                          // setRecommendationIndex(idx);
                           onSubmitRemoveRecommendation(idx);
                         }}
                       >
@@ -1040,10 +1112,6 @@ const DoctorAppointmentPage = () => {
                           variant="filled"
                           margin="normal"
                           size="small"
-                          // error={!!errors.end_date}
-                          // helperText={
-                          //   errors.end_date && errors.end_date.message
-                          // }
                           required
                           className=""
                           sx={{

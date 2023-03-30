@@ -40,6 +40,17 @@ export const removeRecommendation = createAsyncThunk(
   }
 );
 
+export const removeDrug = createAsyncThunk('drug/remove', async (data) => {
+  try {
+    const response = await axios
+      .patch(`/appointments/${data.appointmentId}/drug/${data.drugIndex}`)
+      .then((res) => res.data);
+  } catch (error) {
+    toast.error(error.response.data.message);
+    throw new Error(error.response.data.message);
+  }
+});
+
 const recommendationSlice = createSlice({
   name: 'recommendation',
   initialState,
@@ -80,6 +91,19 @@ const recommendationSlice = createSlice({
       state.error = '';
     });
     builder.addCase(removeRecommendation.rejected, (state, action) => {
+      state.loading = false;
+      state.data = [];
+      state.error = action.error.message;
+    });
+    builder.addCase(removeDrug.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(removeDrug.fulfilled, (state, action) => {
+      state.loading = false;
+      state.data = action.payload;
+      state.error = '';
+    });
+    builder.addCase(removeDrug.rejected, (state, action) => {
       state.loading = false;
       state.data = [];
       state.error = action.error.message;
