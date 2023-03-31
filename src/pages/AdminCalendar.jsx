@@ -88,6 +88,62 @@ function AdminCalendar() {
     return dateArray;
   });
 
+  const array = [
+    {
+      id: 1,
+      startDate: '2023-03-05',
+      endDate: '2023-03-21'
+    },
+    {
+      id: 2,
+      startDate: '2023-03-23',
+      endDate: '2023-04-01'
+    },
+    {
+      id: 3,
+      startDate: '2023-04-02',
+      endDate: '2023-04-12'
+    },
+    {
+      id: 4,
+      startDate: '2023-04-15',
+      endDate: '2023-04-22'
+    },
+    {
+      id: 5,
+      startDate: '2023-04-25',
+      endDate: '2023-05-17'
+    },
+    {
+      id: 6,
+      startDate: '2023-05-29',
+      endDate: '2023-07-01'
+    },
+    {
+      id: 7,
+      startDate: '2023-07-05',
+      endDate: '2023-07-21'
+    }
+  ];
+
+  const myFx = (array) => {
+    const arr = [];
+
+    for (let i = 0; i < array; i++) {
+      const startIdx = getMonth(new Date(array[i].startDate));
+      const endIdx = getMonth(new Date(array[i].endDate));
+      if (startIdx <= getMonth(viewDate) && endIdx >= getMonth(viewDate)) {
+        arr.push(array[i]);
+      }
+    }
+    return arr;
+  };
+
+  const myTuts = myFx(array);
+
+  console.log(myTuts, '*****');
+  console.log({ array }, getMonth(viewDate), '*****');
+
   const vacationSlots = {};
   const dayoffSlots = {};
 

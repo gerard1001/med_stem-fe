@@ -30,7 +30,8 @@ import {
   DialogContentText,
   DialogTitle,
   DialogActions,
-  Slide
+  Slide,
+  Stack
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -457,12 +458,17 @@ const DoctorAppointmentPage = () => {
                 <Typography variant="subtitle1" fontWeight={600}>
                   Drugs
                 </Typography>
-                <IconButton
-                  className="w-fit flex items-center gap-1 text-[14px]"
+                <Stack
+                  role="button"
+                  component={Button}
+                  variant="text"
+                  direction="row"
+                  className="gap-2 items-center cursor-pointer text-[14px] text-black -mr-4"
+                  flexWrap="nowrap"
                   onClick={handleOpenDrugModal}
                 >
                   <BsPlusCircleFill className="text-primary" /> Add medecine
-                </IconButton>
+                </Stack>
               </Box>
               <Box className="p-4 w-full border border-[#71A9F7] bg-white rounded-[8px] leading-3  min-h-[80px] max-h-[360px] overflow-auto">
                 {!Array.isArray(appointment?.data?.drugs) &&
@@ -617,13 +623,18 @@ const DoctorAppointmentPage = () => {
                   Recommendations
                 </Typography>
                 {!recommendations[0] && (
-                  <IconButton
-                    className="w-fit flex items-center gap-1 text-[14px]"
+                  <Stack
+                    role="button"
+                    component={Button}
+                    variant="text"
+                    direction="row"
+                    className="gap-2 items-center cursor-pointer text-[14px] text-black -mr-4"
+                    flexWrap="nowrap"
                     onClick={handleOpenRecommendationModal}
                   >
                     <BsPlusCircleFill className="text-primary" /> Add
                     recommendation
-                  </IconButton>
+                  </Stack>
                 )}
               </Box>
 

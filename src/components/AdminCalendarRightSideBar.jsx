@@ -91,7 +91,13 @@ const AdminCalendarRightSideBar = ({ toggleRightSideBar }) => {
         appointment_duration
       })
     ).then(() => {
-      dispatch(getOneDoctor(searchQuery));
+      dispatch(
+        getDoctorWorkDays({
+          id: searchQuery
+          // month: getMonth(viewDate),
+          // year: getYear(viewDate)
+        })
+      ).then(()=>{ toggleRightSideBar()});
     });
 
     reset();
@@ -116,9 +122,6 @@ const AdminCalendarRightSideBar = ({ toggleRightSideBar }) => {
 
   const resetData = () => {
     reset();
-    setTimeout(() => {
-      toggleRightSideBar();
-    }, 750);
   };
   return (
     <Box className="w-[250px] z-50 bg-white fixed right-0 top-16 bottom-0 h-[calc(100vh-64px)] border-l border-t border-sky-400">
