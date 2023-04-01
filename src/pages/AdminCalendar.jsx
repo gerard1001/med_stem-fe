@@ -227,13 +227,16 @@ function AdminCalendar() {
   }, [workDays]);
 
   const newSlots = {};
+
+  
   for (const date in slots) {
     for (let i = 0; i < workDays?.length; i++) {
       const formattedFrom = workDays[i].from.split(':');
       const formattedTo = workDays[i].to.split(':');
+      console.log(workDays[i].date, format(new Date(workDays[i].date), 'yyyy-MM-dd'), date, "***");
       if (
         format(new Date(workDays[i].date), 'yyyy-MM-dd') ===
-        format(new Date(date), 'yyyy-MM-dd')
+        date
       ) {
         newSlots[date] = {
           slots: slots[date],
