@@ -43,7 +43,7 @@ const schema = yup.object().shape({
   dayName: yup.array().min(1, 'On minimun day to select').required()
 });
 
-const AdminCalendarRightSideBar = ({ toggleRightSideBar }) => {
+const AdminCalendarRightSideBar = ({ toggleRightSideBar ,handleFromCreateSChedule}) => {
   const dispatch = useDispatch();
   const [dayName, setDayName] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
@@ -76,15 +76,6 @@ const AdminCalendarRightSideBar = ({ toggleRightSideBar }) => {
     to,
     appointment_duration
   }) => {
-    console.log({
-      doctor_id: searchQuery,
-      start_date: format(new Date(start_date), 'MM-dd-yyyy'),
-      end_date: format(new Date(end_date), 'MM-dd-yyyy'),
-      days: dayName?.join(', '),
-      from,
-      to,
-      appointment_duration
-    }, '***');
     setLoading(true);
     dispatch(
       createSchedule({
@@ -448,7 +439,9 @@ const AdminCalendarRightSideBar = ({ toggleRightSideBar }) => {
           className="w-[90%] flex items-center justify-evenly"
         >
           <Button
-            onClick={resetData}
+            onClick={()=>{ 
+              handleFromCreateSChedule()
+              resetData()}}
             sx={{
               width: { md: '100px', xs: '80px' },
               color: '#1A4CFF',
