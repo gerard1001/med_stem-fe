@@ -40,7 +40,10 @@ import { toast } from 'react-toastify';
 import { DatePicker } from '@mui/x-date-pickers';
 import SmallSearchBar from '../components/SmallSearchBar';
 import { getDoctorList, getOneDoctor } from '../redux/reducers/doctor.reducer';
-import { createSchedule } from '../redux/reducers/schedule.reducer';
+import {
+  createSchedule,
+  getScheduleByDoctorId
+} from '../redux/reducers/schedule.reducer';
 import { days } from '../utils/dummyData';
 import { FiChevronLeft } from 'react-icons/fi';
 import { GrClose } from 'react-icons/gr';
@@ -52,6 +55,30 @@ import {
 } from '../redux/reducers/workDays.reducer';
 import { getDoctorVacations } from '../redux/reducers/vacation.reducer';
 import { getDoctorDayoffs } from '../redux/reducers/dayoff.reducer';
+import AdminScheduleActionRightSideBar from '../components/AdminScheduleActionRightSideBar';
+
+const validateArray = (array) => {
+  if (!Array.isArray(array)) {
+    return false;
+  }
+  if (array.length === 0) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
+const filterByMonthAndYear = (array, month, year) => {
+  return array?.filter((item) => {
+    const startDate = new Date(item.start_date);
+    const endDate = new Date(item.end_date);
+    return (
+      (startDate.getFullYear() === year &&
+        startDate.getMonth() === month - 1) ||
+      (endDate.getFullYear() === year && endDate.getMonth() === month - 1)
+    );
+  });
+};
 
 function AdminCalendar() {
   const dispatch = useDispatch();
@@ -74,6 +101,9 @@ function AdminCalendar() {
   const vacations = useSelector(
     (state) => state.vacation.entities[searchQuery]?.vacations
   );
+  const doctorSchedule = useSelector(
+    (state) => state.schedule?.data?.data?.data
+  );
 
   const vacationDates = vacations?.flatMap((vacation) => {
     const start = Date.parse(vacation.from_date);
@@ -87,6 +117,12 @@ function AdminCalendar() {
 
     return dateArray;
   });
+
+  const availableSchedules = filterByMonthAndYear(
+    doctorSchedule,
+    getMonth(viewDate) + 1,
+    getYear(viewDate)
+  );
 
   const vacationSlots = {};
   const dayoffSlots = {};
@@ -110,13 +146,6 @@ function AdminCalendar() {
   const handleDayClick = (date) => {
     setSelectedDate(date);
   };
-
-  const selectedWorkDay = workDays?.filter((values) => {
-    return (
-      format(new Date(values.date), 'yyyy-MM-dd') ===
-      format(new Date(selectedDate), 'yyyy-MM-dd')
-    );
-  });
 
   function addSubstractTime(hour, minute, minutesToAdd, operation) {
     hour = parseInt(hour, 10);
@@ -267,6 +296,8 @@ function AdminCalendar() {
       }
       setLoading(false);
     });
+
+    dispatch(getScheduleByDoctorId(searchQuery));
   }, [searchQuery, viewDate]);
 
   return (
@@ -403,10 +434,18 @@ function AdminCalendar() {
               <GrClose />
             </IconButton>
           </Box>
-          <AdminCalendarRightSideBar
-            viewDate={viewDate}
-            toggleRightSideBar={toggleRightSideBar}
-          />
+          {!validateArray(availableSchedules) ? (
+            <AdminCalendarRightSideBar
+              viewDate={viewDate}
+              toggleRightSideBar={toggleRightSideBar}
+            />
+          ) : (
+            <AdminScheduleActionRightSideBar
+              availableSchedules={availableSchedules}
+              toggleRightSideBar={toggleRightSideBar}
+              searchQuery={searchQuery}
+            />
+          )}
         </Drawer>
       )}
     </Box>

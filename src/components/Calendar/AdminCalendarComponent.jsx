@@ -68,7 +68,6 @@ const AdminCalendarComponent = forwardRef(
       <Calendar
         ref={ref}
         dayCellContent={({ isOther, date }) => {
-          console.log({ slots });
           const formattedDate = format(new Date(date), 'yyyy-MM-dd');
           const availableAppointments =
             slots && slots[formattedDate] && slots[formattedDate].length;

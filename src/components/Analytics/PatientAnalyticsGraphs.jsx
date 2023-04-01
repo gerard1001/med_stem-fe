@@ -6,12 +6,14 @@ import genderAnalyticsHelper from './helpers/genderAnalyticsHelper';
 import ageAnalyticsHelper from './helpers/ageAnalyticsHelper';
 import patientPerDayAnalyticsHelper from './helpers/patientPerDayAnalyticsHelper';
 import patientVisitsAnalyticsHelpers from './helpers/patientVisitsAnalyticsHelpers';
+import patientAppointmentAnalyticsHelpers from './helpers/patientAppointmentsAnalyticsHelpers';
 
 const GraphBox = styled(({ name, children, className, ...props }) => (
   <Box
     className={clsx('w-full h-full', className)}
     sx={{
       borderRadius: '20px',
+      paddingBottom: '40px',
       border: '1px solid #71A9F7'
     }}
     {...props}
@@ -24,7 +26,7 @@ const GraphBox = styled(({ name, children, className, ...props }) => (
 ))(() => ({}));
 
 const PatientAnalyticsGraphs = memo(
-  ({ isAdmin, patients, departments, range }) => {
+  ({ isAdmin, patients, doctors, appointments, range }) => {
     // gender analytics data
     const genderPatientsData = useMemo(
       () => genderAnalyticsHelper(patients, 'patients'),
@@ -41,8 +43,14 @@ const PatientAnalyticsGraphs = memo(
     );
     const visitCountPatientsData = useMemo(
       () =>
-        patientVisitsAnalyticsHelpers(patients, departments, range, isAdmin),
-      [patients, range, departments]
+        patientAppointmentAnalyticsHelpers(
+          patients,
+          doctors,
+          appointments,
+          range,
+          isAdmin
+        ),
+      [patients, doctors, range, appointments]
     );
 
     return (
@@ -103,7 +111,7 @@ const PatientAnalyticsGraphs = memo(
             }}
           />
         </GraphBox>
-        <GraphBox name="Amount of visits per department">
+        <GraphBox name="Diagnosis per doctor">
           <Chart
             chartType="ColumnChart"
             data={visitCountPatientsData}

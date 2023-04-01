@@ -23,6 +23,18 @@ export const makeAppointment = createAsyncThunk(
   }
 );
 
+export const getAllAppointments = createAsyncThunk(
+  'appointments/get',
+  async (id) => {
+    try {
+      const response = await axiosInstance.get(`/appointments`);
+      return { id, appointments: response.data.data };
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
 export const getOneAppointment = createAsyncThunk(
   'appointments/getOne',
   async (appointmentId) => {
@@ -91,6 +103,7 @@ const appointmentSlice = createSlice({
   extraReducers: {
     [getDoctorAppointments.fulfilled]: appointmentAdapter.upsertOne,
     [getOneAppointment.fulfilled]: appointmentAdapter.upsertOne,
+    [getAllAppointments.fulfilled]: appointmentAdapter.upsertOne,
     [updateAppointment.fulfilled]: appointmentAdapter.upsertOne,
     [cancelAppointment.fulfilled]: appointmentAdapter.upsertOne
   }

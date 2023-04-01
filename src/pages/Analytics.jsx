@@ -27,6 +27,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import DoctorAnalyticsGraphs from '../components/Analytics/DoctorAnalyticsGraphs';
 import PatientAnalyticsGraphs from '../components/Analytics/PatientAnalyticsGraphs';
 import SelectDateRangeMenu from '../components/Analytics/SelectDateRangeMenu';
+import { getAllAppointments } from '../redux/reducers/appointment.reducer';
 import { getDepartmentList } from '../redux/reducers/department.reducer';
 
 import { getDoctorList } from '../redux/reducers/doctor.reducer';
@@ -84,7 +85,12 @@ function Analytics() {
   const patients = useSelector((state) => state.patient?.data?.data);
   const doctors = useSelector((state) => state.doctor?.data?.data);
   const departments = useSelector((state) => state.department?.data?.data);
+  const appointments = useSelector(
+    (state) => state.appointment?.entities?.undefined?.appointments
+  );
   const loginData = useSelector((state) => state.user?.loginData);
+
+  console.log({ appointments });
 
   const toggleToggler = () => {
     setSelectedToggler((value) => !value);
@@ -143,6 +149,7 @@ function Analytics() {
     dispatch(getDoctorList());
     dispatch(getPatientList());
     dispatch(getDepartmentList());
+    dispatch(getAllAppointments());
   }, []);
 
   const isAdmin = loginData?.Role?.role === 'admin';
@@ -248,7 +255,7 @@ function Analytics() {
         <Box
           sx={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
             gap: 3,
             maxWidth: '1900px',
             width: '100%',
@@ -262,13 +269,16 @@ function Analytics() {
             <PatientAnalyticsGraphs
               isAdmin={isAdmin}
               patients={patients}
-              departments={departments}
+              doctors={doctors}
+              // departments={departments}
+              appointments={appointments}
               range={selectedPeriodValue}
             />
           ) : (
             <DoctorAnalyticsGraphs
               doctors={doctors}
               departments={departments}
+              appointments={appointments}
               range={selectedPeriodValue}
             />
           )}

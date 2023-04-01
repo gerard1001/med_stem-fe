@@ -74,16 +74,25 @@ const Daycell = memo(
 
     return (
       <Box
-        className="text-green flex flex-col p-1 cursor-pointer"
+        className={`text-green flex flex-col p-1 ${
+          isGrayed || isVacant || isDayoff ? 'cursor-default' : 'cursor-pointer'
+        }`}
         sx={(theme) => ({
           width: '100%',
           height: '100%',
           border: `1px solid transparent`,
-          ...(isGrayed && { backgroundColor: '#F7F8FA' }),
+          ...((isGrayed || isDayoff || isVacant) && {
+            backgroundColor: '#F7F8FA'
+          }),
           ...(isSelected && { borderColor: theme.palette.primary.main })
         })}
         onClick={() => {
-          !loading && !isGrayed && !isOther && handleDayClick(new Date(date));
+          !loading &&
+            !isGrayed &&
+            !isVacant &&
+            !isDayoff &&
+            !isOther &&
+            handleDayClick(new Date(date));
         }}
       >
         <Box className="grow px-[10px]">
@@ -91,7 +100,7 @@ const Daycell = memo(
         </Box>
         <Box
           className={`flex flex-col px-2 py-1 rounded-[4px] ${
-            (isGrayed || isVacant) && 'opacity-0'
+            (isGrayed || isVacant || isDayoff) && 'opacity-0'
           }  
           `}
           bgcolor="gray.light"

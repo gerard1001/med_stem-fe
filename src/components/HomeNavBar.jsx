@@ -137,6 +137,20 @@ const HomeNavBar = (props) => {
                   textAlign: 'center'
                 }}
                 onClick={() => {
+                  localStorage.removeItem('userLoginData');
+                  nav('/');
+                }}
+              >
+                <ListItemText primary="Logout" />
+              </ListItemButton>
+              <Divider />
+            </ListItem>
+            <ListItem>
+              <ListItemButton
+                sx={{
+                  textAlign: 'center'
+                }}
+                onClick={() => {
                   nav('/dashboard/appointments');
                 }}
               >
