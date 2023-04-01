@@ -90,6 +90,7 @@ function AdminCalendar() {
   const [loading, setLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [slots, setSlots] = useState(null);
+  const [toCreateNewSchedule, setToCreateNewSchedule] = useState(true)
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down('md'));
   const searchQuery = useSelector((state) => state.user?.searchQueryRedux);
   const workDays = useSelector(
@@ -301,7 +302,16 @@ function AdminCalendar() {
     });
 
     dispatch(getScheduleByDoctorId(searchQuery));
+
+    setToCreateNewSchedule(true)
   }, [searchQuery, viewDate]);
+
+  const handleToCreateSChedule=()=>{
+    setToCreateNewSchedule(false)
+  }
+  const handleFromCreateSChedule=()=>{
+    setToCreateNewSchedule(true)
+  }
 
   return (
     <Box
@@ -378,7 +388,7 @@ function AdminCalendar() {
             }}
             variant="text"
             direction="row"
-            className="gap-2 items-center cursor-pointer text-[20px] text-black -mr-4"
+            className="gap-2 items-center cursor-pointer text-[17px] text-black -mr-4"
             flexWrap="nowrap"
           >
             <BsPlusCircle /> Work Schedule
@@ -437,15 +447,17 @@ function AdminCalendar() {
               <GrClose />
             </IconButton>
           </Box>
-          {!validateArray(availableSchedules) ? (
+          {!validateArray(availableSchedules) || !toCreateNewSchedule ? (
             <AdminCalendarRightSideBar
               viewDate={viewDate}
               toggleRightSideBar={toggleRightSideBar}
+              handleFromCreateSChedule={handleFromCreateSChedule}
             />
           ) : (
             <AdminScheduleActionRightSideBar
               availableSchedules={availableSchedules}
               toggleRightSideBar={toggleRightSideBar}
+              handleToCreateSChedule={handleToCreateSChedule}
               searchQuery={searchQuery}
             />
           )}

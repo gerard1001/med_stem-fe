@@ -7,7 +7,8 @@ import {
   Button,
   Grid,
   TextField,
-  Radio
+  Radio,
+  IconButton
 } from '@mui/material';
 import { format, getDay, getMonth, getYear, isEqual } from 'date-fns';
 import React, { forwardRef, memo, useEffect, useState } from 'react';
@@ -131,6 +132,7 @@ const Daycell = memo(
     const searchQuery = useSelector((state) => state.user?.searchQueryRedux);
     const isSelected = isEqual(new Date(selectedDate), new Date(date));
     const isGrayed = !availableAppointments || availableAppointments === 0;
+    const isPassed =  new Date(date).getTime() >=  new Date().getTime();
     const isVacant = availableVacations;
     const isDayoff = availableDayoffs;
     const [openScheduleModal, setOpenScheduleModal] = useState(false);
@@ -139,6 +141,9 @@ const Daycell = memo(
     const [newDate, setNewDate] = useState('');
     const [newDay, setNewDay] = useState('');
     const [dataloading, setDataLoading] = useState(false);
+
+    console.log(new Date(date));
+    console.log(new Date());
 
     const handleOpenScheduleModal = () => setOpenScheduleModal(true);
     const handleCloseScheduleModal = () => setOpenScheduleModal(false);
@@ -247,13 +252,13 @@ const Daycell = memo(
         <Box className="grow px-[10px]">
           <Typography>{date.getDate()}</Typography>
         </Box>
-        {searchQuery && (
+        {searchQuery && isPassed && (
           <Box
             className={`flex flex-col px-2 py-1 my-1 rounded-[4px] ${
               isVacant
-                ? 'h-[calc(100%-24px)] bg-[#ffe2ff] cursor-default'
+                ? 'h-[calc(100%-24px)] bg-[#FBE5E5] cursor-default'
                 : isDayoff
-                ? 'h-[calc(100%-24px)] bg-[#a6f9ff] cursor-default'
+                ? 'h-[calc(100%-24px)] bg-[#DAF7A6] cursor-default'
                 : 'bg-[#d8edff] hover:bg-[#bbdfff] cursor-pointer'
             }`}
             bgcolor="#d8edff"
@@ -266,11 +271,11 @@ const Daycell = memo(
             ) : (
               <Box className="w-full h-full flex items-center justify-center">
                 {isVacant ? (
-                  <Typography variant="h6" textAlign="center">
+                  <Typography variant="subtitle1" textAlign="center" color="#333">
                     Vacation
                   </Typography>
                 ) : (
-                  <Typography variant="h6" textAlign="center">
+                  <Typography variant="subtitle1" textAlign="center" color="#333">
                     Dayoff
                   </Typography>
                 )}
@@ -282,7 +287,7 @@ const Daycell = memo(
         <Box
           className={`flex flex-col px-2 py-1 rounded-[4px] ${
             isGrayed && 'opacity-0'
-          } ${(isVacant || isDayoff) && 'hidden'}`}
+          } ${(isVacant || isDayoff ) && 'hidden'}`}
           bgcolor="gray.light"
         >
           <Typography fontSize="17px" fontWeight={600}>
@@ -320,18 +325,19 @@ const Daycell = memo(
                   >
                     {format(new Date(date), 'MM.dd.yyyy')}
                   </Typography>
-                  <Box className="">
+                  <IconButton className="">
                     <IoCloseCircleOutline
-                      className="text-[25px]"
+                      className="text-[25px] cursor-pointer"
                       onClick={handleCloseScheduleModal}
                     />
-                  </Box>
+                  </IconButton>
                 </Box>
                 <Divider className="w-full" />
                 <Box className="flex w-full gap-2 items-center justify-start flex-row px-6 py-1">
                   <Stack
                     role="button"
                     component={Button}
+                    disabled={dayData}
                     border="1px solid"
                     backgroundColor="#e9f5ff"
                     borderRadius="10px"
@@ -536,24 +542,40 @@ const Daycell = memo(
                                     }
                                   }}
                                   className=""
+                                  // sx={{
+                                  //   width: '150px',
+                                  //   '& .MuiInputBase-input': {
+                                  //     padding: '5px 10px 12px',
+                                  //     backgroundColor: '#E7E7E7',
+                                  //     borderRadius: '5px 0 0 5px'
+                                  //   },
+                                  //   '& .MuiFormLabel-root': {
+                                  //     top: '-7px'
+                                  //   },
+                                  //   '& .MuiInputLabel-root.MuiInputLabel-shrink':
+                                  //     {
+                                  //       top: '5px'
+                                  //     },
+                                  //   '& .MuiInputBase-root': {
+                                  //     paddingY: 0,
+                                  //     borderRadius: '5px',
+                                  //     background: '#E7E7E7'
+                                  //   }
+                                  // }}
                                   sx={{
-                                    width: '150px',
+                                    width:'150px',
                                     '& .MuiInputBase-input': {
-                                      padding: '5px 10px 12px',
+                                      padding: '7px 10px',
                                       backgroundColor: '#E7E7E7',
                                       borderRadius: '5px 0 0 5px'
                                     },
                                     '& .MuiFormLabel-root': {
-                                      top: '-7px'
+                                      top: '0px'
                                     },
-                                    '& .MuiInputLabel-root.MuiInputLabel-shrink':
-                                      {
-                                        top: '5px'
-                                      },
                                     '& .MuiInputBase-root': {
                                       paddingY: 0,
-                                      borderRadius: '5px',
-                                      background: '#E7E7E7'
+                                      backgroundColor: '#E7E7E7',
+                                      borderRadius: '5px'
                                     }
                                   }}
                                 />
@@ -584,24 +606,41 @@ const Daycell = memo(
                                     }
                                   }}
                                   className=""
+                                  // sx={{
+                                  //   width: '150px',
+                                  //   '& .MuiInputBase-input': {
+                                  //     padding: '5px 10px 12px',
+                                  //     backgroundColor: '#E7E7E7',
+                                  //     borderRadius: '5px 0 0 5px'
+                                  //   },
+                                  //   '& .MuiFormLabel-root': {
+                                  //     top: '-7px'
+                                  //   },
+                                  //   '& .MuiInputLabel-root.MuiInputLabel-shrink':
+                                  //     {
+                                  //       top: '0px'
+                                  //     },
+                                  //   '& .MuiInputBase-root': {
+                                  //     paddingY: 0,
+                                  //     borderRadius: '5px',
+                                  //     background: '#E7E7E7'
+                                  //   }
+                                  // }}
+
                                   sx={{
-                                    width: '150px',
+                                    width:'150px',
                                     '& .MuiInputBase-input': {
-                                      padding: '5px 10px 12px',
+                                      padding: '7px 10px',
                                       backgroundColor: '#E7E7E7',
                                       borderRadius: '5px 0 0 5px'
                                     },
                                     '& .MuiFormLabel-root': {
-                                      top: '-7px'
+                                      top: '-8px'
                                     },
-                                    '& .MuiInputLabel-root.MuiInputLabel-shrink':
-                                      {
-                                        top: '0px'
-                                      },
                                     '& .MuiInputBase-root': {
                                       paddingY: 0,
-                                      borderRadius: '5px',
-                                      background: '#E7E7E7'
+                                      backgroundColor: '#E7E7E7',
+                                      borderRadius: '5px'
                                     }
                                   }}
                                 />

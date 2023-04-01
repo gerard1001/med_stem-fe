@@ -29,7 +29,8 @@ import { format } from 'date-fns';
 const AdminScheduleActionRightSideBar = ({
   toggleRightSideBar,
   availableSchedules,
-  searchQuery
+  searchQuery,
+  handleToCreateSChedule
 }) => {
   const dispatch = useDispatch();
   const [openEditModal, setOpenEditModal] = useState(false);
@@ -166,7 +167,7 @@ const AdminScheduleActionRightSideBar = ({
         role="button"
         component={Button}
         onClick={() => {
-          toggleRightSideBar();
+          handleToCreateSChedule();
         }}
         variant="text"
         direction="row"
@@ -344,7 +345,10 @@ const AdminScheduleActionRightSideBar = ({
                   Delete
                 </LoadingButton>
                 <Button
-                  onClick={handleCloseDeleteModal}
+                  onClick={() => {
+                    handleToCreateSChedule();
+                    handleCloseDeleteModal();
+                  }}
                   sx={{
                     color: '#fff',
                     width: { md: '100px', xs: '80px' },
