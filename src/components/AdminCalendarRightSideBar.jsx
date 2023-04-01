@@ -76,12 +76,21 @@ const AdminCalendarRightSideBar = ({ toggleRightSideBar }) => {
     to,
     appointment_duration
   }) => {
+    console.log({
+      doctor_id: searchQuery,
+      start_date: format(new Date(start_date), 'MM-dd-yyyy'),
+      end_date: format(new Date(end_date), 'MM-dd-yyyy'),
+      days: dayName?.join(', '),
+      from,
+      to,
+      appointment_duration
+    }, '***');
     setLoading(true);
     dispatch(
       createSchedule({
         doctor_id: searchQuery,
-        start_date: format(new Date(start_date), 'MM-dd-yyyy'),
-        end_date: format(new Date(end_date), 'MM-dd-yyyy'),
+        start_date: new Date(start_date).toISOString(),
+        end_date: new Date(end_date).toISOString(),
         days: dayName?.join(', '),
         from,
         to,
