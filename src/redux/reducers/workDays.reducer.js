@@ -23,6 +23,24 @@ export const getDoctorWorkDays = createAsyncThunk(
   }
 );
 
+export const updateSheduleWorkDays = createAsyncThunk(
+  'workDays/schedule/get',
+  async (data) => {
+    try {
+      const response = await axiosInstance.patch(
+        `/work_days/schedule/${data.id}`,
+        data.body
+      );
+      return {
+        id,
+        workDays: response.data.data
+      };
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
 const workDaysAdapter = createEntityAdapter();
 
 export const { selectById: selectWorkDaysDoctors } =
@@ -33,7 +51,8 @@ const workDaysSlice = createSlice({
   initialState: workDaysAdapter.getInitialState(),
   reducers: {},
   extraReducers: {
-    [getDoctorWorkDays.fulfilled]: workDaysAdapter.upsertOne
+    [getDoctorWorkDays.fulfilled]: workDaysAdapter.upsertOne,
+    [updateSheduleWorkDays.fulfilled]: workDaysAdapter.upsertOne
   }
 });
 

@@ -22,13 +22,17 @@ import { Controller, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
 import { getOneDoctor } from '../redux/reducers/doctor.reducer';
-import { createSchedule } from '../redux/reducers/schedule.reducer';
+import {
+  createSchedule,
+  getScheduleByDoctorId
+} from '../redux/reducers/schedule.reducer';
 import {
   getDoctorWorkDays,
   selectWorkDaysDoctors
 } from '../redux/reducers/workDays.reducer';
 import { days } from '../utils/dummyData';
 import { getDoctorVacations } from '../redux/reducers/vacation.reducer';
+import LoadingButton from './LoadingButton';
 
 const schema = yup.object().shape({
   start_date: yup.date().typeError('Invalid date').required(),
@@ -42,6 +46,7 @@ const schema = yup.object().shape({
 const AdminCalendarRightSideBar = ({ toggleRightSideBar }) => {
   const dispatch = useDispatch();
   const [dayName, setDayName] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
   const searchQuery = useSelector((state) => state.user?.searchQueryRedux);
 
   const doctor = useSelector((state) => state.doctor);
@@ -71,15 +76,7 @@ const AdminCalendarRightSideBar = ({ toggleRightSideBar }) => {
     to,
     appointment_duration
   }) => {
-    console.log({
-      doctor_id: searchQuery,
-      start_date: format(new Date(start_date), 'MM-dd-yyyy'),
-      end_date: format(new Date(end_date), 'MM-dd-yyyy'),
-      days: dayName?.join(', '),
-      from,
-      to,
-      appointment_duration
-    });
+    setLoading(true);
     dispatch(
       createSchedule({
         doctor_id: searchQuery,
@@ -97,7 +94,12 @@ const AdminCalendarRightSideBar = ({ toggleRightSideBar }) => {
           // month: getMonth(viewDate),
           // year: getYear(viewDate)
         })
-      ).then(()=>{ toggleRightSideBar()});
+      ).then(() => {
+        dispatch(getScheduleByDoctorId(searchQuery)).then(() => {
+          setLoading(false);
+          toggleRightSideBar();
+        });
+      });
     });
 
     reset();
