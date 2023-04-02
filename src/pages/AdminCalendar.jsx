@@ -125,6 +125,11 @@ function AdminCalendar() {
     getYear(viewDate)
   );
 
+  const mySChedules= availableSchedules?.length
+  
+
+      console.log({mySChedules}, "::::::::");
+
   const vacationSlots = {};
   const dayoffSlots = {};
 
@@ -394,6 +399,10 @@ function AdminCalendar() {
             <BsPlusCircle /> Work Schedule
           </Stack>
         </Stack>
+        {mySChedules && mySChedules !== 0 &&  <Box className='px-4'>
+        Work Schedules: {mySChedules}
+        </Box>}
+       
 
         <Box className="sm:px-0 px-5 w-full overflow-auto">
           <AdminCalendarComponent

@@ -225,7 +225,7 @@ const DoctorAppointmentPage = () => {
           frequency_per_week: frequency_per_week[0],
           duration: duration[0],
           start_date: format(new Date(start_date), 'MM-dd-yyyy'),
-          end_date: format(new Date(start_date), 'MM-dd-yyyy'),
+          end_date: format(new Date(end_date), 'MM-dd-yyyy'),
           explanation
         }
       ]
@@ -1069,7 +1069,7 @@ const DoctorAppointmentPage = () => {
                     <Controller
                       control={control}
                       name="start_date"
-                      defaultValue={format(new Date(), 'dd.MM.yyyy')}
+                      defaultValue={new Date()}
                       render={({ field }) => (
                         <DatePicker
                           {...field}
@@ -1114,7 +1114,7 @@ const DoctorAppointmentPage = () => {
                     <Controller
                       control={control}
                       name="end_date"
-                      defaultValue={format(new Date(), 'dd.MM.yyyy')}
+                      defaultValue={new Date()}
                       render={({ field }) => (
                         <DatePicker
                           {...field}

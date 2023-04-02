@@ -24,8 +24,8 @@ const defaultValues = {
 
 const AddSpecialityForm = () => {
   const dispatch = useDispatch();
-  const [picture, setPicture] = useState(null);
-  const [picUrl, setPicUrl] = useState(null);
+  const [picture, setPicture] = useState('');
+  const [picUrl, setPicUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const {
     handleSubmit,
@@ -129,7 +129,7 @@ const AddSpecialityForm = () => {
               name="picture"
               id="picture"
               type="file"
-              accept="image/*"
+              // accept="image/*"
               className="w-full h-full absolute top-0 left-0 opacity-0 z-20 cursor-pointer"
             />
           </Box>
