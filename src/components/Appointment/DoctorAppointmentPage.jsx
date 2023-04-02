@@ -513,8 +513,10 @@ const DoctorAppointmentPage = () => {
                             </TableCell>
                             <TableCell
                               align="left"
-                              sx={{ fontSize: '14px', width: 50 }}
-                             />
+                              sx={{ fontSize: '14px', fontWeight: 550, width: 50 }}
+                              >
+                                Option
+                              </TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
@@ -589,7 +591,6 @@ const DoctorAppointmentPage = () => {
                               </TableCell>
 
                               <TableCell className="w-[50px]">
-                                {showCloseButton[idx] && (
                                   <IconButton
                                     onClick={() => {
                                       onSubmitRemoveDrug(idx);
@@ -597,7 +598,6 @@ const DoctorAppointmentPage = () => {
                                   >
                                     <IoCloseOutline className="cursor-pointer" />
                                   </IconButton>
-                                )}
                               </TableCell>
                             </TableRow>
                           ))}

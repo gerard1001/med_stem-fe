@@ -104,9 +104,6 @@ function AdminCalendar() {
   );
 
   const mySChedules= availableSchedules?.length
-  
-
-      console.log({mySChedules}, "::::::::");
 
   const vacationSlots = {};
   const dayoffSlots = {};
@@ -375,10 +372,21 @@ function AdminCalendar() {
             <BsPlusCircle /> Work Schedule
           </Stack>
         </Stack>
-        {mySChedules && mySChedules !== 0 &&  <Box className='px-4'>
-        Work Schedules: {mySChedules}
-        </Box>}
-       
+        <Stack
+            role="button"
+            component={Button}
+            onClick={() => {
+              setToCreateNewSchedule(true)
+              toggleRightSideBar();
+            }}
+            variant="text"
+            direction="row"
+            className="w-fit gap-2 items-center cursor-pointer text-[17px] text-black -mr-4"
+            flexWrap="nowrap"
+          >
+           Work Schedules: {mySChedules}
+          </Stack>
+
 
         <Box className="sm:px-0 px-5 w-full overflow-auto">
           <AdminCalendarComponent
