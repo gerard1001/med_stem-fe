@@ -1,30 +1,12 @@
-import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Box,
   Button,
-  Checkbox,
-  FormControl,
-  FormHelperText,
-  Grid,
-  InputLabel,
-  ListItemText,
-  MenuItem,
-  OutlinedInput,
-  Select,
-  Stack,
-  TextField,
-  Typography,
   Drawer,
-  useMediaQuery,
-  IconButton
+  IconButton,
+  Stack,
+  Typography,
+  useMediaQuery
 } from '@mui/material';
-import React, { useEffect, useRef, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { BsPlusCircle } from 'react-icons/bs';
-import { useDispatch, useSelector } from 'react-redux';
-import * as yup from 'yup';
-import Calendar from '../components/Calendar';
-import CalendarMonthYearSelector from '../components/Calendar/CalendarMonthYearSelector';
 import {
   addMinutes,
   format,
@@ -32,30 +14,27 @@ import {
   getMonth,
   getYear,
   isFuture,
-  isPast,
   isToday,
   subMinutes
 } from 'date-fns';
-import { toast } from 'react-toastify';
-import { DatePicker } from '@mui/x-date-pickers';
-import SmallSearchBar from '../components/SmallSearchBar';
-import { getDoctorList, getOneDoctor } from '../redux/reducers/doctor.reducer';
-import {
-  createSchedule,
-  getScheduleByDoctorId
-} from '../redux/reducers/schedule.reducer';
-import { days } from '../utils/dummyData';
+import React, { useEffect, useRef, useState } from 'react';
+import { BsPlusCircle } from 'react-icons/bs';
 import { FiChevronLeft } from 'react-icons/fi';
 import { GrClose } from 'react-icons/gr';
+import { useDispatch, useSelector } from 'react-redux';
 import AdminCalendarRightSideBar from '../components/AdminCalendarRightSideBar';
+import AdminScheduleActionRightSideBar from '../components/AdminScheduleActionRightSideBar';
 import AdminCalendarComponent from '../components/Calendar/AdminCalendarComponent';
+import CalendarMonthYearSelector from '../components/Calendar/CalendarMonthYearSelector';
+import SmallSearchBar from '../components/SmallSearchBar';
+import { getDoctorDayoffs } from '../redux/reducers/dayoff.reducer';
+import { getDoctorList } from '../redux/reducers/doctor.reducer';
+import { getScheduleByDoctorId } from '../redux/reducers/schedule.reducer';
+import { getDoctorVacations } from '../redux/reducers/vacation.reducer';
 import {
   getDoctorWorkDays,
   selectWorkDaysDoctors
 } from '../redux/reducers/workDays.reducer';
-import { getDoctorVacations } from '../redux/reducers/vacation.reducer';
-import { getDoctorDayoffs } from '../redux/reducers/dayoff.reducer';
-import AdminScheduleActionRightSideBar from '../components/AdminScheduleActionRightSideBar';
 
 const validateArray = (array) => {
   if (!Array.isArray(array)) {
@@ -63,9 +42,8 @@ const validateArray = (array) => {
   }
   if (array.length === 0) {
     return false;
-  } else {
-    return true;
   }
+  return true;
 };
 
 const filterByMonthAndYear = (array, month, year) => {
@@ -86,11 +64,11 @@ function AdminCalendar() {
   const calendarRef = useRef(null);
   const [viewDate, setViewDate] = useState(new Date());
   const [openRightSideBar, setOpenRightSideBar] = useState(false);
-  const [selectedDoctor, setSelectedDoctor] = useState();
+  const [selectedDoctor, setSelectedDoctor] = useState('');
   const [loading, setLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [slots, setSlots] = useState(null);
-  const [toCreateNewSchedule, setToCreateNewSchedule] = useState(true)
+  const [toCreateNewSchedule, setToCreateNewSchedule] = useState(true);
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down('md'));
   const searchQuery = useSelector((state) => state.user?.searchQueryRedux);
   const workDays = useSelector(
@@ -229,19 +207,16 @@ function AdminCalendar() {
 
   const newSlots = {};
 
-  
+  // eslint-disable-next-line no-restricted-syntax, guard-for-in
   for (const date in slots) {
     for (let i = 0; i < workDays?.length; i++) {
       const formattedFrom = workDays[i].from.split(':');
       const formattedTo = workDays[i].to.split(':');
-      console.log(workDays[i].date, format(new Date(workDays[i].date), 'yyyy-MM-dd'), date, "***");
-      if (
-        format(new Date(workDays[i].date), 'yyyy-MM-dd') ===
-        date
-      ) {
+      if (format(new Date(workDays[i].date), 'yyyy-MM-dd') === date) {
         newSlots[date] = {
           slots: slots[date],
           day: {
+            // eslint-disable-next-line no-underscore-dangle
             _id: workDays[i]._id,
             date: workDays[i].date,
             from: `${formattedFrom[0]}:${formattedFrom[1]}`,
@@ -260,6 +235,7 @@ function AdminCalendar() {
   }, []);
 
   useEffect(() => {
+    if (!searchQuery) return;
     setSelectedDate(null);
     setLoading(true);
     dispatch(
@@ -303,15 +279,15 @@ function AdminCalendar() {
 
     dispatch(getScheduleByDoctorId(searchQuery));
 
-    setToCreateNewSchedule(true)
+    setToCreateNewSchedule(true);
   }, [searchQuery, viewDate]);
 
-  const handleToCreateSChedule=()=>{
-    setToCreateNewSchedule(false)
-  }
-  const handleFromCreateSChedule=()=>{
-    setToCreateNewSchedule(true)
-  }
+  const handleToCreateSChedule = () => {
+    setToCreateNewSchedule(false);
+  };
+  const handleFromCreateSChedule = () => {
+    setToCreateNewSchedule(true);
+  };
 
   return (
     <Box

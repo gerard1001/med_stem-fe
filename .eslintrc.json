@@ -28,7 +28,9 @@
     "arrow-body-style": "off",
     "no-unused-expressions": "off",
     "consistent-return": "off",
-    "no-console": "warn"
+    "no-console": "warn",
+    "no-nested-ternary": "off",
+    "react/jsx-curly-brace-presence": "off"
     // "react/jsx-no-undef": "off",
     // "react/jsx-wrap-multilines": "off",
   }

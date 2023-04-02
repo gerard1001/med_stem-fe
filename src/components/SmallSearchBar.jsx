@@ -4,31 +4,33 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { setSearchQueryRedux } from '../redux/reducers/user.reducer';
 
-const StyledAutoComplete = styled(Autocomplete)(() => ({
-  '& .MuiInputBase-root': {
-    backgroundColor: '#E7E7E7',
-    overflow: 'hidden'
-  },
-  '& .MuiInputBase-root.Mui-focused': {
-    borderBottomLeftRadius: '0px',
-    borderBottomRightRadius: '0px'
-  },
-  '& .MuiOutlinedInput-notchedOutline': {
-    border: 'none'
-  },
-  '& .MuiPaper-root': {
-    backgroundColor: '#E7E7E7'
-  },
-  '& .MuiPaper-rounded': {
-    borderRadius: 0
-  }
-}));
+const StyledAutoComplete = styled((props) => <Autocomplete {...props} />)(
+  () => ({
+    '& .MuiInputBase-root': {
+      backgroundColor: '#E7E7E7',
+      overflow: 'hidden'
+    },
+    '& .MuiInputBase-root.Mui-focused': {
+      borderBottomLeftRadius: '0px',
+      borderBottomRightRadius: '0px'
+    },
+    '& .MuiOutlinedInput-notchedOutline': {
+      border: 'none'
+    },
+    '& .MuiPaper-root': {
+      backgroundColor: '#E7E7E7'
+    },
+    '& .MuiPaper-rounded': {
+      borderRadius: 0
+    }
+  })
+);
 
 const SmallSearchBar = ({
   className,
   inputValue,
   setInputValue,
-  filteredData
+  filteredData = []
 }) => {
   const dispatch = useDispatch();
   const newFilteredData = filteredData?.map((value) => ({
@@ -40,6 +42,7 @@ const SmallSearchBar = ({
       <StyledAutoComplete
         disablePortal
         id="combo-box-demo"
+        loading={!filteredData.length}
         options={filteredData}
         value={inputValue}
         inputValue={inputValue}
