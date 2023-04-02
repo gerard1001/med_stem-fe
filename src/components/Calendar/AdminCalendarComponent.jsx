@@ -13,7 +13,7 @@ import {
   Typography
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
-import { format, isEqual } from 'date-fns';
+import { format, isEqual, toDate } from 'date-fns';
 import React, { forwardRef, memo, useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { BsPlus } from 'react-icons/bs';
@@ -236,7 +236,7 @@ const Daycell = memo(
           width: '100%',
           height: '100%',
           border: `1px solid transparent`,
-          ...(isGrayed && { backgroundColor: '#F7F8FA' })
+          ...(isGrayed ? { backgroundColor: '#F7F8FA' }: { backgroundColor: '#fff' } )
         })}
         // onClick={() => {
         //   !loading && !isOther && handleDayClick(new Date(date));
@@ -254,7 +254,6 @@ const Daycell = memo(
                 ? 'h-[calc(100%-24px)] bg-[#DAF7A6] cursor-default'
                 : 'bg-[#d8edff] hover:bg-[#bbdfff] cursor-pointer'
             }`}
-            bgcolor="#d8edff"
             onClick={(e) => {
               // !loading && !isOther && handleDayClick(new Date(date));
               !isVacant && !isDayoff && handleOpenScheduleModal(e);
@@ -728,7 +727,7 @@ const Daycell = memo(
               <Box className="w-full p-6 py-0 pt-3 flex flex-row-reverse gap-3">
                 <Button
                   type="submit"
-                  disabled={!searchQuery}
+                  disabled={!searchQuery || ((onVacation && onSchedule) || !toDate)}
                   sx={{
                     color: '#fff',
                     width: { md: '100px', xs: '80px' },

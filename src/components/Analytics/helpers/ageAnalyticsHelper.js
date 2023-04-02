@@ -28,13 +28,13 @@ export default function ageAnalyticsHelper(entities, type = 'Patients') {
 
   const res = [
     ['Age', type, { role: 'style' }],
-    ['18-24', data[1] || '', '#86B0CC'],
-    ['25-30', data[2] || '', '#0C2C84'],
-    ['31-40', data[3] || '', '#225EA8'],
-    ['41-50', data[4] || '', '#41B6C4'],
-    ['51-60', data[5] || '', '#1D91C0'],
-    ['61-70', data[6] || '', '#A3CBE5'],
-    ['70+', data[7] || '', '#C1E7FF']
+    ['18-24', data[1] || 0, '#86B0CC'],
+    ['25-30', data[2] || 0, '#0C2C84'],
+    ['31-40', data[3] || 0, '#225EA8'],
+    ['41-50', data[4] || 0, '#41B6C4'],
+    ['51-60', data[5] || 0, '#1D91C0'],
+    ['61-70', data[6] || 0, '#A3CBE5'],
+    ['70+', data[7] || 0, '#C1E7FF']
   ];
 
   return res;

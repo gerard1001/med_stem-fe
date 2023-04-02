@@ -9,8 +9,8 @@ export default function genderAnalyticsHelper(entities, type = 'patients') {
     data[gender] = data[gender] ? data[gender] + 1 : 1;
   });
 
-  data.male = data.male || 1;
-  data.female = data.female || 1;
+  data.male = data.male || 0;
+  data.female = data.female || 0;
 
   const res = [
     ['Gender', `Number of ${type}`],
