@@ -1051,7 +1051,7 @@ const DoctorAppointmentPage = () => {
                     <Controller
                       control={control}
                       name="start_date"
-                      defaultValue={format(new Date(), 'dd.MM.yyyy')}
+                      defaultValue={new Date()}
                       render={({ field }) => (
                         <DatePicker
                           {...field}
@@ -1096,7 +1096,7 @@ const DoctorAppointmentPage = () => {
                     <Controller
                       control={control}
                       name="end_date"
-                      defaultValue={format(new Date(), 'dd.MM.yyyy')}
+                      defaultValue={new Date()}
                       render={({ field }) => (
                         <DatePicker
                           {...field}
