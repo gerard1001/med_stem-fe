@@ -280,8 +280,9 @@ const AccountInfo = () => {
               )}
               {!loadingUpload && (
                 <input
+                  value=""
                   onChange={(e) => {
-                    setPicture(e.target.files[0]);
+                    setPicture(e.target?.files && e.target.files[0]);
                   }}
                   id="picture"
                   type="file"

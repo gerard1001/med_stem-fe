@@ -4,13 +4,10 @@ import { Box, Button, Stack, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { FiUser } from 'react-icons/fi';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
-import {
-  getDepartmentList,
-  makeDepartment
-} from '../redux/reducers/department.reducer';
+import { makeDepartment } from '../redux/reducers/department.reducer';
 import Loader from './Loader/Loader';
 
 const schema = yup.object().shape({
@@ -31,7 +28,6 @@ const AddSpecialityForm = () => {
     handleSubmit,
     control,
     reset,
-    register,
     formState: { errors }
   } = useForm({
     mode: 'all',
@@ -64,6 +60,8 @@ const AddSpecialityForm = () => {
         setPicUrl(e.target.result);
       };
       reader.readAsDataURL(picture);
+    } else {
+      setPicUrl(null);
     }
   }, [picture]);
 
@@ -123,8 +121,9 @@ const AddSpecialityForm = () => {
               />
             )}
             <input
+              value=""
               onChange={(e) => {
-                setPicture(e.target.files[0]);
+                setPicture(e.target?.files && e.target?.files[0]);
               }}
               name="picture"
               id="picture"

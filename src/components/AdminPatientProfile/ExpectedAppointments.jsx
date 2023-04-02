@@ -1,29 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Typography } from '@mui/material';
-import { useSelector, useDispatch } from 'react-redux';
 import {
-  Button,
+  Box,
+  Modal,
   Paper,
-  TableRow,
-  TableHead,
-  TableContainer,
-  TableCell,
+  Stack,
   Table,
   TableBody,
-  Modal,
-  Stack
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography
 } from '@mui/material';
-import { getOnePatient } from '../../redux/reducers/patient.reducer';
-import { getPatientAppointments } from '../../redux/reducers/patient.appointment.reducer';
-import { cancelAppointment } from '../../redux/reducers/appointment.reducer';
-import EditAppointmentModal from '../Appointment/CancelAppointmentModal';
+import { format } from 'date-fns';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
-import PatientProfileNavigation from './PatientProfileNavigation';
+import { cancelAppointment } from '../../redux/reducers/appointment.reducer';
+import { getPatientAppointments } from '../../redux/reducers/patient.appointment.reducer';
 import { toAdminPatientExpectedAppointments } from '../../redux/reducers/step.reducer';
-import LoadingButton from '../LoadingButton';
 import CloseXButton from '../CloseXButton';
-import { format } from 'date-fns';
+import LoadingButton from '../LoadingButton';
+import PatientProfileNavigation from './PatientProfileNavigation';
 
 const ExpectedAppointments = () => {
   const dispatch = useDispatch();
@@ -40,10 +38,6 @@ const ExpectedAppointments = () => {
   const [loading, setLoading] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => !loading && setOpen(false);
-
-  const handleShow = () => {
-    console.log(appointDate, appointDoc, appointNum, appointSpec, appointTime);
-  };
 
   const isDoctor =
     JSON.parse(localStorage.getItem('userLoginData'))?.user?.Role.role ===
@@ -62,12 +56,11 @@ const ExpectedAppointments = () => {
           format(new Date(), 'MM-dd-yyyy') &&
         !values.is_canceled
       );
-    } else {
-      return (
-        format(new Date(values?.work_day?.date), 'MM-dd-yyyy') >
-          format(new Date(), 'MM-dd-yyyy') && !values.is_canceled
-      );
     }
+    return (
+      format(new Date(values?.work_day?.date), 'MM-dd-yyyy') >
+        format(new Date(), 'MM-dd-yyyy') && !values.is_canceled
+    );
   });
 
   React.useEffect(() => {
@@ -263,91 +256,9 @@ const ExpectedAppointments = () => {
                             >
                               Check
                             </Typography>
-                            <Typography
-                              style={{
-                                color: '#2E3033',
-                                textTransform: 'capitalize',
-                                cursor: 'pointer',
-                                fontSize: { md: '17px', xs: '14px' }
-                              }}
-                              onClick={() => {
-                                setAppointIdx(row.appointment_id);
-                                setDoctor(
-                                  `${row.doctor.first_name} ${row.doctor.last_name}`
-                                );
-                                setSpeciality(row.doctor.departments[0]);
-                                setAppointDate(
-                                  new Date(
-                                    row.work_day.date
-                                  ).toLocaleDateString()
-                                );
-                                setAppointNum(row.appointment_number);
-                                setAppointTime(row.appointment_period);
-                                setClickedIdx(idx);
-                                handleOpen();
-                                handleShow();
-                              }}
-                            >
-                              cancel
-                            </Typography>
                           </Box>
                         </TableCell>
                       </TableRow>
-                      {clickedIdx === idx && (
-                        <Modal
-                          open={open}
-                          onClose={handleClose}
-                          aria-labelledby="modal-modal-title"
-                          aria-describedby="modal-modal-description"
-                          className="flex flex-col items-center justify-center"
-                          sx={{
-                            '& .MuiFormControl-root': {}
-                          }}
-                        >
-                          <Box className="flex flex-col w-[500px] sm:w-[98%] justify-center items-center gap-4 bg-white border border-primary shadow-2 rounded-[20px] relative py-10 px-4 m-4 overflow-y-auto">
-                            <Typography className="w-full font-semibold text-lg text-center">
-                              Appointment Cancelation
-                            </Typography>
-                            <CloseXButton onClick={handleClose} />
-                            <Box>
-                              <Stack direction="row" gap={6} width="100%">
-                                <Stack>
-                                  {appointmentData.map(({ name, value }) => (
-                                    <Typography
-                                      key={name}
-                                      className="truncate font-semibold "
-                                    >
-                                      {name}
-                                    </Typography>
-                                  ))}
-                                </Stack>
-                                <Stack>
-                                  {appointmentData?.map(({ value }) => (
-                                    <Typography
-                                      component={Link}
-                                      key={value}
-                                      className="truncate"
-                                    >
-                                      {value}
-                                      {/* Edit */}
-                                    </Typography>
-                                  ))}
-                                </Stack>
-                              </Stack>
-                            </Box>
-
-                            <Box>
-                              <LoadingButton
-                                loading={loading}
-                                className="max-w-fit w-full"
-                                onClick={handleCancelAppointment}
-                              >
-                                Cancel appointment
-                              </LoadingButton>
-                            </Box>
-                          </Box>
-                        </Modal>
-                      )}
                     </>
                   ))
                 : null}

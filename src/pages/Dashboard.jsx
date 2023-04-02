@@ -71,7 +71,7 @@ const Dashboard = () => {
           toggleLeftSideBar={toggleLeftSideBar}
         />
       )}
-      <Box className="flex flex-row w-full grow overflow-y-auto bg-[#FAFAFA]">
+      <Box className="flex flex-row w-full grow overflow-y-auto bg-[#F5F5F5]">
         {!isClient && (
           <Drawer
             open={openLeftSideBar}

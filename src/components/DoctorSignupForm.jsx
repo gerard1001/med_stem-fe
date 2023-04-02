@@ -308,6 +308,7 @@ const DoctorSignupForm = () => {
               />
             )}
             <input
+              value=''
               onChange={(e) => {
                 setPicture(e.target.files[0]);
               }}

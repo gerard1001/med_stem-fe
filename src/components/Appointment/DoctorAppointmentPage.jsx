@@ -1,38 +1,40 @@
-import React, { useEffect, useState } from 'react';
 import {
   Box,
-  Typography,
-  styled,
-  Paper,
-  TableRow,
-  TableHead,
-  TableContainer,
-  TableCell,
-  Table,
-  TableBody,
   Button,
-  IconButton,
-  Modal,
-  TextField,
-  InputLabel,
-  FormControl,
-  Select,
-  OutlinedInput,
-  MenuItem,
-  ListItemText,
-  Checkbox,
-  List,
-  ListItem,
-  ListItemIcon,
-  Radio,
   Dialog,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  DialogActions,
+  FormControl,
+  IconButton,
+  InputLabel,
+  ListItemText,
+  MenuItem,
+  Modal,
+  OutlinedInput,
+  Paper,
+  Radio,
+  Select,
   Slide,
-  Stack
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+  Typography
 } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers';
+import { format } from 'date-fns';
+import React, { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { BsPlusCircleFill } from 'react-icons/bs';
+import {
+  IoCloseOutline,
+  IoCloseSharp
+} from 'react-icons/io5';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getOneAppointment,
@@ -41,32 +43,21 @@ import {
 import {
   addRecommendation,
   getRecommendations,
-  removeRecommendation,
-  removeDrug
+  removeDrug,
+  removeRecommendation
 } from '../../redux/reducers/recommendation.reducer';
-import HomeNavBar from '../HomeNavBar';
-import AppointmantPageNavigation from './AppointmantPageNavigation';
-import { BsPlusCircleFill } from 'react-icons/bs';
-import AddNewAppointmentData from './AddNewAppointmentData';
-import CloseXButton from '../CloseXButton';
-import { Controller, useForm } from 'react-hook-form';
-import { format } from 'date-fns';
-import { DatePicker } from '@mui/x-date-pickers';
 import {
   cureduration,
   dayfrequency,
   weekfrequency
 } from '../../utils/dummyData';
-import Loader from '../Loader/Loader';
-import {
-  IoCloseCircleOutline,
-  IoCloseOutline,
-  IoCloseSharp
-} from 'react-icons/io5';
 import BackButton from '../BackButton';
-import { FaApple } from 'react-icons/fa';
+import CloseXButton from '../CloseXButton';
+import Loader from '../Loader/Loader';
+import AddNewAppointmentData from './AddNewAppointmentData';
+import AppointmantPageNavigation from './AppointmantPageNavigation';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
+const Transition = React.forwardRef((props, ref) => {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
@@ -133,7 +124,7 @@ const DoctorAppointmentPage = () => {
     (state) => state.appointment.entities.undefined
   );
 
-  let urlId = window.location.href.substring(
+  const urlId = window.location.href.substring(
     window.location.href.lastIndexOf('/') + 1
   );
 
@@ -196,8 +187,8 @@ const DoctorAppointmentPage = () => {
   const onSubmitAppointmentData = async ({ complaints, diagnosis }) => {
     setLoading(true);
     const body = {
-      complaints: complaints,
-      diagnosis: diagnosis
+      complaints,
+      diagnosis
     };
     const data = { appointmentId, body };
     dispatch(updateAppointment(data)).then(() => {
@@ -225,7 +216,7 @@ const DoctorAppointmentPage = () => {
           frequency_per_week: frequency_per_week[0],
           duration: duration[0],
           start_date: format(new Date(start_date), 'MM-dd-yyyy'),
-          end_date: format(new Date(start_date), 'MM-dd-yyyy'),
+          end_date: format(new Date(end_date), 'MM-dd-yyyy'),
           explanation
         }
       ]
@@ -272,7 +263,7 @@ const DoctorAppointmentPage = () => {
 
   const onSubmitRemoveRecommendation = (idx) => {
     const data = {
-      appointmentId: appointmentId,
+      appointmentId,
       recommendationIndex: idx
     };
 
@@ -286,7 +277,7 @@ const DoctorAppointmentPage = () => {
 
   const onSubmitRemoveDrug = (idx) => {
     const data = {
-      appointmentId: appointmentId,
+      appointmentId,
       drugIndex: idx
     };
 
@@ -329,7 +320,6 @@ const DoctorAppointmentPage = () => {
             <Button
               className="border border-primary"
               sx={{
-                color: '#fff',
                 width: 'fit-content',
                 color: '#1A4CFF',
                 border: '1px solid #1A4CFF',
@@ -524,12 +514,13 @@ const DoctorAppointmentPage = () => {
                             <TableCell
                               align="left"
                               sx={{ fontSize: '14px', width: 50 }}
-                            ></TableCell>
+                             />
                           </TableRow>
                         </TableHead>
                         <TableBody>
                           {drugs?.map((row, idx) => (
                             <TableRow
+                              // eslint-disable-next-line react/no-array-index-key
                               key={idx + 1}
                               sx={{
                                 position: 'relative',
@@ -642,6 +633,7 @@ const DoctorAppointmentPage = () => {
                 {recommendations?.map((item, idx) => {
                   return (
                     <Box
+                      // eslint-disable-next-line react/no-array-index-key
                       key={idx + 1}
                       className="relative bg-[#ececec] rounded-[5px] px-3 py-[3px] pr-8 cursor-pointer"
                     >
@@ -677,7 +669,6 @@ const DoctorAppointmentPage = () => {
                 className=" bottom-2 right-2 mt-10"
                 size="small"
                 sx={{
-                  color: '#fff',
                   width: '80px',
                   color: '#1A4CFF',
                   border: '1px solid #1A4CFF',
@@ -833,9 +824,6 @@ const DoctorAppointmentPage = () => {
                             '& .MuiInputLabel-formControl': {
                               top: '-4px'
                             },
-                            '& .MuiInputLabel-formControl': {
-                              top: '-4px'
-                            },
                             '& .MuiInputLabel-root': {
                               top: '-4px'
                             },
@@ -871,9 +859,6 @@ const DoctorAppointmentPage = () => {
                               '& .MuiInputLabel-formControl': {
                                 top: '-4px'
                               },
-                              '& .MuiInputLabel-formControl': {
-                                top: '-4px'
-                              },
                               '& .MuiInputLabel-root': {
                                 top: '-4px'
                               },
@@ -885,6 +870,7 @@ const DoctorAppointmentPage = () => {
                             renderValue={(selected) => selected.join(', ')}
                           >
                             {weekfrequency.map((name, idx) => (
+                              // eslint-disable-next-line react/no-array-index-key
                               <MenuItem key={idx} value={name}>
                                 <ListItemText primary={name} />
                               </MenuItem>
@@ -919,9 +905,6 @@ const DoctorAppointmentPage = () => {
                               borderRadius: '5px'
                             },
                             '& .MuiFormLabel-root': {
-                              top: '-4px'
-                            },
-                            '& .MuiInputLabel-formControl': {
                               top: '-4px'
                             },
                             '& .MuiInputLabel-formControl': {
@@ -967,6 +950,7 @@ const DoctorAppointmentPage = () => {
                             renderValue={(selected) => selected.join(', ')}
                           >
                             {dayfrequency.map((name, idx) => (
+                              // eslint-disable-next-line react/no-array-index-key
                               <MenuItem key={idx} value={name}>
                                 <ListItemText primary={name} />
                               </MenuItem>
@@ -1000,9 +984,6 @@ const DoctorAppointmentPage = () => {
                               borderRadius: '5px'
                             },
                             '& .MuiFormLabel-root': {
-                              top: '-4px'
-                            },
-                            '& .MuiInputLabel-formControl': {
                               top: '-4px'
                             },
                             '& .MuiInputLabel-formControl': {
@@ -1048,6 +1029,7 @@ const DoctorAppointmentPage = () => {
                             renderValue={(selected) => selected.join(', ')}
                           >
                             {cureduration.map((name, idx) => (
+                              // eslint-disable-next-line react/no-array-index-key
                               <MenuItem key={idx} value={name}>
                                 <ListItemText primary={name} />
                               </MenuItem>
@@ -1209,7 +1191,6 @@ const DoctorAppointmentPage = () => {
                   <Button
                     onClick={handleCloseDrugModal}
                     sx={{
-                      color: '#fff',
                       width: { md: '100px', xs: '80px' },
                       color: '#1A4CFF',
                       border: '1px solid #1A4CFF',
@@ -1351,7 +1332,6 @@ const DoctorAppointmentPage = () => {
                         className="absolute bottom-2 right-2"
                         size="small"
                         sx={{
-                          color: '#fff',
                           width: '80px',
                           color: '#1A4CFF',
                           border: '1px solid #1A4CFF',
@@ -1397,7 +1377,6 @@ const DoctorAppointmentPage = () => {
                   <Button
                     onClick={handleCloseRecommendationModal}
                     sx={{
-                      color: '#fff',
                       width: { md: '100px', xs: '80px' },
                       color: '#1A4CFF',
                       border: '1px solid #1A4CFF',

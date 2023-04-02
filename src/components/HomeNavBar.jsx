@@ -122,13 +122,13 @@ const HomeNavBar = (props) => {
                 ml: '40%'
               }}
             >
-              <ListItemButton
+              {/* <ListItemButton
                 sx={{
                   textAlign: 'center'
                 }}
               >
                 <ListItemText primary={<FiIcons.FiSearch />} />
-              </ListItemButton>
+              </ListItemButton> */}
               <Divider />
             </ListItem>
             <ListItem>
@@ -302,7 +302,7 @@ const HomeNavBar = (props) => {
                     mx: 2
                   }}
                 >
-                  <Button
+                  {/* <Button
                     color="primary"
                     sx={{
                       color: '#1A4CFF',
@@ -311,7 +311,7 @@ const HomeNavBar = (props) => {
                     }}
                   >
                     <FiIcons.FiSearch />
-                  </Button>
+                  </Button> */}
                   <Button
                     color="primary"
                     sx={{
@@ -336,7 +336,7 @@ const HomeNavBar = (props) => {
                   }}
                   className="flex-row flex-nowrap md:gap-1 gap-5 items-center pl-2"
                 >
-                  <IconButton
+                  {/* <IconButton
                     color="primary"
                     sx={{
                       color: '#1A4CFF',
@@ -346,7 +346,7 @@ const HomeNavBar = (props) => {
                     }}
                   >
                     <FiIcons.FiSearch />
-                  </IconButton>
+                  </IconButton> */}
                   <Button
                     color="primary"
                     sx={{

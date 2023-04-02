@@ -45,6 +45,9 @@ const LandingPage = () => {
             </div>
             <div className="flex items-center  lg:flex-col lg:justify-center gap-3 w-[100%]">
               <button
+                onClick={() => {
+                  nav('/find_doctor');
+                }}
                 type="button"
                 className="text-white bg-[#214ADD] hover:bg-[#456dff] w-[50%] xl:w-[90%] rounded-2xl text-[18px] min-w-[178px] max-w-[280px]  py-3"
               >

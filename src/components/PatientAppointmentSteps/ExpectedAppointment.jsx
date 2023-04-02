@@ -1,28 +1,26 @@
-import React, { useMemo, useState } from 'react';
-import { Box, Typography } from '@mui/material';
-import PatientAppointmentNavigation from './PatientAppoinmentNavigation';
-import { useSelector, useDispatch } from 'react-redux';
 import {
-  Button,
+  Box,
+  Modal,
   Paper,
-  TableRow,
-  TableHead,
-  TableContainer,
-  TableCell,
+  Stack,
   Table,
   TableBody,
-  Modal,
-  Stack
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography
 } from '@mui/material';
-import { getOnePatient } from '../../redux/reducers/patient.reducer';
-import { getPatientAppointments } from '../../redux/reducers/patient.appointment.reducer';
-import { cancelAppointment } from '../../redux/reducers/appointment.reducer';
-import EditAppointmentModal from '../Appointment/CancelAppointmentModal';
+import React, { useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
-import LoadingButton from '../LoadingButton';
+import { cancelAppointment } from '../../redux/reducers/appointment.reducer';
+import { getPatientAppointments } from '../../redux/reducers/patient.appointment.reducer';
+import { getOnePatient } from '../../redux/reducers/patient.reducer';
 import CloseXButton from '../CloseXButton';
-import { toast } from 'react-toastify';
+import LoadingButton from '../LoadingButton';
+import PatientAppointmentNavigation from './PatientAppoinmentNavigation';
 
 export const filterData = (query, data) => {
   if (!query) {
@@ -52,10 +50,6 @@ const ExpectedAppointment = () => {
   const [query, setQuery] = useState('');
   const handleOpen = () => setOpen(true);
   const handleClose = () => !loading && setOpen(false);
-
-  const handleShow = () => {
-    console.log(appointDate, appointDoc, appointNum, appointSpec, appointTime);
-  };
 
   const clientId = JSON.parse(localStorage.getItem('userLoginData'))?.user
     ?.client_id;
@@ -119,7 +113,7 @@ const ExpectedAppointment = () => {
           component={Paper}
           elevation={0}
           sx={{
-            backgroundColor: '#FF2',
+            backgroundColor: '#F5F5F5',
             maxHeight: '400px',
             overflow: 'auto'
           }}
@@ -127,7 +121,6 @@ const ExpectedAppointment = () => {
           <Table
             sx={{
               minWidth: 650,
-              overflow: 'auto',
               marginBottom: '40px',
               maxHeight: '55vh',
               overflow: 'auto'
@@ -272,7 +265,6 @@ const ExpectedAppointment = () => {
                           setAppointTime(row.appointment_period);
                           setClickedIdx(idx);
                           handleOpen();
-                          handleShow();
                         }}
                       >
                         cancel

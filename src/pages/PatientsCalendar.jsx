@@ -132,6 +132,11 @@ function PatientsCalendar() {
   }
 
   useEffect(() => {
+    if (selectedDate) {
+      setOpenRightSideBar(true);
+    }
+  }, [selectedDate]);
+  useEffect(() => {
     const workDaysSlots = {};
     workDays?.forEach((workDay) => {
       const slots = [];
