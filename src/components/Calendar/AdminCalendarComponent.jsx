@@ -32,13 +32,12 @@ import {
 } from '../../redux/reducers/vacation.reducer';
 import { getDoctorWorkDays } from '../../redux/reducers/workDays.reducer';
 
-const schema = yup.object().shape({
-  // from_date: yup.date().typeError('Invalid date').required(),
-  // to_date: yup.date().typeError('Invalid date').required()
-  // dayoff_date: yup.string().required()
-  // from: yup.string().required(),
-  // to: yup.string().required()
+const vacationSchema = yup.object().shape({
+  from_date: yup.date().typeError('Invalid date').required(),
+  to_date: yup.date().typeError('Invalid date').required()
 });
+
+const scheduleSchema = yup.object().shape({});
 
 const AdminCalendarComponent = forwardRef(
   (
@@ -152,7 +151,11 @@ const Daycell = memo(
       formState: { errors },
       trigger,
       reset
-    } = useForm({ resolver: yupResolver(schema) });
+    } = useForm({
+      resolver: yupResolver(
+        !onSchedule && !onVacation ? vacationSchema : scheduleSchema
+      )
+    });
 
     const onSubmitDayoffData = ({ dayoff_date }) => {
       dispatch(
@@ -236,7 +239,9 @@ const Daycell = memo(
           width: '100%',
           height: '100%',
           border: `1px solid transparent`,
-          ...(isGrayed ? { backgroundColor: '#F7F8FA' }: { backgroundColor: '#fff' } )
+          ...(isGrayed
+            ? { backgroundColor: '#F7F8FA' }
+            : { backgroundColor: '#fff' })
         })}
         // onClick={() => {
         //   !loading && !isOther && handleDayClick(new Date(date));
@@ -555,26 +560,6 @@ const Daycell = memo(
                                   }
                                 }}
                                 className=""
-                                // sx={{
-                                //   width: '150px',
-                                //   '& .MuiInputBase-input': {
-                                //     padding: '5px 10px 12px',
-                                //     backgroundColor: '#E7E7E7',
-                                //     borderRadius: '5px 0 0 5px'
-                                //   },
-                                //   '& .MuiFormLabel-root': {
-                                //     top: '-7px'
-                                //   },
-                                //   '& .MuiInputLabel-root.MuiInputLabel-shrink':
-                                //     {
-                                //       top: '5px'
-                                //     },
-                                //   '& .MuiInputBase-root': {
-                                //     paddingY: 0,
-                                //     borderRadius: '5px',
-                                //     background: '#E7E7E7'
-                                //   }
-                                // }}
                                 sx={{
                                   maxWidth: '150px',
                                   width: '100%',
@@ -623,27 +608,6 @@ const Daycell = memo(
                                   }
                                 }}
                                 className=""
-                                // sx={{
-                                //   width: '150px',
-                                //   '& .MuiInputBase-input': {
-                                //     padding: '5px 10px 12px',
-                                //     backgroundColor: '#E7E7E7',
-                                //     borderRadius: '5px 0 0 5px'
-                                //   },
-                                //   '& .MuiFormLabel-root': {
-                                //     top: '-7px'
-                                //   },
-                                //   '& .MuiInputLabel-root.MuiInputLabel-shrink':
-                                //     {
-                                //       top: '0px'
-                                //     },
-                                //   '& .MuiInputBase-root': {
-                                //     paddingY: 0,
-                                //     borderRadius: '5px',
-                                //     background: '#E7E7E7'
-                                //   }
-                                // }}
-
                                 sx={{
                                   maxWidth: '150px',
                                   width: '100%',
@@ -657,6 +621,9 @@ const Daycell = memo(
                                   },
                                   '& .MuiFormLabel-root.MuiInputLabel-shrink': {
                                     top: '0px'
+                                  },
+                                  '& .MuiFormHelperText-root': {
+                                    marginBottom: '-15px'
                                   },
                                   '& .MuiInputBase-root': {
                                     paddingY: 0,
@@ -727,7 +694,9 @@ const Daycell = memo(
               <Box className="w-full p-6 py-0 pt-3 flex flex-row-reverse gap-3">
                 <Button
                   type="submit"
-                  disabled={!searchQuery || ((onVacation && onSchedule) || !toDate)}
+                  disabled={
+                    !searchQuery || (onVacation && onSchedule) || !toDate
+                  }
                   sx={{
                     color: '#fff',
                     width: { md: '100px', xs: '80px' },

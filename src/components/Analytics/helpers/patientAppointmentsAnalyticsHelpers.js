@@ -39,8 +39,6 @@ export default function patientAppointmentAnalyticsHelpers(
   ];
   let colorCount = 0;
 
-  console.log({ result });
-
   const newData =
     doctors?.map((doc) => {
       const docName = `${doc.first_name} ${doc.last_name}`;

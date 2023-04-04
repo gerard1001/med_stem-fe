@@ -41,7 +41,6 @@ const AppointmentPage = () => {
     (state) => state.appointment.entities.undefined
   );
   const [loading, setLoading] = useState(false);
-  console.log({ loading });
 
   let urlId = window.location.href.substring(
     window.location.href.lastIndexOf('/') + 1
