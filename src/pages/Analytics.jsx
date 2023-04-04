@@ -90,8 +90,6 @@ function Analytics() {
   );
   const loginData = useSelector((state) => state.user?.loginData);
 
-  console.log({ appointments });
-
   const toggleToggler = () => {
     setSelectedToggler((value) => !value);
   };

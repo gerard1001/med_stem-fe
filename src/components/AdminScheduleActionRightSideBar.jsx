@@ -83,11 +83,6 @@ const AdminScheduleActionRightSideBar = ({
   const result = getSchedules(availableSchedules);
 
   const onEditTime = ({ from, to }) => {
-    console.log({
-      scheduleId,
-      from,
-      to
-    });
     const body = { from, to };
     const data = {
       id: scheduleId,
@@ -121,7 +116,6 @@ const AdminScheduleActionRightSideBar = ({
     <Box className="w-[250px] z-50 bg-white fixed right-0 top-16 bottom-0 h-[calc(100vh-64px)] border-l border-t border-sky-400">
       {availableSchedules?.map((value, idx) => {
         const days = value.work_days.day;
-        console.log(days);
         return (
           <>
             <Box className="py-4 pl-2 pr-2">

@@ -31,10 +31,7 @@ import { format } from 'date-fns';
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { BsPlusCircleFill } from 'react-icons/bs';
-import {
-  IoCloseOutline,
-  IoCloseSharp
-} from 'react-icons/io5';
+import { IoCloseOutline, IoCloseSharp } from 'react-icons/io5';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getOneAppointment,
@@ -166,13 +163,6 @@ const DoctorAppointmentPage = () => {
   const existingRecommendations = recommendations?.map((value) => {
     return value;
   });
-
-  console.log(appointment?.data?.drugs, drugs, 'QWQWQMW');
-  console.log(
-    appointment?.data?.recommendations,
-    recommendations?.length === 0,
-    'MWMWM'
-  );
 
   const [month, day, year] = [
     date.getMonth(),
@@ -312,7 +302,8 @@ const DoctorAppointmentPage = () => {
             ID: {appointment?.data?.appointment_number}
           </Typography>
         </Box>
-        {!defaultDiagnosis &&
+        {!isStarted &&
+          !defaultDiagnosis &&
           !defaultComplaints &&
           (!appointment?.data?.drugs || drugs?.length === 0) &&
           (!appointment?.data?.recommendations ||
@@ -513,10 +504,14 @@ const DoctorAppointmentPage = () => {
                             </TableCell>
                             <TableCell
                               align="left"
-                              sx={{ fontSize: '14px', fontWeight: 550, width: 50 }}
-                              >
-                                Option
-                              </TableCell>
+                              sx={{
+                                fontSize: '14px',
+                                fontWeight: 550,
+                                width: 50
+                              }}
+                            >
+                              Option
+                            </TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
@@ -591,13 +586,13 @@ const DoctorAppointmentPage = () => {
                               </TableCell>
 
                               <TableCell className="w-[50px]">
-                                  <IconButton
-                                    onClick={() => {
-                                      onSubmitRemoveDrug(idx);
-                                    }}
-                                  >
-                                    <IoCloseOutline className="cursor-pointer" />
-                                  </IconButton>
+                                <IconButton
+                                  onClick={() => {
+                                    onSubmitRemoveDrug(idx);
+                                  }}
+                                >
+                                  <IoCloseOutline className="cursor-pointer" />
+                                </IconButton>
                               </TableCell>
                             </TableRow>
                           ))}

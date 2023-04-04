@@ -42,9 +42,7 @@ const EditAdminDoctorPersonalProfileModal = ({
   open,
   onClose,
   info = {},
-  handleOnSubmit = (data, setLoading) => {
-    console.log(data);
-  }
+  handleOnSubmit = (data, setLoading) => {}
 }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
