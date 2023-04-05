@@ -4,7 +4,7 @@ export default function ageAnalyticsHelper(entities, type = 'Patients') {
   const data = {};
 
   entities?.forEach((entity) => {
-    const { birth_date } = entity;
+    const birth_date = entity?.birth_date;
     const age = differenceInYears(new Date(), new Date(birth_date));
 
     if (age <= 24) {

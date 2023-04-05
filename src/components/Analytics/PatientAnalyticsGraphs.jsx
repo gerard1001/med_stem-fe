@@ -111,7 +111,7 @@ const PatientAnalyticsGraphs = memo(
             }}
           />
         </GraphBox>
-        <GraphBox name="Diagnosis per doctor">
+        {/* <GraphBox name="Diagnosis per doctor">
           <Chart
             chartType="ColumnChart"
             data={visitCountPatientsData}
@@ -132,7 +132,7 @@ const PatientAnalyticsGraphs = memo(
               }
             }}
           />
-        </GraphBox>
+        </GraphBox> */}
       </>
     );
   }

@@ -30,7 +30,7 @@ import SelectDateRangeMenu from '../components/Analytics/SelectDateRangeMenu';
 import { getAllAppointments } from '../redux/reducers/appointment.reducer';
 import { getDepartmentList } from '../redux/reducers/department.reducer';
 
-import { getDoctorList } from '../redux/reducers/doctor.reducer';
+import { getDoctorList, getOneDoctor } from '../redux/reducers/doctor.reducer';
 import { getPatientList } from '../redux/reducers/patient.reducer';
 
 const formatDoctorName = (doctor) => {
@@ -77,13 +77,15 @@ function Analytics() {
   const dispatch = useDispatch();
   const [selectedToggler, setSelectedToggler] = useState(true);
   const selectedDoctorRef = useRef(null);
-  const [selectedDoctor, setSelectedDoctor] = useState('');
+  const [selectedDoctor, setSelectedDoctor] = useState('All Doctors');
   const [selectedPeriodValue, setSelectedPeriodValue] = useState([]);
   const [selectedPeriod, setSelectedPeriod] = useState('This week');
+  const [clickedDoctor, setClickedDoctor] = useState(null);
   const selectPeriodRef = useRef();
   const [selectPeriodOpen, setSelectPeriodOpen] = useState(false);
   const patients = useSelector((state) => state.patient?.data?.data);
-  const doctors = useSelector((state) => state.doctor?.data?.data);
+  const allDoctors = useSelector((state) => state.doctor?.data?.data);
+  const oneDoctor = useSelector((state) => state.doctor?.single_data?.data);
   const departments = useSelector((state) => state.department?.data?.data);
   const appointments = useSelector(
     (state) => state.appointment?.entities?.undefined?.appointments
@@ -105,20 +107,22 @@ function Analytics() {
   const newDoctors = useMemo(
     () =>
       !selectedToggler &&
-      doctors?.filter((doctor) =>
+      allDoctors?.filter((doctor) =>
         isBefore(subWeeks(new Date(), 1), new Date(doctor?.createdAt))
       ),
-    [doctors, selectedToggler]
+    [allDoctors, selectedToggler]
   );
 
+  // useEffect(() => {
+  //   if (allDoctors) {
+  //     setSelectedDoctor(All Doctors);
+  //   }
+  // }, [allDoctors]);
   useEffect(() => {
-    if (doctors) {
-      setSelectedDoctor(doctors[0].last_name);
-    }
-  }, [doctors]);
-  useEffect(() => {
-    selectedDoctorRef.current = _.find(doctors, { last_name: selectedDoctor });
-  }, [selectedDoctor, doctors]);
+    selectedDoctorRef.current = _.find(allDoctors, {
+      last_name: selectedDoctor
+    });
+  }, [selectedDoctor, allDoctors]);
   useEffect(() => {
     switch (selectedPeriod) {
       case 'This week':
@@ -152,6 +156,8 @@ function Analytics() {
 
   const isAdmin = loginData?.Role?.role === 'admin';
 
+  const doctors = clickedDoctor ? [oneDoctor] : allDoctors;
+
   return (
     <>
       <Box className="w-full max-w-[1200px] h-full mx-auto p-10 sm:p-3">
@@ -176,23 +182,39 @@ function Analytics() {
                 className="ml-2 w-[16px] h-[16px] rounded-full border-dark border"
               />
             </Box>
-            <StyledSelect
-              className="max-w-[200px] w-full"
-              value={selectedDoctor || ''}
-              onChange={(e) => {
-                setSelectedDoctor(e.target.value);
-              }}
-            >
-              {!doctors || doctors.length < 0 ? (
-                <MenuItem value="">No Doctors</MenuItem>
-              ) : (
-                doctors.map((doctor) => (
-                  <MenuItem key={doctor.doctor_id} value={doctor.last_name}>
+
+            {!allDoctors || allDoctors.length < 0 ? (
+              <MenuItem value="">No Doctors</MenuItem>
+            ) : (
+              <StyledSelect
+                className="max-w-[200px] w-full"
+                value={selectedDoctor || ''}
+                onChange={(e) => {
+                  setSelectedDoctor(e.target.value);
+                }}
+              >
+                <MenuItem
+                  value="All Doctors"
+                  onClick={() => {
+                    setClickedDoctor(null);
+                  }}
+                >
+                  All Doctors
+                </MenuItem>
+                {allDoctors.map((doctor) => (
+                  <MenuItem
+                    key={doctor.doctor_id}
+                    value={doctor.last_name}
+                    onClick={() => {
+                      setClickedDoctor(doctor.doctor_id);
+                      dispatch(getOneDoctor(doctor.doctor_id));
+                    }}
+                  >
                     {formatDoctorName(doctor)}
                   </MenuItem>
-                ))
-              )}
-            </StyledSelect>
+                ))}
+              </StyledSelect>
+            )}
             <StyledSelect
               className="max-w-[250px] w-full"
               value={selectedPeriod}
@@ -244,7 +266,9 @@ function Analytics() {
               Total {selectedToggler ? 'Patients' : 'Doctors'}
             </Typography>
             <Typography className="text.dark text-[40px] font-semibold leading-none">
-              {selectedToggler ? patients?.length || 0 : doctors?.length || 0}
+              {selectedToggler
+                ? patients?.length || 0
+                : allDoctors?.length || 0}
             </Typography>
           </Stack>
         </Stack>
@@ -267,13 +291,14 @@ function Analytics() {
             <PatientAnalyticsGraphs
               isAdmin={isAdmin}
               patients={patients}
-              doctors={doctors}
+              doctors={allDoctors}
               // departments={departments}
               appointments={appointments}
               range={selectedPeriodValue}
             />
           ) : (
             <DoctorAnalyticsGraphs
+              clickedDoctor={clickedDoctor}
               doctors={doctors}
               departments={departments}
               appointments={appointments}

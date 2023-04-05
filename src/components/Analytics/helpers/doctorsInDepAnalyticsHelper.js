@@ -2,7 +2,7 @@ export default function doctorsInDepAnalyticsHelper(doctors, departments) {
   const data = {};
 
   doctors?.forEach((doctor) => {
-    doctor.departments?.forEach((department) => {
+    doctor?.departments?.forEach((department) => {
       const name = department.department_name;
       data[name] = data[name] ? data[name] + 1 : 1;
     });
