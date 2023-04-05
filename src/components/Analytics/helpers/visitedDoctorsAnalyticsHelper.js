@@ -4,8 +4,9 @@ export default function visitedDoctorsAnalyticsHelper(doctors, range) {
   const data = [];
 
   doctors?.forEach((doctor) => {
-    const appointments = doctor.appointments?.filter((appointment) => {
-      const { date } = appointment.work_day;
+    const appointments = doctor?.appointments?.filter((appointment) => {
+      const date = appointment?.work_day?.date;
+
       if (
         isAfter(new Date(date), new Date(range[0])) &&
         isBefore(new Date(date), new Date(range[1]))
@@ -15,7 +16,7 @@ export default function visitedDoctorsAnalyticsHelper(doctors, range) {
       return false;
     });
 
-    const name = `${doctor.first_name} ${doctor.last_name}`;
+    const name = `${doctor?.first_name} ${doctor?.last_name}`;
     data.push({ counts: appointments ? appointments.length : 0, name });
   });
 

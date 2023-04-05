@@ -5,7 +5,7 @@ export default function genderAnalyticsHelper(entities, type = 'patients') {
   };
 
   entities?.forEach((entity) => {
-    const { gender } = entity;
+    const gender = entity?.gender;
     data[gender] = data[gender] ? data[gender] + 1 : 1;
   });
 
