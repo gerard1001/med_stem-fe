@@ -425,8 +425,8 @@ const PatientSignupForm = () => {
                   fullWidth
                   label="phone"
                   placeholder="Phone number"
-                  error={!!errors.phone}
-                  helperText={!!errors.phone && errors.phone.message}
+                  error={!!errors.phone_number}
+                  helperText={!!errors.phone_number && errors.phone_number.message}
                   size="small"
                 />
               );
