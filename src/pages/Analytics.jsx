@@ -75,7 +75,9 @@ const StyledSelect = styled((props) => (
 
 function Analytics() {
   const dispatch = useDispatch();
-  const [selectedToggler, setSelectedToggler] = useState(true);
+  const [selectedToggler, setSelectedToggler] = useState(false);
+  const [showDoctors, setShowDoctors] = useState(false);
+  const [showCharts, setShowCharts] = useState(false);
   const selectedDoctorRef = useRef(null);
   const [selectedDoctor, setSelectedDoctor] = useState('All Doctors');
   const [selectedPeriodValue, setSelectedPeriodValue] = useState([]);
@@ -94,6 +96,8 @@ function Analytics() {
 
   const toggleToggler = () => {
     setSelectedToggler((value) => !value);
+    setShowDoctors((value) => !value);
+    setShowCharts(true);
   };
 
   const newPatients = useMemo(
@@ -182,39 +186,43 @@ function Analytics() {
                 className="ml-2 w-[16px] h-[16px] rounded-full border-dark border"
               />
             </Box>
-
-            {!allDoctors || allDoctors.length < 0 ? (
-              <MenuItem value="">No Doctors</MenuItem>
-            ) : (
-              <StyledSelect
-                className="max-w-[200px] w-full"
-                value={selectedDoctor || ''}
-                onChange={(e) => {
-                  setSelectedDoctor(e.target.value);
-                }}
-              >
-                <MenuItem
-                  value="All Doctors"
-                  onClick={() => {
-                    setClickedDoctor(null);
-                  }}
-                >
-                  All Doctors
-                </MenuItem>
-                {allDoctors.map((doctor) => (
-                  <MenuItem
-                    key={doctor.doctor_id}
-                    value={doctor.last_name}
-                    onClick={() => {
-                      setClickedDoctor(doctor.doctor_id);
-                      dispatch(getOneDoctor(doctor.doctor_id));
+            {!selectedToggler && showCharts && (
+              <Box>
+                {!allDoctors || allDoctors.length < 0 ? (
+                  <MenuItem value="">No Doctors</MenuItem>
+                ) : (
+                  <StyledSelect
+                    className="max-w-[200px] w-full"
+                    value={selectedDoctor || ''}
+                    onChange={(e) => {
+                      setSelectedDoctor(e.target.value);
                     }}
                   >
-                    {formatDoctorName(doctor)}
-                  </MenuItem>
-                ))}
-              </StyledSelect>
+                    <MenuItem
+                      value="All Doctors"
+                      onClick={() => {
+                        setClickedDoctor(null);
+                      }}
+                    >
+                      All Doctors
+                    </MenuItem>
+                    {allDoctors.map((doctor) => (
+                      <MenuItem
+                        key={doctor.doctor_id}
+                        value={doctor.last_name}
+                        onClick={() => {
+                          setClickedDoctor(doctor.doctor_id);
+                          dispatch(getOneDoctor(doctor.doctor_id));
+                        }}
+                      >
+                        {formatDoctorName(doctor)}
+                      </MenuItem>
+                    ))}
+                  </StyledSelect>
+                )}
+              </Box>
             )}
+
             <StyledSelect
               className="max-w-[250px] w-full"
               value={selectedPeriod}
@@ -244,68 +252,72 @@ function Analytics() {
         )}
 
         {/* Analytics sample data cards */}
-        <Stack direction="row" className="w-full gap-3 mt-3" flexWrap="wrap">
-          <Stack
-            direction="column"
-            className="p-4 gap-1 bg-[#EDF0F2] w-full max-w-[175px] h-[119px] rounded-xl"
-          >
-            <Typography className="text-[18px]">
-              New {selectedToggler ? 'Patients' : 'Doctors'}
-            </Typography>
-            <Typography className="text.dark text-[40px] font-semibold leading-none">
-              {selectedToggler
-                ? newPatients?.length || 0
-                : newDoctors?.length || 0}
-            </Typography>
+        {showCharts && (
+          <Stack direction="row" className="w-full gap-3 mt-3" flexWrap="wrap">
+            <Stack
+              direction="column"
+              className="p-4 gap-1 bg-[#EDF0F2] w-full max-w-[175px] h-[119px] rounded-xl"
+            >
+              <Typography className="text-[18px]">
+                New {selectedToggler ? 'Patients' : 'Doctors'}
+              </Typography>
+              <Typography className="text.dark text-[40px] font-semibold leading-none">
+                {selectedToggler
+                  ? newPatients?.length || 0
+                  : newDoctors?.length || 0}
+              </Typography>
+            </Stack>
+            <Stack
+              direction="column"
+              className="p-4 gap-1 bg-[#EDF0F2] w-full max-w-[175px] h-[119px] rounded-xl"
+            >
+              <Typography className="text-[18px]">
+                Total {selectedToggler ? 'Patients' : 'Doctors'}
+              </Typography>
+              <Typography className="text.dark text-[40px] font-semibold leading-none">
+                {selectedToggler
+                  ? patients?.length || 0
+                  : allDoctors?.length || 0}
+              </Typography>
+            </Stack>
           </Stack>
-          <Stack
-            direction="column"
-            className="p-4 gap-1 bg-[#EDF0F2] w-full max-w-[175px] h-[119px] rounded-xl"
-          >
-            <Typography className="text-[18px]">
-              Total {selectedToggler ? 'Patients' : 'Doctors'}
-            </Typography>
-            <Typography className="text.dark text-[40px] font-semibold leading-none">
-              {selectedToggler
-                ? patients?.length || 0
-                : allDoctors?.length || 0}
-            </Typography>
-          </Stack>
-        </Stack>
+        )}
 
         {/* Analytics Graphs */}
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-            gap: 3,
-            maxWidth: '1900px',
-            width: '100%',
-            marginX: 'auto',
-            height: 'max-content',
-            mt: 2,
-            pb: 5
-          }}
-        >
-          {selectedToggler ? (
-            <PatientAnalyticsGraphs
-              isAdmin={isAdmin}
-              patients={patients}
-              doctors={allDoctors}
-              // departments={departments}
-              appointments={appointments}
-              range={selectedPeriodValue}
-            />
-          ) : (
-            <DoctorAnalyticsGraphs
-              clickedDoctor={clickedDoctor}
-              doctors={doctors}
-              departments={departments}
-              appointments={appointments}
-              range={selectedPeriodValue}
-            />
-          )}
-        </Box>
+        {showCharts && (
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
+              gap: 3,
+              maxWidth: '1900px',
+              width: '100%',
+              marginX: 'auto',
+              height: 'max-content',
+              mt: 2,
+              pb: 5
+            }}
+          >
+            {selectedToggler ? (
+              <PatientAnalyticsGraphs
+                isAdmin={isAdmin}
+                patients={patients}
+                doctors={allDoctors}
+                // departments={departments}
+                appointments={appointments}
+                range={selectedPeriodValue}
+              />
+            ) : (
+              <DoctorAnalyticsGraphs
+                clickedDoctor={clickedDoctor}
+                doctors={doctors}
+                departments={departments}
+                appointments={appointments}
+                range={selectedPeriodValue}
+              />
+            )}
+          </Box>
+        )}
       </Box>
       <SelectDateRangeMenu
         {...{
