@@ -11,7 +11,8 @@ export const addRecommendation = createAsyncThunk(
   'recommendation/create',
   async (data) => {
     try {
-      axios.post(`/recommendation`, data.body).then((res) => res.data);
+      const response = await axios.post(`/recommendation`, data.body);
+      return response;
     } catch (error) {
       toast.error(error.response.data.message);
       throw new Error(error.response.data.message);
@@ -21,7 +22,15 @@ export const addRecommendation = createAsyncThunk(
 
 export const getRecommendations = createAsyncThunk(
   'recommendation/fetch',
-  async () => axios.get(`/recommendation`).then((res) => res.data)
+  async () => {
+    try {
+      const res = await axios.get(`/recommendation`);
+      return res;
+    } catch (error) {
+      toast.error(error.response.data.message);
+      throw new Error(error.response.data.message);
+    }
+  }
 );
 
 export const removeRecommendation = createAsyncThunk(

@@ -58,13 +58,21 @@ const Transition = React.forwardRef((props, ref) => {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
+const validateArray = (array) => {
+  if (Array.isArray(array) || array === '[]') {
+    return false;
+  } else {
+    return true;
+  }
+};
+
 const DoctorAppointmentPage = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const recommendation = useSelector((state) => state.recommendation);
+  const recommendation = useSelector((state) => state.recommendation?.data);
   const [openDrugModal, setOpenDrugModal] = useState(false);
   const [openRecommendationModal, setOpenRecommendationModal] = useState(false);
-  const [recName, setRecName] = useState(false);
+  const [recName, setRecName] = useState(null);
   const [checked, setChecked] = useState([]);
   const [defaultComplaints, setDefaultComplaints] = useState('');
   const [defaultDiagnosis, setDefaultDiagnosis] = useState('');
@@ -73,6 +81,8 @@ const DoctorAppointmentPage = () => {
   const [open, setOpen] = React.useState(false);
   const [hoveredId, setHoveredId] = useState();
   const [showCloseButton, setShowCloseButton] = useState({});
+
+  console.log(recommendation);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -246,9 +256,11 @@ const DoctorAppointmentPage = () => {
     const data = { body };
 
     dispatch(addRecommendation(data)).then(() => {
-      dispatch(getRecommendations());
+      dispatch(getRecommendations()).then(() => {
+        reset();
+        setRecName(null);
+      });
     });
-    reset();
   };
 
   const onSubmitRemoveRecommendation = (idx) => {
@@ -276,6 +288,8 @@ const DoctorAppointmentPage = () => {
     });
     reset();
   };
+
+  console.log(isStarted, 'isStarted');
 
   return (
     <Box className="bg-[#F5F5F5] min-h-[100vh]">
@@ -305,9 +319,8 @@ const DoctorAppointmentPage = () => {
         {!isStarted &&
           !defaultDiagnosis &&
           !defaultComplaints &&
-          (!appointment?.data?.drugs || drugs?.length === 0) &&
-          (!appointment?.data?.recommendations ||
-            recommendations?.length === 0) && (
+          !validateArray(appointment?.data?.drugs) &&
+          !validateArray(appointment?.data?.recommendations) && (
             <Button
               className="border border-primary"
               sx={{
@@ -329,13 +342,10 @@ const DoctorAppointmentPage = () => {
             </Button>
           )}
         {isStarted &&
-          (!defaultDiagnosis ||
-            !defaultComplaints ||
-            !appointment?.data?.drugs ||
-            // !Array.isArray(appointment?.data?.drugs) ||
-            !appointment?.data?.drugs ||
-            // Array.isArray(appointment?.data?.recommendations) ||
-            !appointment?.data?.recommendations) && (
+          !defaultDiagnosis &&
+          !defaultComplaints &&
+          !validateArray(appointment?.data?.drugs) &&
+          !validateArray(appointment?.data?.recommendations) && (
             <AddNewAppointmentData
               handleOpenDrugModal={handleOpenDrugModal}
               handleOpenRecommendationModal={handleOpenRecommendationModal}
@@ -458,7 +468,7 @@ const DoctorAppointmentPage = () => {
                       <Table
                         stickyHeader
                         sx={{
-                          minWidth: 650,
+                          minWidth: 750,
                           backgroundColor: '#fff',
                           height: 'fit',
                           overflow: 'auto'
@@ -536,28 +546,36 @@ const DoctorAppointmentPage = () => {
                                 }));
                               }}
                             >
-                              <TableCell component="th" scope="row">
+                              <TableCell
+                                className="truncate"
+                                component="th"
+                                scope="row"
+                              >
                                 {row.name}
                               </TableCell>
                               <TableCell
+                                className="truncate"
                                 align="left"
                                 sx={{ fontSize: '14px', height: '73.2px' }}
                               >
                                 {row.dosage}
                               </TableCell>
                               <TableCell
+                                className="truncate"
                                 align="left"
                                 sx={{ fontSize: '14px', height: '73.2px' }}
                               >
                                 {row.frequency_per_day}
                               </TableCell>
                               <TableCell
+                                className="truncate"
                                 align="left"
                                 sx={{ fontSize: '14px', height: '73.2px' }}
                               >
                                 {row.duration}
                               </TableCell>
                               <TableCell
+                                className="truncate"
                                 align="left"
                                 sx={{
                                   fontSize: '14px',
@@ -656,33 +674,37 @@ const DoctorAppointmentPage = () => {
             </Box>
           </Box>
         )}
-        {inputEntered && (defaultComplaints || defaultDiagnosis) && (
-          <Box className="relative w-full h-fit min-h-[40px]">
-            <Box className="absolute right-0 w-fit flex items-center justify-end gap-5">
-              <Button
-                type="submit"
-                className=" bottom-2 right-2 mt-10"
-                size="small"
-                sx={{
-                  width: '80px',
-                  color: '#1A4CFF',
-                  border: '1px solid #1A4CFF',
-                  borderRadius: '10px',
-                  marginX: 'auto',
-                  ':hover': {
-                    backgroundColor: '#a2ccff',
-                    border: '1px solid #a2ccff'
-                  },
-                  '& .MuiButtonBase-root': {
-                    height: 25
-                  }
-                }}
-              >
-                Save
-              </Button>
+        {inputEntered &&
+          (defaultComplaints ||
+            defaultDiagnosis ||
+            validateArray(appointment?.data?.drugs) ||
+            validateArray(appointment?.data?.recommendations)) && (
+            <Box className="relative w-full h-fit min-h-[40px]">
+              <Box className="absolute right-0 w-fit flex items-center justify-end gap-5">
+                <Button
+                  type="submit"
+                  className=" bottom-2 right-2 mt-10"
+                  size="small"
+                  sx={{
+                    width: '80px',
+                    color: '#1A4CFF',
+                    border: '1px solid #1A4CFF',
+                    borderRadius: '10px',
+                    marginX: 'auto',
+                    ':hover': {
+                      backgroundColor: '#a2ccff',
+                      border: '1px solid #a2ccff'
+                    },
+                    '& .MuiButtonBase-root': {
+                      height: 25
+                    }
+                  }}
+                >
+                  Save
+                </Button>
+              </Box>
             </Box>
-          </Box>
-        )}
+          )}
       </Box>
 
       <Modal
@@ -728,7 +750,6 @@ const DoctorAppointmentPage = () => {
                         <TextField
                           {...field}
                           fullWidth
-                          multiline
                           placeholder="Name of medecine"
                           sx={{
                             width: '100%',
@@ -770,7 +791,6 @@ const DoctorAppointmentPage = () => {
                           {...field}
                           placeholder="Dosage quantity"
                           fullWidth
-                          multiline
                           sx={{
                             width: '100%',
                             '& .MuiInputBase-input': {
@@ -834,14 +854,12 @@ const DoctorAppointmentPage = () => {
                             {...field}
                             required
                             labelId="demo-multiple-checkbox-label"
-                            id="demo-multiple-checkbox"
                             size="small"
-                            multiple
                             // onChange={(event) => {
                             //   handleChangeSelectInput(event);
                             //   field.onChange(event.target.value);
                             // }}
-                            className="rounded-[5px]"
+                            className="rounded-[5px] max-w-[150px]"
                             sx={{
                               '& .MuiInputBase-input': {
                                 padding: '5px 10px',
@@ -862,7 +880,7 @@ const DoctorAppointmentPage = () => {
                               }
                             }}
                             input={<OutlinedInput label="Select" />}
-                            renderValue={(selected) => selected.join(', ')}
+                            renderValue={(selected) => selected}
                           >
                             {weekfrequency.map((name, idx) => (
                               // eslint-disable-next-line react/no-array-index-key
@@ -892,7 +910,7 @@ const DoctorAppointmentPage = () => {
                       render={({ field }) => (
                         <FormControl
                           size="small"
-                          className="w-full"
+                          className="w-full max-w-[150px]"
                           sx={{
                             '& .MuiInputBase-input': {
                               padding: '5px 10px',
@@ -919,10 +937,7 @@ const DoctorAppointmentPage = () => {
                           <Select
                             {...field}
                             required
-                            labelId="demo-multiple-checkbox-label"
-                            id="demo-multiple-checkbox"
                             size="small"
-                            multiple
                             // onChange={(event) => {
                             //   handleChangeSelectInput(event);
                             //   field.onChange(event.target.value);
@@ -942,7 +957,7 @@ const DoctorAppointmentPage = () => {
                               }
                             }}
                             input={<OutlinedInput label="Select" />}
-                            renderValue={(selected) => selected.join(', ')}
+                            renderValue={(selected) => selected}
                           >
                             {dayfrequency.map((name, idx) => (
                               // eslint-disable-next-line react/no-array-index-key
