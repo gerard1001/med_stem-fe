@@ -56,60 +56,66 @@ const PatientAnalyticsGraphs = memo(
     return (
       <>
         <GraphBox name="Gender">
-          <Chart
-            chartType="PieChart"
-            data={genderPatientsData}
-            options={{
-              backgroundColor: '',
-              slices: [{ color: '#1D91C0' }, { color: '#225EA8' }],
-              legend: 'none',
-              chartArea: { width: '100%', height: '90%' }
-            }}
-          />
+          {patients && (
+            <Chart
+              chartType="PieChart"
+              data={genderPatientsData}
+              options={{
+                backgroundColor: '',
+                slices: [{ color: '#1D91C0' }, { color: '#225EA8' }],
+                legend: 'none',
+                chartArea: { width: '100%', height: '90%' }
+              }}
+            />
+          )}
         </GraphBox>
         <GraphBox name="Age">
-          <Chart
-            chartType="ColumnChart"
-            data={agePatientsData}
-            options={{
-              backgroundColor: '',
-              hAxis: {
-                gridlines: { color: 'transparent' }
-              },
-              vAxis: {
-                gridlines: { color: 'transparent' }
-              },
-              legend: {
-                position: 'none'
-              },
-              chartArea: {
-                width: '80%',
-                height: '80%'
-              }
-            }}
-          />
+          {patients && (
+            <Chart
+              chartType="ColumnChart"
+              data={agePatientsData}
+              options={{
+                backgroundColor: '',
+                hAxis: {
+                  gridlines: { color: 'transparent' }
+                },
+                vAxis: {
+                  gridlines: { color: 'transparent' }
+                },
+                legend: {
+                  position: 'none'
+                },
+                chartArea: {
+                  width: '80%',
+                  height: '80%'
+                }
+              }}
+            />
+          )}
         </GraphBox>
         <GraphBox name="Amount of patients per day">
-          <Chart
-            chartType="AreaChart"
-            data={patientPerDayPatientsData}
-            options={{
-              backgroundColor: '',
-              hAxis: {
-                gridlines: { color: 'transparent' }
-              },
-              vAxis: {
-                gridlines: { color: 'transparent' }
-              },
-              legend: {
-                position: 'none'
-              },
-              chartArea: {
-                width: '80%',
-                height: '80%'
-              }
-            }}
-          />
+          {patients && (
+            <Chart
+              chartType="AreaChart"
+              data={patientPerDayPatientsData}
+              options={{
+                backgroundColor: '',
+                hAxis: {
+                  gridlines: { color: 'transparent' }
+                },
+                vAxis: {
+                  gridlines: { color: 'transparent' }
+                },
+                legend: {
+                  position: 'none'
+                },
+                chartArea: {
+                  width: '80%',
+                  height: '80%'
+                }
+              }}
+            />
+          )}
         </GraphBox>
         {/* <GraphBox name="Diagnosis per doctor">
           <Chart

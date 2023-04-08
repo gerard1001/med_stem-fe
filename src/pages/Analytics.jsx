@@ -107,6 +107,8 @@ function Analytics() {
     setStep(true);
   };
 
+  const isAdmin = loginData?.Role?.role === 'admin';
+
   useEffect(() => {
     !isAdmin && setClickedDoctor(loginData?.doctor_id);
   }, [isAdmin]);
@@ -152,8 +154,6 @@ function Analytics() {
     dispatch(getAllAppointments());
   }, []);
 
-  const isAdmin = loginData?.Role?.role === 'admin';
-
   const filteredPatients = allPatients?.filter((patient) => {
     const hasAppointmentsWithDoctor = patient.appointments.some(
       (appointment) => appointment.doctor_id === clickedDoctor
@@ -176,7 +176,7 @@ function Analytics() {
 
   const newPatients = useMemo(
     () =>
-      (selectedToggler || clickedDoctor) &&
+      (!isAdmin || selectedToggler || clickedDoctor) &&
       patients?.filter((patient) => {
         return isBefore(subWeeks(new Date(), 1), new Date(patient?.createdAt));
       }),
@@ -254,7 +254,7 @@ function Analytics() {
                 className="ml-2 w-[16px] h-[16px] rounded-full border-dark border"
               />
             </Box>
-            {step && (!selectedToggler || showDoctors) && (
+            {(!selectedToggler || showDoctors) && (
               <Box>
                 {!allDoctors || allDoctors.length < 0 ? (
                   <MenuItem value="">No Doctors</MenuItem>
@@ -342,7 +342,7 @@ function Analytics() {
         )}
 
         {/* Analytics sample data cards */}
-        {((showCharts && selectedToggler) || clickedDoctor) && (
+        {(!isAdmin || (showCharts && selectedToggler) || clickedDoctor) && (
           <Stack direction="row" className="w-full gap-3 mt-3" flexWrap="wrap">
             <Stack
               direction="column"
@@ -409,6 +409,7 @@ function Analytics() {
                   width: '100%',
                   marginX: 'auto',
                   height: 'max-content',
+                  minHeight: '340px',
                   mt: 2,
                   pb: 5
                 }}
