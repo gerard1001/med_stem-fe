@@ -1,10 +1,6 @@
 import { isAfter, isBefore } from 'date-fns';
 
-export default function patientPerDayAnalyticsHelper(
-  patients,
-  range,
-  isAdmin = true
-) {
+export default function patientPerDayAnalyticsHelper(patients, range, isAdmin) {
   const data = {};
 
   patients?.forEach((patient) => {
@@ -12,10 +8,10 @@ export default function patientPerDayAnalyticsHelper(
       const { date, day } = appointment.work_day;
       const finishedDays = [];
       if (
-        !isAdmin ||
-        (!finishedDays.includes(day) &&
-          isAfter(new Date(date), new Date(range[0])) &&
-          isBefore(new Date(date), new Date(range[1])))
+        // !isAdmin ||
+        !finishedDays.includes(day) &&
+        isAfter(new Date(date), new Date(range[0])) &&
+        isBefore(new Date(date), new Date(range[1]))
       ) {
         finishedDays.push(day);
         data[day] = data[day] ? data[day] + 1 : 1;

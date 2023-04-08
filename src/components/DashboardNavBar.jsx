@@ -28,13 +28,14 @@ function DashboardNavBar({
       setAdminName(loggedInUser?.last_name || loggedInUser?.first_name);
     }
   }, [loggedInUser]);
-  useEffect(() => {
-    if (doctorLoginData) {
-      setDoctorName(doctorLoginData.last_name);
-      setAdminName(doctorLoginData.last_name);
-    }
-  }, [doctorLoginData]);
+  // useEffect(() => {
+  //   if (doctorLoginData) {
+  //     setDoctorName(doctorLoginData.last_name);
+  //     setAdminName(doctorLoginData.last_name);
+  //   }
+  // }, [doctorLoginData]);
 
+  console.log(doctorName);
   return (
     <Box
       className="flex flex-row items-center justify-between border-b border-primary min-h-[64px] pl-6"

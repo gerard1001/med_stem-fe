@@ -41,17 +41,17 @@ const PatientAnalyticsGraphs = memo(
       () => patientPerDayAnalyticsHelper(patients, range, isAdmin),
       [patients, range]
     );
-    const visitCountPatientsData = useMemo(
-      () =>
-        patientAppointmentAnalyticsHelpers(
-          patients,
-          doctors,
-          appointments,
-          range,
-          isAdmin
-        ),
-      [patients, doctors, range, appointments]
-    );
+    // const visitCountPatientsData = useMemo(
+    //   () =>
+    //     patientAppointmentAnalyticsHelpers(
+    //       patients,
+    //       doctors,
+    //       appointments,
+    //       range,
+    //       isAdmin
+    //     ),
+    //   [patients, doctors, range, appointments]
+    // );
 
     return (
       <>
