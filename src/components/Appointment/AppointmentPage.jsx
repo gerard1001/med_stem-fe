@@ -63,7 +63,7 @@ const AppointmentPage = () => {
       : JSON.parse(appointment?.data?.recommendations);
 
   const [month, day, year] = [
-    date.getMonth(),
+    date.getMonth() + 1,
     date.getDate(),
     date.getFullYear()
   ];
